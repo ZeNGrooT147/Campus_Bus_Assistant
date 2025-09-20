@@ -2,38 +2,45 @@
 class SecurityManager {
   private isDevMode = import.meta.env.DEV;
   private disableDevtools = import.meta.env.VITE_DISABLE_DEVTOOLS === "true";
+  private isProd = import.meta.env.PROD;
 
   constructor() {
-    if (!this.isDevMode && this.disableDevtools) {
+    // Only enable security in production when explicitly requested
+    if (this.isProd && this.disableDevtools) {
       this.initSecurity();
     }
   }
 
   private initSecurity() {
-    // Clear console and disable console methods
-    this.disableConsole();
+    try {
+      // Clear console and disable console methods
+      this.disableConsole();
 
-    // Disable right-click context menu
-    this.disableRightClick();
+      // Disable right-click context menu
+      this.disableRightClick();
 
-    // Disable F12 and other dev tool shortcuts
-    this.disableDevToolShortcuts();
+      // Disable F12 and other dev tool shortcuts
+      this.disableDevToolShortcuts();
 
-    // Monitor for developer tools
-    this.detectDevTools();
+      // Monitor for developer tools (non-blocking)
+      this.detectDevTools();
 
-    // Prevent text selection and copying
-    this.preventSelection();
+      // Prevent text selection and copying
+      this.preventSelection();
 
-    // Obfuscate sensitive data
-    this.obfuscateData();
+      // Obfuscate sensitive data
+      this.obfuscateData();
+    } catch (error) {
+      // Silently fail in production to avoid breaking the app
+      console.warn('Security initialization failed:', error);
+    }
   }
 
   private disableConsole() {
     const noop = () => {};
     const consoleKeys = [
       "log",
-      "debug",
+      "debug", 
       "info",
       "warn",
       "error",

@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "npm run build",
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options", 
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "VITE_SUPABASE_URL": "https://vmuloeaaettksqpzwrcu.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdWxvZWFhZXR0a3NxcHp3cmN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5NTU0MDcsImV4cCI6MjA1ODUzMTQwN30.PDlMBMwm2m4JoPDudXzouVk79PkANLxS0Ql-VTKTpO4",
+    "VITE_GOOGLE_MAPS_API_KEY": "AIzaSyAw0ZCFa0iPtrdRSVBKgD5CStjwwTUh7oo",
+    "VITE_DISABLE_DEVTOOLS": "false",
+    "VITE_OBFUSCATE_CODE": "false"
+  }
+}
