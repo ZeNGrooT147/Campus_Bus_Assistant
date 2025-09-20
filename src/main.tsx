@@ -3,14 +3,18 @@ import App from "./App.tsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
-// Import security manager only in production to avoid dev interference
-if (import.meta.env.PROD && import.meta.env.VITE_DISABLE_DEVTOOLS === "true") {
-  import("./utils/security").catch(console.warn);
-}
+// Disable security features completely for now to avoid React conflicts
+// if (import.meta.env.PROD && import.meta.env.VITE_DISABLE_DEVTOOLS === "true") {
+//   import("./utils/security").catch(console.warn);
+// }
 
-// Correctly wrap the application with BrowserRouter at the entry point
+// Use React.StrictMode to catch issues early
+import React from "react";
+
 createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
