@@ -174,9 +174,7 @@ const StudentBuses = () => {
           capacity: bus.capacity,
           currentOccupancy: bus.current_passengers || 0,
           status: "on-time",
-          busImage:
-            bus.bus_image ||
-            "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=500",
+          busImage: bus.bus_image || "/images/bus-placeholder.svg",
           stops: routeStops,
         };
       });

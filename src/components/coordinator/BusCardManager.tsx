@@ -1,13 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Bus, Clock, Users, Image as ImageIcon, Plus, Save, X, Trash2, Edit } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Bus,
+  Clock,
+  Users,
+  Image as ImageIcon,
+  Plus,
+  Save,
+  X,
+  Trash2,
+  Edit,
+} from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import { useCoordinatorBuses } from "@/hooks/useCoordinatorBuses";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
@@ -27,18 +57,19 @@ interface Driver {
 }
 
 export default function BusCardManager({ onSave }: BusCardManagerProps) {
-  const { buses, routes, drivers, loading, error, fetchBuses, updateBus } = useCoordinatorBuses();
+  const { buses, routes, drivers, loading, error, fetchBuses, updateBus } =
+    useCoordinatorBuses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedBus, setSelectedBus] = useState<any>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    bus_number: '',
+    name: "",
+    bus_number: "",
     capacity: 45,
-    status: 'active',
-    route_id: '',
+    status: "active",
+    route_id: "",
     current_passengers: 0,
-    bus_image: '',
-    assigned_driver: ''
+    bus_image: "",
+    assigned_driver: "",
   });
 
   useEffect(() => {
@@ -47,10 +78,12 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      const selectedRoute = routes.find(r => r.id === formData.route_id);
-      const selectedDriver = drivers.find(d => d.id === formData.assigned_driver);
+      const selectedRoute = routes.find((r) => r.id === formData.route_id);
+      const selectedDriver = drivers.find(
+        (d) => d.id === formData.assigned_driver
+      );
 
       const busData = {
         name: formData.name,
@@ -63,36 +96,38 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
         current_location: null,
         bus_image: formData.bus_image || null,
         assigned_driver: formData.assigned_driver || null,
-        driver: selectedDriver ? {
-          name: selectedDriver.name,
-          experience: '5 years',
-          phone: selectedDriver.contact || '',
-          photo: selectedDriver.avatar_url || ''
-        } : null
+        driver: selectedDriver
+          ? {
+              name: selectedDriver.name,
+              experience: "5 years",
+              phone: selectedDriver.contact || "",
+              photo: selectedDriver.avatar_url || "",
+            }
+          : null,
       };
 
-      console.log('Submitting bus data:', busData);
+      console.log("Submitting bus data:", busData);
 
       if (selectedBus) {
         // Update existing bus
         await updateBus(selectedBus.id, busData);
-        console.log('Bus updated successfully');
-        toast.success('Bus updated successfully');
+        console.log("Bus updated successfully");
+        toast.success("Bus updated successfully");
       } else {
         // Add new bus
         const { data, error: insertError } = await supabase
-          .from('buses')
+          .from("buses")
           .insert([busData])
           .select()
           .single();
 
         if (insertError) {
-          console.error('Error inserting bus:', insertError);
+          console.error("Error inserting bus:", insertError);
           throw insertError;
         }
 
-        console.log('Bus added successfully:', data);
-        toast.success('Bus added successfully');
+        console.log("Bus added successfully:", data);
+        toast.success("Bus added successfully");
       }
 
       setIsDialogOpen(false);
@@ -100,8 +135,8 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
       await fetchBuses(); // Make sure to await the fetch
       if (onSave) onSave(busData);
     } catch (error: any) {
-      console.error('Error saving bus:', error);
-      toast.error(error.message || 'Failed to save bus');
+      console.error("Error saving bus:", error);
+      toast.error(error.message || "Failed to save bus");
     }
   };
 
@@ -112,41 +147,38 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
       bus_number: bus.bus_number,
       capacity: bus.capacity,
       status: bus.status,
-      route_id: bus.route_id || '',
+      route_id: bus.route_id || "",
       current_passengers: bus.current_passengers || 0,
-      bus_image: bus.bus_image || '',
-      assigned_driver: bus.assigned_driver || ''
+      bus_image: bus.bus_image || "",
+      assigned_driver: bus.assigned_driver || "",
     });
     setIsDialogOpen(true);
   };
 
   const handleDelete = async (busId: string) => {
     try {
-      const { error } = await supabase
-        .from('buses')
-        .delete()
-        .eq('id', busId);
+      const { error } = await supabase.from("buses").delete().eq("id", busId);
 
       if (error) throw error;
-      toast.success('Bus deleted successfully');
+      toast.success("Bus deleted successfully");
       fetchBuses();
     } catch (error) {
-      console.error('Error deleting bus:', error);
-      toast.error('Failed to delete bus');
+      console.error("Error deleting bus:", error);
+      toast.error("Failed to delete bus");
     }
   };
 
   const resetForm = () => {
     setSelectedBus(null);
     setFormData({
-      name: '',
-      bus_number: '',
+      name: "",
+      bus_number: "",
       capacity: 45,
-      status: 'active',
-      route_id: '',
+      status: "active",
+      route_id: "",
       current_passengers: 0,
-      bus_image: '',
-      assigned_driver: ''
+      bus_image: "",
+      assigned_driver: "",
     });
   };
 
@@ -180,8 +212,8 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
         {buses.map((bus) => (
           <Card key={bus.id} className="overflow-hidden">
             <div className="h-48 w-full overflow-hidden bg-gray-100">
-              <img 
-                src={bus.bus_image || "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=500"} 
+              <img
+                src={bus.bus_image || "/images/bus-placeholder.svg"}
                 alt={bus.name}
                 className="w-full h-full object-cover"
               />
@@ -193,9 +225,14 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                     <Bus className="h-5 w-5 mr-2 text-primary" />
                     {bus.name}
                   </CardTitle>
-                  <CardDescription className="font-mono">{bus.bus_number}</CardDescription>
+                  <CardDescription className="font-mono">
+                    {bus.bus_number}
+                  </CardDescription>
                 </div>
-                <Badge variant={bus.status === "active" ? "outline" : "destructive"} className="capitalize">
+                <Badge
+                  variant={bus.status === "active" ? "outline" : "destructive"}
+                  className="capitalize"
+                >
                   {bus.status}
                 </Badge>
               </div>
@@ -211,7 +248,7 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                     </p>
                   </div>
                 </div>
-                
+
                 {bus.driver && (
                   <div className="flex items-start">
                     <Users className="h-4 w-4 text-muted-foreground mt-0.5 mr-2" />
@@ -223,7 +260,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                         </Avatar>
                         <div>
                           <p className="text-sm">{bus.driver.name}</p>
-                          <p className="text-xs text-muted-foreground">{bus.driver.experience} experience</p>
+                          <p className="text-xs text-muted-foreground">
+                            {bus.driver.experience} experience
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -235,7 +274,7 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                   <div>
                     <p className="text-sm font-medium">Route</p>
                     <p className="text-sm text-muted-foreground">
-                      {bus.route || 'Not assigned'}
+                      {bus.route || "Not assigned"}
                     </p>
                   </div>
                 </div>
@@ -269,9 +308,13 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{selectedBus ? 'Edit Bus' : 'Add New Bus'}</DialogTitle>
+            <DialogTitle>
+              {selectedBus ? "Edit Bus" : "Add New Bus"}
+            </DialogTitle>
             <DialogDescription>
-              {selectedBus ? 'Update bus information' : 'Enter the details of the new bus'}
+              {selectedBus
+                ? "Update bus information"
+                : "Enter the details of the new bus"}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -281,7 +324,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Enter bus name"
                   required
                 />
@@ -291,7 +336,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                 <Input
                   id="bus_number"
                   value={formData.bus_number}
-                  onChange={(e) => setFormData({ ...formData, bus_number: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bus_number: e.target.value })
+                  }
                   placeholder="Enter bus number"
                   required
                 />
@@ -305,7 +352,12 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                   id="capacity"
                   type="number"
                   value={formData.capacity}
-                  onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      capacity: parseInt(e.target.value),
+                    })
+                  }
                   placeholder="Enter bus capacity"
                   required
                 />
@@ -314,7 +366,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={formData.status}
-                  onValueChange={(value) => setFormData({ ...formData, status: value })}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, status: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
@@ -332,7 +386,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
               <Label htmlFor="route">Route</Label>
               <Select
                 value={formData.route_id}
-                onValueChange={(value) => setFormData({ ...formData, route_id: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, route_id: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select route" />
@@ -351,7 +407,9 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
               <Label htmlFor="driver">Driver</Label>
               <Select
                 value={formData.assigned_driver}
-                onValueChange={(value) => setFormData({ ...formData, assigned_driver: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, assigned_driver: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select driver" />
@@ -371,20 +429,26 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
               <Input
                 id="bus_image"
                 value={formData.bus_image}
-                onChange={(e) => setFormData({ ...formData, bus_image: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, bus_image: e.target.value })
+                }
                 placeholder="Enter bus image URL"
               />
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => {
-                setIsDialogOpen(false);
-                resetForm();
-              }}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsDialogOpen(false);
+                  resetForm();
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit">
-                {selectedBus ? 'Update Bus' : 'Add Bus'}
+                {selectedBus ? "Update Bus" : "Add Bus"}
               </Button>
             </DialogFooter>
           </form>
@@ -393,4 +457,3 @@ export default function BusCardManager({ onSave }: BusCardManagerProps) {
     </div>
   );
 }
-
