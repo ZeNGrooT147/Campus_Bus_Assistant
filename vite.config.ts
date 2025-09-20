@@ -33,56 +33,7 @@ export default defineConfig(({ mode }) => ({
     target: "es2020",
     minify: "terser",
     sourcemap: mode === "development",
-    cssCodeSplit: true,
-    chunkSizeWarningLimit: 1500,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "react-core": ["react", "react-dom"],
-          "react-router": ["react-router-dom"],
-          "ui-components": [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-select",
-            "@radix-ui/react-toast",
-          ],
-          "data-libs": ["@supabase/supabase-js", "@tanstack/react-query"],
-          maps: ["@googlemaps/js-api-loader"],
-          utils: ["date-fns", "clsx", "class-variance-authority"],
-        },
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId
-            ? chunkInfo.facadeModuleId.split("/").pop()?.split(".")[0]
-            : "chunk";
-          return `assets/${facadeModuleId}-[hash].js`;
-        },
-        assetFileNames: (assetInfo) => {
-          const info = assetInfo.name?.split(".") || [];
-          const ext = info[info.length - 1];
-          if (/\.(css)$/.test(assetInfo.name || "")) {
-            return `assets/styles-[hash].${ext}`;
-          }
-          return `assets/[name]-[hash].${ext}`;
-        },
-        entryFileNames: `assets/app-[hash].js`,
-      },
-    },
-    terserOptions: {
-      compress: {
-        drop_console: mode === "production",
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.info", "console.debug"],
-      },
-      mangle: {
-        toplevel: true,
-        properties: {
-          regex: /^_/,
-        },
-      },
-      format: {
-        comments: false,
-      },
-    },
+    chunkSizeWarningLimit: 2000,
   },
   define: {
     __DEV__: mode === "development",
