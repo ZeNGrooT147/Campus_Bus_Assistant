@@ -1,6 +1,6 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Create a simple QueryClient
 const queryClient = new QueryClient({
@@ -15,49 +15,49 @@ const queryClient = new QueryClient({
 // Simple landing page component
 function LandingPage() {
   return (
-    <div style={{ padding: '20px', textAlign: 'center', minHeight: '100vh' }}>
+    <div style={{ padding: "20px", textAlign: "center", minHeight: "100vh" }}>
       <h1>Campus Bus Assistant</h1>
       <p>Welcome to the Campus Bus Management System</p>
-      <div style={{ marginTop: '30px' }}>
-        <button 
-          style={{ 
-            margin: '10px', 
-            padding: '10px 20px', 
-            backgroundColor: '#2563eb', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '5px',
-            cursor: 'pointer'
+      <div style={{ marginTop: "30px" }}>
+        <button
+          style={{
+            margin: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
           }}
-          onClick={() => alert('Student login would go here')}
+          onClick={() => alert("Student login would go here")}
         >
           Student Login
         </button>
-        <button 
-          style={{ 
-            margin: '10px', 
-            padding: '10px 20px', 
-            backgroundColor: '#16a34a', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '5px',
-            cursor: 'pointer'
+        <button
+          style={{
+            margin: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#16a34a",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
           }}
-          onClick={() => alert('Driver login would go here')}
+          onClick={() => alert("Driver login would go here")}
         >
           Driver Login
         </button>
-        <button 
-          style={{ 
-            margin: '10px', 
-            padding: '10px 20px', 
-            backgroundColor: '#dc2626', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '5px',
-            cursor: 'pointer'
+        <button
+          style={{
+            margin: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#dc2626",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
           }}
-          onClick={() => alert('Admin login would go here')}
+          onClick={() => alert("Admin login would go here")}
         >
           Admin Login
         </button>

@@ -38,17 +38,17 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-core': ['react', 'react-dom'],
-          'react-router': ['react-router-dom'],
-          'ui-components': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu', 
-            '@radix-ui/react-select',
-            '@radix-ui/react-toast'
+          "react-core": ["react", "react-dom"],
+          "react-router": ["react-router-dom"],
+          "ui-components": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-select",
+            "@radix-ui/react-toast",
           ],
-          'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
-          'maps': ['@googlemaps/js-api-loader'],
-          'utils': ['date-fns', 'clsx', 'class-variance-authority']
+          "data-libs": ["@supabase/supabase-js", "@tanstack/react-query"],
+          maps: ["@googlemaps/js-api-loader"],
+          utils: ["date-fns", "clsx", "class-variance-authority"],
         },
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId
