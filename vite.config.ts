@@ -30,30 +30,25 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimize for production
-    target: "es2018",
+    target: "es2020",
     minify: "terser",
     sourcemap: mode === "development",
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom")) {
-              return "react-vendor";
-            }
-            if (id.includes("@supabase") || id.includes("react-router")) {
-              return "vendor";
-            }
-            if (id.includes("@radix-ui")) {
-              return "ui";
-            }
-            if (id.includes("@googlemaps")) {
-              return "maps";
-            }
-            return "vendor";
-          }
+        manualChunks: {
+          'react-core': ['react', 'react-dom'],
+          'react-router': ['react-router-dom'],
+          'ui-components': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu', 
+            '@radix-ui/react-select',
+            '@radix-ui/react-toast'
+          ],
+          'data-libs': ['@supabase/supabase-js', '@tanstack/react-query'],
+          'maps': ['@googlemaps/js-api-loader'],
+          'utils': ['date-fns', 'clsx', 'class-variance-authority']
         },
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId
