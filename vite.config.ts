@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     headers: {
       "X-Frame-Options": "DENY",
-      "X-Content-Type-Options": "nosniff", 
+      "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
@@ -39,11 +39,11 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
+          react: ["react", "react-dom"],
           vendor: ["@supabase/supabase-js", "react-router-dom"],
           ui: [
             "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu", 
+            "@radix-ui/react-dropdown-menu",
             "@radix-ui/react-select",
           ],
           maps: ["@googlemaps/js-api-loader"],
