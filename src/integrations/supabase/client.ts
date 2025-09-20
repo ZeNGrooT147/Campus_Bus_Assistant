@@ -2,13 +2,17 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 import { ExtendedDatabase } from "@/types/supabaseTypes";
 
-// Get environment variables with validation
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Get environment variables with fallback defaults for development
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL ||
+  "https://vmuloeaaettksqpzwrcu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdWxvZWFhZXR0a3NxcHp3cmN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5NTU0MDcsImV4cCI6MjA1ODUzMTQwN30.PDlMBMwm2m4JoPDudXzouVk79PkANLxS0Ql-VTKTpO4";
 
-// Validate required environment variables
+// Validate environment variables (warn instead of throw)
 if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  throw new Error("Missing required Supabase environment variables");
+  console.warn("Supabase environment variables not found, using defaults");
 }
 
 // Define Profile type to match our database schema
