@@ -15,10 +15,6 @@ export const useAuthActions = (setUser, setIsLoading) => {
   const login = async (credentials: LoginCredentials) => {
     try {
       setIsLoading(true);
-      console.log("Login attempt with:", {
-        identifier: credentials.identifier,
-        role: credentials.role,
-      });
 
       let email = credentials.identifier;
 
@@ -45,7 +41,6 @@ export const useAuthActions = (setUser, setIsLoading) => {
         }
 
         email = data.email;
-        console.log("Found email for USN:", email);
       }
 
       // Special case for demo accounts if needed for testing
@@ -54,18 +49,15 @@ export const useAuthActions = (setUser, setIsLoading) => {
         credentials.identifier === "coordinator@bustracker.edu" &&
         credentials.password === "password123"
       ) {
-        console.log("Using demo coordinator account");
         // If you want to create a demo account on the fly, you could do it here
       }
 
-      console.log("Attempting Supabase login with:", email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password: credentials.password,
       });
 
       if (error) {
-        console.error("Supabase login error:", error);
         throw error;
       }
 

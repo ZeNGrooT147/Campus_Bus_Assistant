@@ -330,8 +330,6 @@ export function useCoordinatorBuses() {
 
   const addDriver = async (driverData: any) => {
     try {
-      console.log("Adding driver with data:", driverData);
-
       // 1. Create auth user and profile in a single transaction
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: driverData.email,
@@ -350,8 +348,6 @@ export function useCoordinatorBuses() {
         console.error("Auth error:", authError);
         throw authError;
       }
-
-      console.log("Auth completed successfully:", authData);
 
       // 2. Upload profile photo if exists
       if (driverData.profilePhoto && authData.user) {
@@ -479,8 +475,6 @@ export function useCoordinatorBuses() {
         throw routeError;
       }
 
-      console.log("Route created successfully:", routeResult);
-
       if (routeResult && routeResult.length > 0) {
         // Then create the stops for the route
         const routeId = routeResult[0].id;
@@ -490,8 +484,6 @@ export function useCoordinatorBuses() {
           stop_order: index,
         }));
 
-        console.log("Creating stops:", stops);
-
         const { error: stopsError } = await supabase
           .from("route_stops")
           .insert(stops);
@@ -500,8 +492,6 @@ export function useCoordinatorBuses() {
           console.error("Error creating stops:", stopsError);
           throw stopsError;
         }
-
-        console.log("Stops created successfully");
 
         // If a bus is assigned, update the bus with the route
         if (routeData.busId) {

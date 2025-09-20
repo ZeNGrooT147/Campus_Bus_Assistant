@@ -98,13 +98,7 @@ async function sendTelegramEmergencyAlert(
           disable_web_page_preview: true,
         };
 
-        console.log("Sending Telegram message:", {
-          chat_id: chatId,
-          message_length: message.length,
-        });
-
         const response = await axios.post(url, data);
-        console.log("Telegram API Response:", response.data);
         return true;
       } catch (error: any) {
         console.error("Telegram API Error Details:", {
@@ -138,10 +132,7 @@ async function sendTelegramEmergencyAlert(
 export async function checkExpiredDriverRequests() {
   try {
     // DISABLED: Database function doesn't exist yet
-    // TODO: Implement get_expired_driver_requests database function
-    console.log(
-      "checkExpiredDriverRequests: Function disabled - database function not implemented"
-    );
+    // Note: Implement get_expired_driver_requests database function when needed
     return [];
 
     /*
@@ -419,10 +410,7 @@ export function setupVoteThresholdListener() {
       await checkExpiredDriverRequests();
 
       // DISABLED: required_votes column doesn't exist yet
-      // TODO: Add required_votes column to buses table
-      console.log(
-        "Vote threshold check disabled - required_votes column not implemented"
-      );
+      // Note: Add required_votes column to buses table when implementing this feature
 
       /*
       // Check vote thresholds for all buses
