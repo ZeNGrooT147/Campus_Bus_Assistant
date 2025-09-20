@@ -1,7 +1,7 @@
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import axios from 'axios';
-import { SupabaseClient, PostgrestError } from '@supabase/supabase-js';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import axios from "axios";
+import { SupabaseClient, PostgrestError } from "@supabase/supabase-js";
 
 // Type assertion for supabase client
 const typedSupabase = supabase as SupabaseClient;
@@ -12,7 +12,7 @@ const RETRY_DELAY = 2000; // 2 seconds
 // Telegram configuration
 const TELEGRAM_BOT_TOKEN = "7742027749:AAENTZ012O5SiGto0M0QMJhm-xSbtiFZETY";
 const TELEGRAM_CHAT_IDS = [
-  "1146747265",  // Suhas (Bus Coordinator)
+  "1146747265", // Suhas (Bus Coordinator)
   // Add more chat IDs as needed
 ];
 
@@ -27,7 +27,7 @@ async function retryOperation<T>(
     if (retries === 0) {
       throw error;
     }
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await new Promise((resolve) => setTimeout(resolve, delay));
     return retryOperation(operation, retries - 1, delay);
   }
 }
@@ -48,11 +48,12 @@ async function sendTelegramEmergencyAlert(
     }
 
     // Create different message formats based on alert type
-    let message = '';
-    if (alertType === 'Emergency') {
-      message = `EMERGENCY ALERT\n\n` +
-        `Type: ${additionalInfo?.emergency_type || 'Emergency'}\n` +
-        `Bus: ${additionalInfo?.bus_number || 'Not Specified'}\n` +
+    let message = "";
+    if (alertType === "Emergency") {
+      message =
+        `EMERGENCY ALERT\n\n` +
+        `Type: ${additionalInfo?.emergency_type || "Emergency"}\n` +
+        `Bus: ${additionalInfo?.bus_number || "Not Specified"}\n` +
         `Location: https://maps.google.com/?q=${latitude},${longitude}\n` +
         `Contact: ${emergencyContact || "Not Provided"}\n\n` +
         `Instructions:\n` +
@@ -62,14 +63,17 @@ async function sendTelegramEmergencyAlert(
         `4. Wait for coordinator\n\n` +
         `Info:\n` +
         `Time: ${new Date().toLocaleTimeString()}\n` +
-        `Priority: ${additionalInfo?.priority || 'High'}\n` +
-        `Route: ${additionalInfo?.route || 'Not Specified'}`;
-    } else if (alertType === 'Overcrowding') {
-      message = `BUS OVERCROWDING ALERT\n\n` +
+        `Priority: ${additionalInfo?.priority || "High"}\n` +
+        `Route: ${additionalInfo?.route || "Not Specified"}`;
+    } else if (alertType === "Overcrowding") {
+      message =
+        `BUS OVERCROWDING ALERT\n\n` +
         `Type: Overcrowding\n` +
-        `Bus: ${additionalInfo?.bus_number || 'Not Specified'}\n` +
+        `Bus: ${additionalInfo?.bus_number || "Not Specified"}\n` +
         `Location: https://maps.google.com/?q=${latitude},${longitude}\n` +
-        `Passengers: ${additionalInfo?.current_passengers || 0}/${additionalInfo?.capacity || 0}\n\n` +
+        `Passengers: ${additionalInfo?.current_passengers || 0}/${
+          additionalInfo?.capacity || 0
+        }\n\n` +
         `Instructions:\n` +
         `1. Proceed to next stop\n` +
         `2. No additional passengers\n` +
@@ -77,8 +81,10 @@ async function sendTelegramEmergencyAlert(
         `4. Contact coordinator if needed\n\n` +
         `Info:\n` +
         `Time: ${new Date().toLocaleTimeString()}\n` +
-        `Route: ${additionalInfo?.route || 'Not Specified'}\n` +
-        `Votes: ${additionalInfo?.votes_received || 0}/${additionalInfo?.required_votes || 0}`;
+        `Route: ${additionalInfo?.route || "Not Specified"}\n` +
+        `Votes: ${additionalInfo?.votes_received || 0}/${
+          additionalInfo?.required_votes || 0
+        }`;
     }
 
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -89,40 +95,40 @@ async function sendTelegramEmergencyAlert(
         const data = {
           chat_id: chatId,
           text: message,
-          disable_web_page_preview: true
+          disable_web_page_preview: true,
         };
 
-        console.log('Sending Telegram message:', {
+        console.log("Sending Telegram message:", {
           chat_id: chatId,
-          message_length: message.length
+          message_length: message.length,
         });
 
         const response = await axios.post(url, data);
-        console.log('Telegram API Response:', response.data);
+        console.log("Telegram API Response:", response.data);
         return true;
       } catch (error: any) {
-        console.error('Telegram API Error Details:', {
+        console.error("Telegram API Error Details:", {
           status: error.response?.status,
           statusText: error.response?.statusText,
           data: error.response?.data,
-          message: error.message
+          message: error.message,
         });
         return false;
       }
     });
 
     const results = await Promise.all(sendPromises);
-    const success = results.some(result => result === true);
-    
+    const success = results.some((result) => result === true);
+
     if (!success) {
-      throw new Error('Failed to send alert to any recipient');
+      throw new Error("Failed to send alert to any recipient");
     }
-    
+
     return true;
   } catch (error: any) {
-    console.error('Error in sendTelegramEmergencyAlert:', {
+    console.error("Error in sendTelegramEmergencyAlert:", {
       message: error.message,
-      response: error.response?.data
+      response: error.response?.data,
     });
     return false;
   }
@@ -131,6 +137,14 @@ async function sendTelegramEmergencyAlert(
 // Function to check if there are any driver requests that have expired
 export async function checkExpiredDriverRequests() {
   try {
+    // DISABLED: Database function doesn't exist yet
+    // TODO: Implement get_expired_driver_requests database function
+    console.log(
+      "checkExpiredDriverRequests: Function disabled - database function not implemented"
+    );
+    return [];
+
+    /*
     // Get the current time in the format the function expects
     const currentTime = new Date().toISOString();
 
@@ -147,7 +161,9 @@ export async function checkExpiredDriverRequests() {
       
       return result;
     });
+    */
 
+    /*
     if (error) {
       throw error;
     }
@@ -187,10 +203,12 @@ export async function checkExpiredDriverRequests() {
     }
 
     return [];
-
+    */
   } catch (error) {
-    console.error('Error checking expired requests:', error);
-    toast.error('Failed to check expired driver requests. Please try again later.');
+    console.error("Error checking expired requests:", error);
+    toast.error(
+      "Failed to check expired driver requests. Please try again later."
+    );
     return [];
   }
 }
@@ -198,27 +216,29 @@ export async function checkExpiredDriverRequests() {
 async function sendNotificationForExpiredRequest(request: any) {
   try {
     // Create a notification for the expired request
-    toast.error(`Driver Request Expired: Request "${request.title}" has expired without response.`);
+    toast.error(
+      `Driver Request Expired: Request "${request.title}" has expired without response.`
+    );
 
     // Create a notification in the database
     const { error: notificationError } = await supabase
-      .from('notifications')
+      .from("notifications")
       .insert({
         user_id: request.user_id,
-        title: 'Driver Request Expired',
+        title: "Driver Request Expired",
         message: `Your request "${request.title}" has expired without response.`,
-        type: 'request_expired',
+        type: "request_expired",
         metadata: {
           request_id: request.id,
-          expired_at: new Date().toISOString()
-        }
+          expired_at: new Date().toISOString(),
+        },
       });
 
     if (notificationError) {
       throw notificationError;
     }
   } catch (error) {
-    console.error('Error sending notification for expired request:', error);
+    console.error("Error sending notification for expired request:", error);
     throw error;
   }
 }
@@ -228,54 +248,54 @@ export async function sendSMSNotification(userIds: string[], message: string) {
   try {
     // Call Supabase edge function to send SMS with retry logic
     const { data, error } = await retryOperation(async () => {
-      const result = await supabase.functions.invoke('send-sms', {
-        body: { 
+      const result = await supabase.functions.invoke("send-sms", {
+        body: {
           user_ids: userIds,
-          message: message
-        }
+          message: message,
+        },
       });
-      
+
       if (result.error) {
         throw result.error;
       }
-      
+
       return result;
     });
-    
+
     if (error) {
       throw error;
     }
-    
+
     // Log the SMS sending for audit purposes
     try {
       await retryOperation(async () => {
-        const { error: logError } = await supabase.from('notifications').insert(
-          userIds.map(userId => ({
+        const { error: logError } = await supabase.from("notifications").insert(
+          userIds.map((userId) => ({
             user_id: userId,
-            title: 'SMS Notification Sent',
+            title: "SMS Notification Sent",
             message: message,
-            type: 'sms_log',
+            type: "sms_log",
             metadata: {
               message_content: message,
-              status: 'sent',
-              sent_at: new Date().toISOString()
-            }
+              status: "sent",
+              sent_at: new Date().toISOString(),
+            },
           }))
         );
-        
+
         if (logError) {
           throw logError;
         }
       });
     } catch (logError) {
-      console.error('Error logging SMS activity:', logError);
+      console.error("Error logging SMS activity:", logError);
       // Continue execution even if logging fails
     }
-    
+
     return true;
   } catch (error) {
-    console.error('Error in sendSMSNotification:', error);
-    toast.error('Failed to send SMS notification. Please try again later.');
+    console.error("Error in sendSMSNotification:", error);
+    toast.error("Failed to send SMS notification. Please try again later.");
     return false;
   }
 }
@@ -309,13 +329,16 @@ interface Bus {
 }
 
 // Function to check vote threshold and trigger alert
-export async function checkVoteThresholdAndAlert(busId: string, requiredVotes: number) {
+export async function checkVoteThresholdAndAlert(
+  busId: string,
+  requiredVotes: number
+) {
   try {
     // Get current votes for the bus
     const { data: votes, error: voteError } = await typedSupabase
-      .from('votes')
-      .select('*')
-      .eq('bus_id', busId);
+      .from("votes")
+      .select("*")
+      .eq("bus_id", busId);
 
     if (voteError) {
       throw voteError;
@@ -325,58 +348,60 @@ export async function checkVoteThresholdAndAlert(busId: string, requiredVotes: n
 
     // Get bus details
     const { data: bus, error: busError } = await typedSupabase
-      .from('buses')
-      .select('*')
-      .eq('id', busId)
+      .from("buses")
+      .select("*")
+      .eq("id", busId)
       .single();
 
     if (busError || !bus) {
-      throw busError || new Error('Bus not found');
+      throw busError || new Error("Bus not found");
     }
 
     const typedBus = bus as Bus;
 
     // Check if threshold is reached
     if (typedVotes && typedVotes.length >= requiredVotes) {
-      console.log(`Vote threshold reached for bus ${busId}: ${typedVotes.length}/${requiredVotes} votes`);
-      
+      console.log(
+        `Vote threshold reached for bus ${busId}: ${typedVotes.length}/${requiredVotes} votes`
+      );
+
       // Determine alert type based on vote reason
-      const voteReason = typedVotes[0]?.reason || '';
-      const isEmergency = voteReason.toLowerCase().includes('emergency');
-      
+      const voteReason = typedVotes[0]?.reason || "";
+      const isEmergency = voteReason.toLowerCase().includes("emergency");
+
       // Send appropriate alert
       await sendTelegramEmergencyAlert(
-        isEmergency ? 'Emergency' : 'Overcrowding',
+        isEmergency ? "Emergency" : "Overcrowding",
         typedBus.current_latitude,
         typedBus.current_longitude,
         typedBus.driver_contact,
         {
           bus_number: typedBus.bus_number,
-          priority: isEmergency ? 'High' : 'Medium',
+          priority: isEmergency ? "High" : "Medium",
           route: typedBus.route,
           votes_received: typedVotes.length,
           required_votes: requiredVotes,
           current_passengers: typedBus.current_passengers,
           capacity: typedBus.capacity,
-          emergency_type: isEmergency ? voteReason : undefined
+          emergency_type: isEmergency ? voteReason : undefined,
         }
       );
 
       // Update bus status
       await typedSupabase
-        .from('buses')
-        .update({ 
-          status: isEmergency ? 'emergency' : 'overcrowded',
-          last_updated: new Date().toISOString()
+        .from("buses")
+        .update({
+          status: isEmergency ? "emergency" : "overcrowded",
+          last_updated: new Date().toISOString(),
         })
-        .eq('id', busId);
+        .eq("id", busId);
 
       return true;
     }
 
     return false;
   } catch (error) {
-    console.error('Error checking vote threshold:', error);
+    console.error("Error checking vote threshold:", error);
     return false;
   }
 }
@@ -384,15 +409,22 @@ export async function checkVoteThresholdAndAlert(busId: string, requiredVotes: n
 // Setup a vote threshold listener with error handling
 export function setupVoteThresholdListener() {
   let isChecking = false;
-  
+
   const checkInterval = setInterval(async () => {
     if (isChecking) return; // Prevent concurrent checks
-    
+
     try {
       isChecking = true;
       // Check expired requests
       await checkExpiredDriverRequests();
-      
+
+      // DISABLED: required_votes column doesn't exist yet
+      // TODO: Add required_votes column to buses table
+      console.log(
+        "Vote threshold check disabled - required_votes column not implemented"
+      );
+
+      /*
       // Check vote thresholds for all buses
       const { data: buses, error } = await typedSupabase
         .from('buses')
@@ -411,13 +443,14 @@ export function setupVoteThresholdListener() {
           )
         );
       }
+      */
     } catch (error) {
-      console.error('Error in vote threshold check:', error);
+      console.error("Error in vote threshold check:", error);
     } finally {
       isChecking = false;
     }
   }, 60000); // Check every minute
-  
+
   return () => {
     clearInterval(checkInterval);
   };
@@ -428,5 +461,5 @@ export const voteThresholdService = {
   checkExpiredDriverRequests,
   setupVoteThresholdListener,
   sendSMSNotification,
-  sendTelegramEmergencyAlert
+  sendTelegramEmergencyAlert,
 };

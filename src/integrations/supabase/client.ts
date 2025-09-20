@@ -1,16 +1,21 @@
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "./types";
+import { ExtendedDatabase } from "@/types/supabaseTypes";
 
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types';
-import { ExtendedDatabase } from '@/types/supabaseTypes';
+// Get environment variables with validation
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const SUPABASE_URL = "https://vmuloeaaettksqpzwrcu.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdWxvZWFhZXR0a3NxcHp3cmN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5NTU0MDcsImV4cCI6MjA1ODUzMTQwN30.PDlMBMwm2m4JoPDudXzouVk79PkANLxS0Ql-VTKTpO4";
+// Validate required environment variables
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  throw new Error("Missing required Supabase environment variables");
+}
 
 // Define Profile type to match our database schema
 export type Profile = {
   id: string;
   name: string;
-  role: 'student' | 'driver' | 'coordinator' | 'admin';
+  role: "student" | "driver" | "coordinator" | "admin";
   email?: string;
   usn?: string;
   phone?: string;
@@ -23,4 +28,7 @@ export type Profile = {
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<ExtendedDatabase>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+export const supabase = createClient<ExtendedDatabase>(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);

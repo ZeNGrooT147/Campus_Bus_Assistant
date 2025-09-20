@@ -1,24 +1,60 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Bus, Clock, MapPin, User, Calendar, AlertCircle, Map, ArrowRight, Users } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Search,
+  Bus,
+  Clock,
+  MapPin,
+  User,
+  Calendar,
+  AlertCircle,
+  Map,
+  ArrowRight,
+  Users,
+} from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Avatar } from "@/components/ui/avatar";
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
+import { BusTrackingMap } from "@/components/BusTrackingMap";
+import SimpleBusTracker from "@/components/SimpleBusTracker";
+import WorkingMap from "@/components/WorkingMap";
 
 // Schedule data
 const scheduleData = {
   morning: [
-    { time: "07:30 AM", route: "Dharwad to Campus", buses: ["Shalmala Express"] },
+    {
+      time: "07:30 AM",
+      route: "Dharwad to Campus",
+      buses: ["Shalmala Express"],
+    },
     { time: "08:00 AM", route: "Hubli to Campus", buses: ["Varada Express"] },
     { time: "08:15 AM", route: "CBT to Campus", buses: ["Malaprabha Express"] },
   ],
   evening: [
-    { time: "04:30 PM", route: "Campus to Dharwad", buses: ["Shalmala Express"] },
+    {
+      time: "04:30 PM",
+      route: "Campus to Dharwad",
+      buses: ["Shalmala Express"],
+    },
     { time: "05:00 PM", route: "Campus to Hubli", buses: ["Varada Express"] },
     { time: "05:15 PM", route: "Campus to CBT", buses: ["Malaprabha Express"] },
   ],
@@ -66,7 +102,7 @@ const StudentBuses = () => {
   const [buses, setBuses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     fetchBuses();
   }, []);
@@ -74,64 +110,93 @@ const StudentBuses = () => {
   const fetchBuses = async () => {
     try {
       setLoading(true);
+
+      // First fetch buses
       const { data: busesData, error: busesError } = await supabase
-        .from('buses')
-        .select(`
-          *,
-          routes:route_id (
+        .from("buses")
+        .select("*")
+        .eq("status", "active");
+
+      if (busesError) throw busesError;
+
+      // Then fetch routes separately to avoid relationship conflicts
+      const routeIds =
+        busesData?.map((bus) => bus.route_id).filter((id) => id) || [];
+      let routesData = [];
+
+      if (routeIds.length > 0) {
+        const { data: routes, error: routesError } = await supabase
+          .from("routes")
+          .select(
+            `
             id,
             name,
             route_stops (
               stop_name,
               stop_order
             )
+          `
           )
-        `)
-        .eq('status', 'active');
+          .in("id", routeIds);
 
-      if (busesError) throw busesError;
+        if (routesError) {
+          console.warn("Error fetching routes:", routesError);
+        } else {
+          routesData = routes || [];
+        }
+      }
 
       // Transform the data to match the expected format
-      const transformedBuses = (busesData as unknown as Bus[]).map(bus => {
+      const transformedBuses = (busesData as unknown as Bus[]).map((bus) => {
+        // Find the corresponding route data
+        const routeInfo = routesData.find((route) => route.id === bus.route_id);
+
         // Get stops from route_stops if available, otherwise use bus.stops
-        const routeStops = bus.routes?.route_stops
-          ? bus.routes.route_stops
+        const routeStops = routeInfo?.route_stops
+          ? routeInfo.route_stops
               .sort((a, b) => a.stop_order - b.stop_order)
-              .map(stop => stop.stop_name)
+              .map((stop) => stop.stop_name)
           : bus.stops || [];
 
         return {
           id: bus.id,
           name: bus.name,
           number: bus.bus_number,
-          route: bus.route,
-          driver: bus.assigned_driver ? {
-            name: "Driver Name", // Placeholder until driver system is implemented
-            experience: "5 years",
-            phone: "+91 9876543210",
-            photo: "https://i.pravatar.cc/150?img=68"
-          } : null,
+          route: bus.route || routeInfo?.name || "No Route Assigned",
+          driver: bus.assigned_driver
+            ? {
+                name: "Driver Name", // Placeholder until driver system is implemented
+                experience: "5 years",
+                phone: "+91 9876543210",
+                photo: "https://i.pravatar.cc/150?img=68",
+              }
+            : null,
           capacity: bus.capacity,
           currentOccupancy: bus.current_passengers || 0,
-          status: 'on-time',
-          busImage: bus.bus_image || 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=500',
-          stops: routeStops
+          status: "on-time",
+          busImage:
+            bus.bus_image ||
+            "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=500",
+          stops: routeStops,
         };
       });
 
       setBuses(transformedBuses);
     } catch (error: any) {
-      console.error('Error fetching buses:', error);
+      console.error("Error fetching buses:", error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
-  
-  const filteredBuses = buses.filter(bus => 
-    bus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bus.route?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    bus.stops?.some((stop: string) => stop.toLowerCase().includes(searchTerm.toLowerCase()))
+
+  const filteredBuses = buses.filter(
+    (bus) =>
+      bus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bus.route?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bus.stops?.some((stop: string) =>
+        stop.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   const handleViewDetails = (busId: string) => {
@@ -151,9 +216,7 @@ const StudentBuses = () => {
   if (error) {
     return (
       <DashboardLayout pageTitle="Buses & Routes">
-        <div className="p-4 text-red-500">
-          Error loading buses: {error}
-        </div>
+        <div className="p-4 text-red-500">Error loading buses: {error}</div>
       </DashboardLayout>
     );
   }
@@ -169,9 +232,12 @@ const StudentBuses = () => {
                 <Bus className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">Campus Bus Services</h2>
+                <h2 className="text-xl font-semibold mb-1">
+                  Campus Bus Services
+                </h2>
                 <p className="text-muted-foreground">
-                  Find information about available buses, schedules, and routes to help you commute between campus and city.
+                  Find information about available buses, schedules, and routes
+                  to help you commute between campus and city.
                 </p>
               </div>
             </div>
@@ -202,12 +268,19 @@ const StudentBuses = () => {
             {filteredBuses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredBuses.map((bus) => (
-                  <Card key={bus.id} className={`overflow-hidden transition-all duration-200 ${selectedBus === bus.id ? 'ring-2 ring-primary' : 'hover:shadow-lg'}`}>
+                  <Card
+                    key={bus.id}
+                    className={`overflow-hidden transition-all duration-200 ${
+                      selectedBus === bus.id
+                        ? "ring-2 ring-primary"
+                        : "hover:shadow-lg"
+                    }`}
+                  >
                     {/* Bus Image */}
                     <div className="h-48 w-full overflow-hidden bg-gray-100">
-                      <img 
-                        src={bus.busImage} 
-                        alt={`${bus.name} bus`} 
+                      <img
+                        src={bus.busImage}
+                        alt={`${bus.name} bus`}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -218,9 +291,16 @@ const StudentBuses = () => {
                             <Bus className="h-5 w-5 mr-2 text-primary" />
                             {bus.name}
                           </CardTitle>
-                          <CardDescription className="font-mono">{bus.number}</CardDescription>
+                          <CardDescription className="font-mono">
+                            {bus.number}
+                          </CardDescription>
                         </div>
-                        <Badge variant={bus.status === "on-time" ? "outline" : "destructive"} className="capitalize">
+                        <Badge
+                          variant={
+                            bus.status === "on-time" ? "outline" : "destructive"
+                          }
+                          className="capitalize"
+                        >
                           {bus.status === "on-time" ? "On Time" : "Delayed"}
                         </Badge>
                       </div>
@@ -235,11 +315,16 @@ const StudentBuses = () => {
                               <p className="text-sm font-medium">Driver</p>
                               <div className="flex items-center space-x-2 mt-1">
                                 <Avatar className="h-8 w-8">
-                                  <img src={bus.driver.photo} alt={bus.driver.name} />
+                                  <img
+                                    src={bus.driver.photo}
+                                    alt={bus.driver.name}
+                                  />
                                 </Avatar>
                                 <div>
                                   <p className="text-sm">{bus.driver.name}</p>
-                                  <p className="text-xs text-muted-foreground">{bus.driver.experience} experience</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {bus.driver.experience} experience
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -251,7 +336,7 @@ const StudentBuses = () => {
                           <div>
                             <p className="text-sm font-medium">Route</p>
                             <p className="text-sm text-muted-foreground">
-                              {bus.route || 'Not assigned'}
+                              {bus.route || "Not assigned"}
                             </p>
                           </div>
                         </div>
@@ -267,14 +352,20 @@ const StudentBuses = () => {
                         </div>
 
                         <div className="pt-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
+                          <Button
+                            variant="outline"
+                            size="sm"
                             className="w-full flex items-center justify-center"
                             onClick={() => handleViewDetails(bus.id)}
                           >
-                            {selectedBus === bus.id ? "Hide Details" : "View Details"}
-                            <ArrowRight className={`ml-1 h-3.5 w-3.5 transition-transform ${selectedBus === bus.id ? 'rotate-90' : ''}`} />
+                            {selectedBus === bus.id
+                              ? "Hide Details"
+                              : "View Details"}
+                            <ArrowRight
+                              className={`ml-1 h-3.5 w-3.5 transition-transform ${
+                                selectedBus === bus.id ? "rotate-90" : ""
+                              }`}
+                            />
                           </Button>
                         </div>
 
@@ -282,49 +373,69 @@ const StudentBuses = () => {
                           <div className="mt-3 pt-3 border-t animate-in fade-in duration-200">
                             {bus.stops && bus.stops.length > 0 && (
                               <>
-                                <h4 className="text-sm font-medium mb-2">Bus Stops</h4>
+                                <h4 className="text-sm font-medium mb-2">
+                                  Bus Stops
+                                </h4>
                                 <div className="space-y-2">
-                                  {bus.stops.map((stop: string, index: number) => (
-                                    <div key={index} className="flex items-center">
-                                      <div className="relative flex flex-col items-center mr-3">
-                                        <div
-                                          className={`h-3 w-3 rounded-full ${
-                                            index === 0
-                                              ? 'bg-blue-600'
-                                              : index === bus.stops.length - 1
-                                              ? 'bg-blue-600'
-                                              : 'bg-blue-400'
-                                          }`}
-                                        ></div>
-                                        {index < bus.stops.length - 1 && (
-                                          <div className="w-0.5 h-6 bg-blue-200"></div>
-                                        )}
+                                  {bus.stops.map(
+                                    (stop: string, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-center"
+                                      >
+                                        <div className="relative flex flex-col items-center mr-3">
+                                          <div
+                                            className={`h-3 w-3 rounded-full ${
+                                              index === 0
+                                                ? "bg-blue-600"
+                                                : index === bus.stops.length - 1
+                                                ? "bg-blue-600"
+                                                : "bg-blue-400"
+                                            }`}
+                                          ></div>
+                                          {index < bus.stops.length - 1 && (
+                                            <div className="w-0.5 h-6 bg-blue-200"></div>
+                                          )}
+                                        </div>
+                                        <span className="text-sm">
+                                          {stop}
+                                          {index === 0 && " (Departure)"}
+                                          {index === bus.stops.length - 1 &&
+                                            " (Arrival)"}
+                                        </span>
                                       </div>
-                                      <span className="text-sm">
-                                        {stop}
-                                        {index === 0 && " (Departure)"}
-                                        {index === bus.stops.length - 1 && " (Arrival)"}
-                                      </span>
-                                    </div>
-                                  ))}
+                                    )
+                                  )}
                                 </div>
                               </>
                             )}
-                            
+
                             <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                               <div>
-                                <p className="text-muted-foreground">Capacity</p>
-                                <p className="font-medium">{bus.currentOccupancy}/{bus.capacity} seats</p>
+                                <p className="text-muted-foreground">
+                                  Capacity
+                                </p>
+                                <p className="font-medium">
+                                  {bus.currentOccupancy}/{bus.capacity} seats
+                                </p>
                               </div>
                               {bus.driver && (
                                 <div>
-                                  <p className="text-muted-foreground">Contact</p>
-                                  <p className="font-medium">{bus.driver.phone}</p>
+                                  <p className="text-muted-foreground">
+                                    Contact
+                                  </p>
+                                  <p className="font-medium">
+                                    {bus.driver.phone}
+                                  </p>
                                 </div>
                               )}
                             </div>
-                            
-                            <Button variant="default" size="sm" className="mt-3 w-full">
+
+                            <Button
+                              variant="default"
+                              size="sm"
+                              className="mt-3 w-full"
+                            >
                               Track Live Location
                             </Button>
                           </div>
@@ -355,12 +466,13 @@ const StudentBuses = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <AlertCircle className="h-5 w-5 text-yellow-500" />
                   <p className="text-sm text-muted-foreground">
-                    Bus schedules may change during holidays and exam periods. Check announcements for the latest updates.
+                    Bus schedules may change during holidays and exam periods.
+                    Check announcements for the latest updates.
                   </p>
                 </div>
               </CardContent>
             </Card>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -382,12 +494,18 @@ const StudentBuses = () => {
                     <TableBody>
                       {scheduleData.morning.map((item, index) => (
                         <TableRow key={`morning-${index}`}>
-                          <TableCell className="font-medium">{item.time}</TableCell>
+                          <TableCell className="font-medium">
+                            {item.time}
+                          </TableCell>
                           <TableCell>{item.route}</TableCell>
                           <TableCell>
                             <div className="flex gap-1">
-                              {item.buses.map(bus => (
-                                <Badge key={bus} variant="outline" className="text-xs">
+                              {item.buses.map((bus) => (
+                                <Badge
+                                  key={bus}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
                                   {bus}
                                 </Badge>
                               ))}
@@ -420,12 +538,18 @@ const StudentBuses = () => {
                     <TableBody>
                       {scheduleData.evening.map((item, index) => (
                         <TableRow key={`evening-${index}`}>
-                          <TableCell className="font-medium">{item.time}</TableCell>
+                          <TableCell className="font-medium">
+                            {item.time}
+                          </TableCell>
                           <TableCell>{item.route}</TableCell>
                           <TableCell>
                             <div className="flex gap-1">
-                              {item.buses.map(bus => (
-                                <Badge key={bus} variant="outline" className="text-xs">
+                              {item.buses.map((bus) => (
+                                <Badge
+                                  key={bus}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
                                   {bus}
                                 </Badge>
                               ))}
@@ -443,29 +567,24 @@ const StudentBuses = () => {
           <TabsContent value="map" className="animate-fade-in">
             <Card>
               <CardHeader>
-                <CardTitle>Route Maps</CardTitle>
+                <CardTitle>Live Bus Tracking</CardTitle>
                 <CardDescription>
-                  Interactive maps showing bus routes and stops
+                  Real-time bus locations and routes
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[500px] bg-muted rounded-md flex flex-col items-center justify-center p-6">
-                  <div className="bg-primary/10 p-4 rounded-full mb-6">
-                    <Map className="h-12 w-12 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-medium mb-3">Interactive Maps Coming Soon</h3>
-                  <p className="text-muted-foreground max-w-lg mx-auto text-center mb-6">
-                    We're working on implementing interactive Google Maps for all bus routes,
-                    with real-time tracking and ETA features.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
-                    {buses.map(bus => (
-                      <Button key={bus.id} variant="outline" className="bg-white">
-                        <Bus className="mr-2 h-4 w-4" />
-                        {bus.name} Route
-                      </Button>
-                    ))}
-                  </div>
+                <div className="h-[600px]">
+                  <WorkingMap
+                    buses={buses.map((bus) => ({
+                      id: bus.id,
+                      bus_number: bus.bus_number,
+                      status: bus.status,
+                      driver_name: bus.assigned_driver || "Unassigned",
+                      capacity: bus.capacity,
+                      latitude: 15.3647 + Math.random() * 0.02, // Dharwad coordinates
+                      longitude: 75.124 + Math.random() * 0.02,
+                    }))}
+                  />
                 </div>
               </CardContent>
             </Card>

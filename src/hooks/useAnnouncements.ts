@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 export interface Announcement {
   id: string;
   title: string;
   content: string;
-  severity: 'normal' | 'important' | 'critical';
-  target_role: 'student' | 'driver' | 'coordinator' | 'admin';
+  severity: "normal" | "important" | "critical";
+  target_role: "student" | "driver" | "coordinator" | "admin";
   isUrgent: boolean;
   postedAt: Date;
   expiresAt: Date | null;
@@ -25,7 +25,8 @@ export function useAnnouncements() {
       setIsLoading(true);
       setError(null);
 
-      const { data: userData, error: userError } = await supabase.auth.getUser();
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
       if (userError) throw userError;
 
       if (!userData.user?.id) {
@@ -33,17 +34,17 @@ export function useAnnouncements() {
       }
 
       const { data, error } = await supabase
-        .from('alerts')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("alerts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error("Supabase error:", error);
         throw error;
       }
 
       if (!data) {
-        console.warn('No announcements data received');
+        console.warn("No announcements data received");
         setAnnouncements([]);
         return;
       }
@@ -52,23 +53,23 @@ export function useAnnouncements() {
         id: alert.id,
         title: alert.title,
         content: alert.message,
-        severity: alert.severity || 'normal',
-        target_role: alert.target_role || 'student',
-        isUrgent: alert.severity === 'critical',
+        severity: alert.severity || "normal",
+        target_role: alert.target_role || "student",
+        isUrgent: alert.severity === "critical",
         postedAt: new Date(alert.created_at),
         expiresAt: alert.expires_at ? new Date(alert.expires_at) : null,
         createdBy: alert.created_by,
-        is_read: alert.is_read || false
+        is_read: alert.is_read || false,
       }));
 
       setAnnouncements(formattedAnnouncements);
     } catch (err: any) {
-      console.error('Error fetching announcements:', err);
-      setError(err.message || 'Failed to fetch announcements');
+      console.error("Error fetching announcements:", err);
+      setError(err.message || "Failed to fetch announcements");
       toast({
         title: "Error",
-        description: err.message || 'Failed to fetch announcements',
-        variant: "destructive"
+        description: err.message || "Failed to fetch announcements",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -78,16 +79,16 @@ export function useAnnouncements() {
   const markAsRead = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('alerts')
+        .from("alerts")
         .update({ is_read: true })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
       // Update local state
-      setAnnouncements(prev => 
-        prev.map(announcement => 
-          announcement.id === id 
+      setAnnouncements((prev) =>
+        prev.map((announcement) =>
+          announcement.id === id
             ? { ...announcement, is_read: true }
             : announcement
         )
@@ -98,11 +99,11 @@ export function useAnnouncements() {
         description: "Announcement marked as read",
       });
     } catch (err: any) {
-      console.error('Error marking announcement as read:', err);
+      console.error("Error marking announcement as read:", err);
       toast({
         title: "Error",
-        description: err.message || 'Failed to mark announcement as read',
-        variant: "destructive"
+        description: err.message || "Failed to mark announcement as read",
+        variant: "destructive",
       });
     }
   };
@@ -112,18 +113,19 @@ export function useAnnouncements() {
 
     // Subscribe to real-time updates
     const subscription = supabase
-      .channel('alerts_changes')
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'alerts' 
-      }, (payload) => {
-        console.log('Real-time update received:', payload);
-        fetchAnnouncements();
-      })
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-      });
+      .channel("alerts_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "alerts",
+        },
+        (payload) => {
+          fetchAnnouncements();
+        }
+      )
+      .subscribe();
 
     return () => {
       subscription.unsubscribe();
@@ -135,6 +137,6 @@ export function useAnnouncements() {
     isLoading,
     error,
     refreshAnnouncements: fetchAnnouncements,
-    markAsRead
+    markAsRead,
   };
 }

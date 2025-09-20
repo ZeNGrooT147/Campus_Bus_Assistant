@@ -6,10 +6,22 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+# Environment files - NEVER COMMIT THESE
 .env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
+build
 *.local
 
 # Editor directories and files
@@ -22,3 +34,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Security and sensitive files
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets/
+config/production.json
+
+# Bundle analysis
+dist/stats.html
+bundle-report.html
+
+# Coverage and test reports
+coverage/
+.nyc_output

@@ -4,14 +4,39 @@ import { useRealVotingTopics } from "@/hooks/useRealVotingTopics";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar as CalendarIcon, Bus, Plus, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
@@ -41,23 +66,26 @@ interface FormData {
   busId: string;
 }
 
-export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogProps) {
+export function CreateVoteRequestDialog({
+  className,
+}: CreateVoteRequestDialogProps) {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
-  const { availableBuses, requestNewBus, isSubmitting, refreshData, error } = useRealVotingTopics();
+  const { availableBuses, requestNewBus, isSubmitting, refreshData, error } =
+    useRealVotingTopics();
   const [routes, setRoutes] = useState<Route[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [selectedRoute, setSelectedRoute] = useState<string>('');
+  const [selectedRoute, setSelectedRoute] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const form = useForm<FormData>({
     defaultValues: {
-      routeId: '',
-      scheduleId: '',
+      routeId: "",
+      scheduleId: "",
       date: new Date(),
-      description: '',
-      busId: '',
-    }
+      description: "",
+      busId: "",
+    },
   });
 
   useEffect(() => {
@@ -83,18 +111,18 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('routes')
-        .select('*')
-        .order('name');
-        
+        .from("routes")
+        .select("*")
+        .order("name");
+
       if (error) throw error;
-      
+
       if (data) {
         setRoutes(data);
       }
     } catch (error) {
-      console.error('Error fetching routes:', error);
-      toast.error('Failed to load routes');
+      console.error("Error fetching routes:", error);
+      toast.error("Failed to load routes");
     } finally {
       setIsLoading(false);
     }
@@ -104,19 +132,19 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('schedules')
-        .select('*')
-        .eq('route_id', routeId)
-        .eq('is_active', true);
-        
+        .from("schedules")
+        .select("*")
+        .eq("route_id", routeId)
+        .eq("is_active", true);
+
       if (error) throw error;
-      
+
       if (data) {
         setSchedules(data);
       }
     } catch (error) {
-      console.error('Error fetching schedules:', error);
-      toast.error('Failed to load schedules');
+      console.error("Error fetching schedules:", error);
+      toast.error("Failed to load schedules");
     } finally {
       setIsLoading(false);
     }
@@ -125,23 +153,25 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
   const onSubmit = async (data: FormData) => {
     try {
       if (!user) {
-        toast.error('You must be logged in to submit a request');
+        toast.error("You must be logged in to submit a request");
         return;
       }
 
-      const selectedRoute = routes.find(r => r.id === data.routeId);
-      const selectedSchedule = schedules.find(s => s.id === data.scheduleId);
-      
+      const selectedRoute = routes.find((r) => r.id === data.routeId);
+      const selectedSchedule = schedules.find((s) => s.id === data.scheduleId);
+
       if (!selectedRoute || !selectedSchedule) {
-        toast.error('Please select a valid route and schedule');
+        toast.error("Please select a valid route and schedule");
         return;
       }
 
       const startDate = new Date(data.date);
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour
 
-      const reason = `Request for additional bus on route ${selectedRoute.name} at ${selectedSchedule.departure_time} on ${format(data.date, 'PPP')}`;
-      
+      const reason = `Request for additional bus on route ${
+        selectedRoute.name
+      } at ${selectedSchedule.departure_time} on ${format(data.date, "PPP")}`;
+
       const success = await requestNewBus({
         routeId: data.routeId,
         scheduleId: data.scheduleId,
@@ -149,23 +179,30 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
         description: data.description,
         busId: data.busId,
         reason: reason,
-        endDate: endDate
+        endDate: endDate,
       });
-      
+
       if (success) {
         form.reset();
         setOpen(false);
-        toast.success('Your bus request has been submitted for voting! It will expire in 1 hour.');
+        toast.success(
+          "Your bus request has been submitted for voting! It will expire in 1 hour."
+        );
+      } else {
+        toast.error("Failed to submit your request. Please try again.");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Failed to submit your request. Please try again.');
+      toast.error(
+        `Failed to submit your request: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   };
 
   return (
     <>
-      <Button 
+      <Button
         onClick={() => setOpen(true)}
         className={cn("gap-2", className)}
         variant="default"
@@ -179,7 +216,8 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
           <DialogHeader>
             <DialogTitle>Request Additional Bus</DialogTitle>
             <DialogDescription>
-              Create a voting request for an additional bus. Other students can vote on this request.
+              Create a voting request for an additional bus. Other students can
+              vote on this request.
             </DialogDescription>
           </DialogHeader>
 
@@ -191,11 +229,11 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Route</FormLabel>
-                    <Select 
+                    <Select
                       onValueChange={(value) => {
                         field.onChange(value);
                         setSelectedRoute(value);
-                      }} 
+                      }}
                       defaultValue={field.value}
                       disabled={isLoading}
                     >
@@ -232,8 +270,8 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Schedule</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
+                      <Select
+                        onValueChange={field.onChange}
                         defaultValue={field.value}
                         disabled={isLoading}
                       >
@@ -268,8 +306,8 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Bus</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
+                    <Select
+                      onValueChange={field.onChange}
                       defaultValue={field.value}
                       disabled={isLoading}
                     >
@@ -283,7 +321,9 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
                           <SelectItem key={bus.id} value={bus.id}>
                             <div className="flex items-center gap-2">
                               <Bus className="h-4 w-4" />
-                              <span>{bus.bus_number} - {bus.name}</span>
+                              <span>
+                                {bus.bus_number} - {bus.name}
+                              </span>
                             </div>
                           </SelectItem>
                         ))}
@@ -329,7 +369,11 @@ export function CreateVoteRequestDialog({ className }: CreateVoteRequestDialogPr
                           selected={field.value}
                           onSelect={field.onChange}
                           disabled={(date) =>
-                            date < new Date() || date > new Date(new Date().setMonth(new Date().getMonth() + 1))
+                            date < new Date() ||
+                            date >
+                              new Date(
+                                new Date().setMonth(new Date().getMonth() + 1)
+                              )
                           }
                           initialFocus
                         />
