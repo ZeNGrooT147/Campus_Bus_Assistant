@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     headers: {
       "X-Frame-Options": "DENY",
-      "X-Content-Type-Options": "nosniff",
+      "X-Content-Type-Options": "nosniff", 
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
@@ -31,32 +31,19 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Optimize for production
-    target: "esnext",
+    target: "es2020",
     minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: mode === "production", // Remove console.log in production
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.info", "console.debug"],
-      },
-      mangle: {
-        toplevel: true,
-        properties: {
-          regex: /^_/,
-        },
-      },
-      format: {
-        comments: false,
-      },
-    },
+    sourcemap: mode === "development",
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom"],
-          supabase: ["@supabase/supabase-js"],
+          react: ['react', 'react-dom'],
+          vendor: ["@supabase/supabase-js", "react-router-dom"],
           ui: [
             "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-dropdown-menu", 
             "@radix-ui/react-select",
           ],
           maps: ["@googlemaps/js-api-loader"],
@@ -78,9 +65,22 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: `assets/app-[hash].js`,
       },
     },
-    chunkSizeWarningLimit: 1000,
-    sourcemap: mode === "development",
-    cssCodeSplit: true,
+    terserOptions: {
+      compress: {
+        drop_console: mode === "production",
+        drop_debugger: true,
+        pure_funcs: ["console.log", "console.info", "console.debug"],
+      },
+      mangle: {
+        toplevel: true,
+        properties: {
+          regex: /^_/,
+        },
+      },
+      format: {
+        comments: false,
+      },
+    },
   },
   define: {
     __DEV__: mode === "development",
