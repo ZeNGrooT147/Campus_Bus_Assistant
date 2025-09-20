@@ -25,26 +25,21 @@ const SimpleBusMap: React.FC<SimpleBusMapProps> = ({
   useEffect(() => {
     const initMap = async () => {
       try {
-        console.log("SimpleBusMap: Starting map initialization...");
         const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
         if (!apiKey) {
           throw new Error("Google Maps API key not found");
         }
 
-        console.log("SimpleBusMap: API key found, creating loader...");
         const loader = new Loader({
           apiKey,
           version: "weekly",
           libraries: ["places", "geometry"], // Match the other components
         });
 
-        console.log("SimpleBusMap: Loading Google Maps API...");
         await loader.load();
-        console.log("SimpleBusMap: Google Maps API loaded successfully");
 
         if (mapRef.current) {
-          console.log("SimpleBusMap: Creating map instance...");
           // Center map on Dharwad
           const map = new google.maps.Map(mapRef.current, {
             center: { lat: 15.3647, lng: 75.124 },
@@ -58,11 +53,6 @@ const SimpleBusMap: React.FC<SimpleBusMapProps> = ({
             ],
           });
 
-          console.log(
-            "SimpleBusMap: Map created, adding markers for",
-            buses.length,
-            "buses"
-          );
           // Add bus markers
           buses.forEach((bus) => {
             if (bus.latitude && bus.longitude) {
@@ -107,11 +97,8 @@ const SimpleBusMap: React.FC<SimpleBusMapProps> = ({
               });
             }
           });
-
-          console.log("SimpleBusMap: Map initialization complete!");
           setIsLoading(false);
         } else {
-          console.error("SimpleBusMap: mapRef.current is null");
           throw new Error("Map container not found");
         }
       } catch (error) {

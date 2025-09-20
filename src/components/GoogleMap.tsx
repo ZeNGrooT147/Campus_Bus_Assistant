@@ -31,18 +31,9 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
       try {
         const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-        console.log("Initializing Google Maps...");
-        console.log("Environment:", {
-          isDev: import.meta.env.DEV,
-          isProd: import.meta.env.PROD,
-          mode: import.meta.env.MODE,
-          hasApiKey: !!apiKey,
-        });
-
         if (!apiKey) {
           const errorMsg =
             "Google Maps API key not found. Please add VITE_GOOGLE_MAPS_API_KEY to your environment variables.";
-          console.error(errorMsg);
           setError(errorMsg);
           return;
         }
@@ -53,9 +44,7 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
           libraries: ["places", "geometry"],
         });
 
-        console.log("Loading Google Maps API...");
         await loader.load();
-        console.log("Google Maps API loaded successfully");
 
         if (mapRef.current) {
           const mapInstance = new google.maps.Map(mapRef.current, {

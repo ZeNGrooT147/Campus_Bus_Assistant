@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./components/theme-provider";
 import { ToastProvider } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { AboutSection } from "@/components/AboutSection";
 
 // Context providers
 import { AuthProvider } from "@/context/AuthContext";
@@ -321,7 +320,6 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             <Toaster />
-            <AboutSection />
           </ToastProvider>
         </AuthProvider>
       </QueryClientProvider>
