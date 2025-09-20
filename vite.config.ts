@@ -31,22 +31,29 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Optimize for production
-    target: "es2020",
+    target: "es2018",
     minify: "terser",
     sourcemap: mode === "development",
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
-          vendor: ["@supabase/supabase-js", "react-router-dom"],
-          ui: [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-dropdown-menu",
-            "@radix-ui/react-select",
-          ],
-          maps: ["@googlemaps/js-api-loader"],
+        manualChunks: (id) => {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "react-vendor";
+            }
+            if (id.includes("@supabase") || id.includes("react-router")) {
+              return "vendor";
+            }
+            if (id.includes("@radix-ui")) {
+              return "ui";
+            }
+            if (id.includes("@googlemaps")) {
+              return "maps";
+            }
+            return "vendor";
+          }
         },
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId
