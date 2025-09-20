@@ -1,20 +1,17 @@
+import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
-// Disable security features completely for now to avoid React conflicts
-// if (import.meta.env.PROD && import.meta.env.VITE_DISABLE_DEVTOOLS === "true") {
-//   import("./utils/security").catch(console.warn);
-// }
+// Ensure React is available globally to prevent createContext issues
+if (typeof window !== 'undefined') {
+  (window as any).React = React;
+}
 
-// Use React.StrictMode to catch issues early
-import React from "react";
-
+// Restore full app with proper React context handling
 createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );
