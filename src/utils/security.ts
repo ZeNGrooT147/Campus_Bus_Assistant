@@ -32,7 +32,7 @@ class SecurityManager {
       this.obfuscateData();
     } catch (error) {
       // Silently fail in production to avoid breaking the app
-      console.warn('Security initialization failed:', error);
+      console.warn("Security initialization failed:", error);
     }
   }
 
@@ -40,7 +40,7 @@ class SecurityManager {
     const noop = () => {};
     const consoleKeys = [
       "log",
-      "debug", 
+      "debug",
       "info",
       "warn",
       "error",
