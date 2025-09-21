@@ -1,21 +1,43 @@
-
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Bus, ChevronLeft, Eye, EyeOff, KeyRound, UserRound } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useAuth } from '@/context/AuthContext';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Bus,
+  ChevronLeft,
+  Eye,
+  EyeOff,
+  KeyRound,
+  UserRound,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
-  usn: z.string().min(1, { message: 'USN is required' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  usn: z.string().min(1, { message: "USN is required" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -26,20 +48,20 @@ const StudentLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
+  const [resetEmail, setResetEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated && role === 'student') {
-      navigate('/student');
+    if (isAuthenticated && role === "student") {
+      navigate("/student");
     }
   }, [isAuthenticated, role, navigate]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      usn: '',
-      password: '',
+      usn: "",
+      password: "",
     },
   });
 
@@ -49,27 +71,28 @@ const StudentLogin = () => {
       await login({
         identifier: values.usn,
         password: values.password,
-        role: 'student'
+        role: "student",
       });
-      
+
       // Success toast is shown by the login function in useAuthActions
-      
     } catch (error: any) {
-      console.error('Login error:', error);
-      
+      console.error("Login error:", error);
+
       const newAttempts = loginAttempts + 1;
       setLoginAttempts(newAttempts);
-      
-      if (error.message?.includes('Invalid login credentials')) {
+
+      if (error.message?.includes("Invalid login credentials")) {
         toast.error("Wrong USN or password. Please try again.");
-      } else if (error.message?.includes('User not found')) {
+      } else if (error.message?.includes("User not found")) {
         toast.error("USN not found. Please check or register.");
       } else {
         toast.error("Please try again later.");
       }
-      
+
       if (newAttempts >= 3 && !showForgotPassword) {
-        toast.error("Multiple failed login attempts. You can use the forgot password option below.");
+        toast.error(
+          "Multiple failed login attempts. You can use the forgot password option below."
+        );
         setShowForgotPassword(true);
       }
     } finally {
@@ -79,12 +102,12 @@ const StudentLogin = () => {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!resetEmail.trim()) {
       toast.error("Please enter your USN");
       return;
     }
-    
+
     try {
       setIsSubmitting(true);
       await forgotPassword(resetEmail);
@@ -99,12 +122,16 @@ const StudentLogin = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
       <Link to="/login" className="absolute top-4 left-6 z-10">
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center gap-1 hover:bg-black/5"
+        >
           <ChevronLeft className="h-4 w-4" />
           Back to Selection
         </Button>
       </Link>
-      
+
       <div className="flex-grow flex items-center justify-center p-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -118,7 +145,9 @@ const StudentLogin = () => {
                 <div className="p-2 bg-blue-50 rounded-full">
                   <Bus className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-2xl font-bold">Student Login</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                  Student Login
+                </CardTitle>
               </div>
               <CardDescription>
                 Enter your USN and password to access your dashboard
@@ -156,10 +185,10 @@ const StudentLogin = () => {
                         <div className="flex items-center justify-between">
                           <FormLabel>Password</FormLabel>
                           {loginAttempts >= 3 && (
-                            <Button 
-                              variant="link" 
-                              size="sm" 
-                              className="px-0 text-xs text-primary" 
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="px-0 text-xs text-primary"
                               type="button"
                               onClick={() => setShowForgotPassword(true)}
                               disabled={isSubmitting}
@@ -200,22 +229,26 @@ const StudentLogin = () => {
                   />
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
+                  <Button
+                    type="submit"
+                    className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 
+                    {isSubmitting ? (
                       <div className="flex items-center gap-2">
                         <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         <span>Logging in...</span>
-                      </div> : 
-                      'Log In'
-                    }
+                      </div>
+                    ) : (
+                      "Log In"
+                    )}
                   </Button>
                   <div className="text-center text-sm">
-                    Don't have an account?{' '}
-                    <Link to="/register/student" className="text-primary font-medium hover:underline">
+                    Don't have an account?{" "}
+                    <Link
+                      to="/register/student"
+                      className="text-primary font-medium hover:underline"
+                    >
                       Register here
                     </Link>
                   </div>
@@ -225,9 +258,12 @@ const StudentLogin = () => {
           </Card>
         </motion.div>
       </div>
-      
+
       <footer className="py-6 text-center text-sm text-gray-600 border-t">
-        <p>© {new Date().getFullYear()} Campus Bus Assistant. All rights reserved.</p>
+        <p>
+          © {new Date().getFullYear()} Campus Bus Assistant. All rights
+          reserved.
+        </p>
       </footer>
     </div>
   );

@@ -1,22 +1,47 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangle, ArrowRight, Bus, ChevronLeft, Eye, EyeOff, Key, UserRound } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useAuth } from '@/context/AuthContext';
-import { toast } from 'sonner';
-import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Bus,
+  ChevronLeft,
+  Eye,
+  EyeOff,
+  Key,
+  UserRound,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
-  identifier: z.string().min(1, { message: 'Email is required' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  identifier: z.string().min(1, { message: "Email is required" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -28,19 +53,19 @@ const CoordinatorLogin = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
+  const [resetEmail, setResetEmail] = useState("");
 
   useEffect(() => {
-    if (isAuthenticated && role === 'coordinator') {
-      navigate('/coordinator');
+    if (isAuthenticated && role === "coordinator") {
+      navigate("/coordinator");
     }
   }, [isAuthenticated, role, navigate]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      identifier: '',
-      password: '',
+      identifier: "",
+      password: "",
     },
   });
 
@@ -50,24 +75,26 @@ const CoordinatorLogin = () => {
       await login({
         identifier: values.identifier,
         password: values.password,
-        role: 'coordinator'
+        role: "coordinator",
       });
-      
+
       // Success will be handled by the auth listener
     } catch (error: any) {
-      console.error('Login failed:', error);
-      
+      console.error("Login failed:", error);
+
       const newAttempts = loginAttempts + 1;
       setLoginAttempts(newAttempts);
-      
-      if (error.message?.includes('Invalid login credentials')) {
+
+      if (error.message?.includes("Invalid login credentials")) {
         toast.error("Invalid credentials. Please try again.");
       } else {
         toast.error("An error occurred. Please try again later.");
       }
-      
+
       if (newAttempts >= 3) {
-        toast.error("Multiple failed attempts. You can use the forgot password option.");
+        toast.error(
+          "Multiple failed attempts. You can use the forgot password option."
+        );
         setShowForgotPassword(true);
       }
     } finally {
@@ -78,29 +105,33 @@ const CoordinatorLogin = () => {
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetEmail.trim()) {
-      toast.error('Please enter your registered email');
+      toast.error("Please enter your registered email");
       return;
     }
 
     try {
       await forgotPassword(resetEmail);
-      toast.success('Password reset instructions sent to your email');
+      toast.success("Password reset instructions sent to your email");
       setShowForgotPassword(false);
     } catch (error) {
-      console.error('Password reset failed:', error);
-      toast.error('Failed to send reset instructions. Please try again.');
+      console.error("Password reset failed:", error);
+      toast.error("Failed to send reset instructions. Please try again.");
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
       <Link to="/login" className="absolute top-4 left-6 z-10">
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center gap-1 hover:bg-black/5"
+        >
           <ChevronLeft className="h-4 w-4" />
           Back to Selection
         </Button>
       </Link>
-      
+
       <div className="flex-grow flex items-center justify-center p-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,7 +145,9 @@ const CoordinatorLogin = () => {
                 <div className="p-2 bg-purple-50 rounded-full">
                   <Bus className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle className="text-2xl font-bold">Coordinator Login</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                  Coordinator Login
+                </CardTitle>
               </div>
               <CardDescription>
                 Enter your credentials to access the coordinator dashboard
@@ -152,10 +185,10 @@ const CoordinatorLogin = () => {
                         <div className="flex items-center justify-between">
                           <FormLabel>Password</FormLabel>
                           {loginAttempts >= 3 && (
-                            <Button 
-                              variant="link" 
-                              size="sm" 
-                              className="px-0 text-xs text-purple-600" 
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="px-0 text-xs text-purple-600"
                               type="button"
                               onClick={() => setShowForgotPassword(true)}
                               disabled={isSubmitting}
@@ -196,22 +229,26 @@ const CoordinatorLogin = () => {
                   />
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
+                  <Button
+                    type="submit"
+                    className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 
+                    {isSubmitting ? (
                       <div className="flex items-center gap-2">
                         <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         <span>Logging in...</span>
-                      </div> : 
-                      'Sign In'
-                    }
+                      </div>
+                    ) : (
+                      "Sign In"
+                    )}
                   </Button>
                   <div className="text-center text-sm">
-                    Not a coordinator?{' '}
-                    <Link to="/login" className="text-purple-600 font-medium hover:underline">
+                    Not a coordinator?{" "}
+                    <Link
+                      to="/login"
+                      className="text-purple-600 font-medium hover:underline"
+                    >
                       Back to login selection
                     </Link>
                   </div>
@@ -219,7 +256,7 @@ const CoordinatorLogin = () => {
               </form>
             </Form>
           </Card>
-          
+
           {showForgotPassword && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -237,30 +274,31 @@ const CoordinatorLogin = () => {
                   <form onSubmit={handleForgotPassword} className="space-y-4">
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Email</Label>
-                      <Input 
-                        type="email" 
-                        placeholder="Enter your registered email" 
-                        value={resetEmail} 
-                        onChange={(e) => setResetEmail(e.target.value)} 
+                      <Input
+                        type="email"
+                        placeholder="Enter your registered email"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
                       />
                     </div>
                     <div className="bg-amber-50 p-3 rounded-md flex items-start text-sm gap-2">
                       <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                       <p className="text-amber-800">
-                        We'll send password reset instructions to this email address.
+                        We'll send password reset instructions to this email
+                        address.
                       </p>
                     </div>
                     <div className="flex gap-2 pt-2">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={() => setShowForgotPassword(false)}
                         className="flex-1"
                       >
                         Cancel
                       </Button>
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         className="flex-1 bg-purple-600 hover:bg-purple-700"
                       >
                         Send Instructions
@@ -271,7 +309,7 @@ const CoordinatorLogin = () => {
               </Card>
             </motion.div>
           )}
-          
+
           <div className="mt-6 flex justify-center">
             <Badge variant="outline" className="bg-gray-50">
               Campus Transit Management System
@@ -279,9 +317,12 @@ const CoordinatorLogin = () => {
           </div>
         </motion.div>
       </div>
-      
+
       <footer className="py-6 text-center text-sm text-gray-600 border-t">
-        <p>© {new Date().getFullYear()} Campus Bus Assistant. All rights reserved.</p>
+        <p>
+          © {new Date().getFullYear()} Campus Bus Assistant. All rights
+          reserved.
+        </p>
       </footer>
     </div>
   );
