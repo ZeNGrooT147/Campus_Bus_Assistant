@@ -439,20 +439,10 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
 
         {/* Footer */}
         <footer className="border-t py-4 px-6 text-center text-sm text-muted-foreground bg-white">
-          <div className="flex justify-center items-center gap-1">
-            <p>
-              © {new Date().getFullYear()} Campus Bus Assistant. All rights
-              reserved.
-            </p>
-            <span className="h-1 w-1 rounded-full bg-muted-foreground"></span>
-            <a href="#" className="hover:text-primary">
-              Privacy Policy
-            </a>
-            <span className="h-1 w-1 rounded-full bg-muted-foreground"></span>
-            <a href="#" className="hover:text-primary">
-              Terms of Service
-            </a>
-          </div>
+          <p>
+            © {new Date().getFullYear()} Campus Bus Assistant. All rights
+            reserved.
+          </p>
         </footer>
       </div>
     </div>
