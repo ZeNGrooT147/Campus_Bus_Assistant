@@ -16,6 +16,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
@@ -54,13 +55,13 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden bg-background text-foreground">
       {/* Navbar */}
       <header
         className={cn(
           "fixed top-0 w-full z-50 transition-all duration-300",
           isHeaderSolid
-            ? "bg-white/90 backdrop-blur-sm shadow-subtle py-4"
+            ? "bg-background/90 backdrop-blur-sm shadow-subtle py-4 border-b border-border"
             : "bg-transparent py-6"
         )}
       >
@@ -79,7 +80,7 @@ const LandingPage = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <a
               href="#features"
-              className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
               onClick={(e) => {
                 e.preventDefault();
                 const section = document.getElementById("features");
@@ -103,7 +104,7 @@ const LandingPage = () => {
             </a>
             <a
               href="#how-it-works"
-              className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
               onClick={(e) => {
                 e.preventDefault();
                 const section = document.getElementById("how-it-works");
@@ -127,7 +128,7 @@ const LandingPage = () => {
             </a>
             <a
               href="#roles"
-              className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
               onClick={(e) => {
                 e.preventDefault();
                 const section = document.getElementById("roles");
@@ -151,53 +152,60 @@ const LandingPage = () => {
             </a>
           </nav>
 
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 rounded-md hover:bg-gray-100"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <div className="w-6 h-5 flex flex-col justify-between">
-              <span
-                className={`h-0.5 w-full bg-gray-600 transition-transform ${
-                  mobileMenuOpen ? "rotate-45 translate-y-2" : ""
-                }`}
-              ></span>
-              <span
-                className={`h-0.5 w-full bg-gray-600 transition-opacity ${
-                  mobileMenuOpen ? "opacity-0" : "opacity-100"
-                }`}
-              ></span>
-              <span
-                className={`h-0.5 w-full bg-gray-600 transition-transform ${
-                  mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-                }`}
-              ></span>
-            </div>
-          </button>
+          {/* Right side: Theme Toggle, Mobile Menu Button, and CTA */}
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle - always visible */}
+            <ThemeToggle />
 
-          <div className="hidden md:block">
-            {isAuthenticated ? (
-              <Link to={`/${user?.role}`}>
-                <Button className="shadow-md hover:shadow-lg transition-shadow">
-                  Go to Dashboard
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            ) : (
-              <Link to="/login">
-                <Button className="shadow-md hover:shadow-lg transition-shadow group">
-                  Get Started
-                  <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            )}
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <div className="w-6 h-5 flex flex-col justify-between">
+                <span
+                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-transform ${
+                    mobileMenuOpen ? "rotate-45 translate-y-2" : ""
+                  }`}
+                ></span>
+                <span
+                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-opacity ${
+                    mobileMenuOpen ? "opacity-0" : "opacity-100"
+                  }`}
+                ></span>
+                <span
+                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-transform ${
+                    mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
+                  }`}
+                ></span>
+              </div>
+            </button>
+
+            {/* Desktop CTA Button */}
+            <div className="hidden md:block">
+              {isAuthenticated ? (
+                <Link to={`/${user?.role}`}>
+                  <Button className="shadow-md hover:shadow-lg transition-shadow">
+                    Go to Dashboard
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <Button className="shadow-md hover:shadow-lg transition-shadow group">
+                    Get Started
+                    <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Mobile menu */}
         <div
           className={cn(
-            "md:hidden fixed inset-x-0 top-[72px] bg-white border-b transition-all duration-300",
+            "md:hidden fixed inset-x-0 top-[72px] bg-background border-b border-border transition-all duration-300",
             mobileMenuOpen
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-full pointer-events-none"
@@ -206,7 +214,7 @@ const LandingPage = () => {
           <div className="container mx-auto flex flex-col space-y-4 px-4">
             <a
               href="#features"
-              className="text-sm font-medium py-2 border-b border-gray-100"
+              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
               onClick={(e) => {
                 e.preventDefault();
                 setMobileMenuOpen(false);
@@ -231,7 +239,7 @@ const LandingPage = () => {
             </a>
             <a
               href="#how-it-works"
-              className="text-sm font-medium py-2 border-b border-gray-100"
+              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
               onClick={(e) => {
                 e.preventDefault();
                 setMobileMenuOpen(false);
@@ -256,7 +264,7 @@ const LandingPage = () => {
             </a>
             <a
               href="#roles"
-              className="text-sm font-medium py-2 border-b border-gray-100"
+              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
               onClick={(e) => {
                 e.preventDefault();
                 setMobileMenuOpen(false);
@@ -303,18 +311,28 @@ const LandingPage = () => {
                 </Button>
               </Link>
             )}
+
+            {/* Theme Toggle for Mobile */}
+            <div className="py-2 border-t border-gray-100 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium dark:text-gray-300">
+                  Theme
+                </span>
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-white pointer-events-none" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background pointer-events-none" />
 
         {/* Animated background elements */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div
-            className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blue-100/50 blur-3xl"
+            className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blue-100/50 dark:bg-blue-900/30 blur-3xl"
             animate={{
               x: [0, 10, 0],
               y: [0, -15, 0],
@@ -327,7 +345,7 @@ const LandingPage = () => {
             }}
           />
           <motion.div
-            className="absolute bottom-20 -left-20 w-80 h-80 rounded-full bg-indigo-100/40 blur-3xl"
+            className="absolute bottom-20 -left-20 w-80 h-80 rounded-full bg-indigo-100/40 dark:bg-indigo-900/20 blur-3xl"
             animate={{
               x: [0, -20, 0],
               y: [0, 20, 0],
@@ -341,7 +359,7 @@ const LandingPage = () => {
             }}
           />
           <motion.div
-            className="absolute top-1/4 left-1/3 w-60 h-60 rounded-full bg-blue-50/30 blur-3xl"
+            className="absolute top-1/4 left-1/3 w-60 h-60 rounded-full bg-blue-50/30 dark:bg-blue-900/20 blur-3xl"
             animate={{
               x: [0, 15, 0],
               y: [0, 15, 0],
@@ -376,7 +394,7 @@ const LandingPage = () => {
 
             <motion.h1
               variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white"
             >
               Campus Bus{" "}
               <span className="relative">
@@ -390,7 +408,7 @@ const LandingPage = () => {
 
             <motion.p
               variants={fadeInUp}
-              className="text-lg text-gray-600 max-w-lg"
+              className="text-lg text-gray-600 dark:text-gray-300 max-w-lg"
             >
               A seamless platform connecting students, drivers, and
               administrators for efficient campus transportation management.
@@ -412,7 +430,7 @@ const LandingPage = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="font-medium text-base border-2 hover:bg-gray-50 w-full sm:w-auto"
+                className="font-medium text-base border-2 hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-600 w-full sm:w-auto"
                 onClick={() => {
                   const howItWorksSection =
                     document.getElementById("how-it-works");
@@ -438,13 +456,13 @@ const LandingPage = () => {
 
             <motion.div
               variants={fadeInUp}
-              className="flex items-center space-x-4 pt-6 text-sm text-gray-500"
+              className="flex items-center space-x-4 pt-6 text-sm text-gray-500 dark:text-gray-400"
             >
               <div className="flex -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-primary-400 flex items-center justify-center text-white text-xs font-medium ring-2 ring-white"
+                    className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-primary-400 flex items-center justify-center text-white text-xs font-medium ring-2 ring-white dark:ring-gray-800"
                   >
                     {i}
                   </div>
@@ -539,7 +557,7 @@ const LandingPage = () => {
       {/* Features Section */}
       <section
         id="features"
-        className="py-20 bg-gradient-to-b from-white to-blue-50"
+        className="py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800"
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -552,10 +570,10 @@ const LandingPage = () => {
             <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
               <CheckCircle className="w-4 h-4 mr-2" /> Powerful Features
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               Everything You Need
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our platform offers a comprehensive set of tools designed to
               streamline campus transportation logistics.
             </p>
@@ -572,16 +590,16 @@ const LandingPage = () => {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="bg-white rounded-xl p-6 hover:shadow-lg transition-shadow relative overflow-hidden group border border-gray-100"
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 hover:shadow-lg dark:hover:shadow-xl transition-shadow relative overflow-hidden group border border-gray-100 dark:border-gray-700"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 relative z-10">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 dark:from-blue-400/10 dark:to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4 relative z-10">
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 relative z-10">
+                <h3 className="text-xl font-semibold mb-2 relative z-10 text-gray-900 dark:text-white">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 relative z-10">
+                <p className="text-gray-600 dark:text-gray-300 relative z-10">
                   {feature.description}
                 </p>
               </motion.div>
@@ -591,7 +609,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-white">
+      <section id="how-it-works" className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -603,10 +621,10 @@ const LandingPage = () => {
             <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
               <CheckCircle className="w-4 h-4 mr-2" /> Easy Process
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               How It Works
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our platform connects all stakeholders in the campus
               transportation ecosystem through a simple process.
             </p>
@@ -638,8 +656,12 @@ const LandingPage = () => {
                     </div>
                   )}
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {step.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -649,7 +671,7 @@ const LandingPage = () => {
       {/* User Roles */}
       <section
         id="roles"
-        className="py-20 bg-gradient-to-b from-blue-50 to-white"
+        className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900"
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -662,10 +684,10 @@ const LandingPage = () => {
             <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
               <CheckCircle className="w-4 h-4 mr-2" /> User Roles
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               Choose Your Role
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our platform caters to different stakeholders in the campus bus
               ecosystem, each with tailored features.
             </p>
@@ -690,13 +712,17 @@ const LandingPage = () => {
                   </div>
                   <role.icon className="w-12 h-12 text-white relative z-10" />
                 </div>
-                <div className="p-6 bg-white">
-                  <h3 className="text-xl font-semibold mb-2">{role.title}</h3>
-                  <p className="text-gray-600 mb-6">{role.description}</p>
+                <div className="p-6 bg-white dark:bg-gray-800">
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+                    {role.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6">
+                    {role.description}
+                  </p>
                   <Link to={role.loginPath}>
                     <Button
                       variant="outline"
-                      className="w-full group hover:bg-gray-50/80"
+                      className="w-full group hover:bg-gray-50/80 dark:hover:bg-gray-700/80"
                     >
                       Login as {role.title}
                       <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -710,7 +736,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary/10 to-blue-600/10">
+      <section className="py-16 bg-gradient-to-r from-primary/10 to-blue-600/10 dark:from-primary/20 dark:to-blue-600/20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -719,10 +745,10 @@ const LandingPage = () => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
               Ready to Simplify Campus Transportation?
             </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               Join thousands of students, drivers, and coordinators who are
               already using our platform to make campus transportation more
               efficient.
@@ -741,27 +767,31 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-gray-50 border-t">
+      <footer className="py-12 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <Bus className="h-6 w-6 text-primary" />
-                <span className="font-bold text-xl">Campus Bus Assistant</span>
+                <span className="font-bold text-xl text-gray-900 dark:text-white">
+                  Campus Bus Assistant
+                </span>
               </div>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
                 Simplifying campus transportation for students and
                 administrators.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">Features</h3>
+              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
+                Features
+              </h3>
               <ul className="space-y-2">
                 <li>
                   <a
                     href="#features"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Real-time Tracking
                   </a>
@@ -769,7 +799,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#features"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Voting System
                   </a>
@@ -777,7 +807,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#features"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Route Guidance
                   </a>
@@ -785,7 +815,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#features"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Emergency Assistance
                   </a>
@@ -794,12 +824,14 @@ const LandingPage = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">User Roles</h3>
+              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
+                User Roles
+              </h3>
               <ul className="space-y-2">
                 <li>
                   <Link
                     to="/login/student"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Student
                   </Link>
@@ -807,7 +839,7 @@ const LandingPage = () => {
                 <li>
                   <Link
                     to="/login/driver"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Driver
                   </Link>
@@ -815,7 +847,7 @@ const LandingPage = () => {
                 <li>
                   <Link
                     to="/login/coordinator"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Coordinator
                   </Link>
@@ -823,7 +855,7 @@ const LandingPage = () => {
                 <li>
                   <Link
                     to="/login/admin"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Administrator
                   </Link>
@@ -832,12 +864,14 @@ const LandingPage = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">Connect</h3>
+              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
+                Connect
+              </h3>
               <ul className="space-y-2">
                 <li>
                   <a
                     href="#"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Contact Support
                   </a>
@@ -845,7 +879,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Privacy Policy
                   </a>
@@ -853,7 +887,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Terms of Service
                   </a>
@@ -861,7 +895,7 @@ const LandingPage = () => {
                 <li>
                   <a
                     href="#"
-                    className="text-gray-500 hover:text-primary text-sm"
+                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
                   >
                     Help Center
                   </a>
@@ -870,7 +904,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-600">
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             <p className="mb-2">
               © {new Date().getFullYear()} Campus Bus Assistant. All rights
               reserved.
@@ -878,7 +912,7 @@ const LandingPage = () => {
             <div className="flex justify-center space-x-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-primary transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -892,7 +926,7 @@ const LandingPage = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-primary transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -906,7 +940,7 @@ const LandingPage = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-primary transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -920,7 +954,7 @@ const LandingPage = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-primary transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

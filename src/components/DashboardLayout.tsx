@@ -11,6 +11,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ui/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -284,7 +285,7 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-gray-50">
+    <div className="flex min-h-screen w-full bg-gray-50 dark:bg-gray-900">
       {sidebarOpen && (
         <DashboardSidebar
           userRole={user.role as "student" | "driver" | "coordinator" | "admin"}
@@ -293,7 +294,7 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
 
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top navigation bar */}
-        <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
+        <header className="h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
           <div className="flex items-center">
             <Button
               variant="ghost"
@@ -303,10 +304,12 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <h1 className="text-xl font-semibold">{pageTitle}</h1>
+            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{pageTitle}</h1>
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <ThemeToggle />
             {/* Notification Button in top bar */}
             <NotificationDropdown />
             {/* User Profile Dropdown */}
@@ -332,15 +335,15 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-60 p-2 shadow-lg rounded-xl"
+                className="w-60 p-2 shadow-lg rounded-xl dark:bg-gray-800 dark:border-gray-600"
               >
-                <div className="flex items-center gap-3 p-2 mb-1 bg-primary/5 rounded-md">
-                  <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center text-primary font-medium text-lg">
+                <div className="flex items-center gap-3 p-2 mb-1 bg-primary/5 dark:bg-primary/20 rounded-md">
+                  <div className="w-10 h-10 rounded-full bg-primary/15 dark:bg-primary/30 flex items-center justify-center text-primary font-medium text-lg">
                     {getInitial()}
                   </div>
                   <div className="flex flex-col">
-                    <span className="font-medium">{user.name || "User"}</span>
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <span className="font-medium dark:text-white">{user.name || "User"}</span>
+                    <span className="text-xs text-muted-foreground dark:text-gray-400 flex items-center gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
                       {user.role &&
                         user.role.charAt(0).toUpperCase() +
@@ -349,23 +352,23 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
                     </span>
                   </div>
                 </div>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="dark:border-gray-600" />
                 <Link to={`/${user.role}/profile`}>
-                  <DropdownMenuItem className="cursor-pointer rounded-md p-2 focus:bg-muted hover:bg-muted">
-                    <User className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <DropdownMenuItem className="cursor-pointer rounded-md p-2 focus:bg-muted hover:bg-muted dark:hover:bg-gray-700 dark:focus:bg-gray-700 dark:text-gray-300">
+                    <User className="h-4 w-4 mr-2 text-muted-foreground dark:text-gray-400" />
                     Profile
                   </DropdownMenuItem>
                 </Link>
                 <Link to={`/${user.role}/settings`}>
-                  <DropdownMenuItem className="cursor-pointer rounded-md p-2 focus:bg-muted hover:bg-muted">
-                    <Settings className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <DropdownMenuItem className="cursor-pointer rounded-md p-2 focus:bg-muted hover:bg-muted dark:hover:bg-gray-700 dark:focus:bg-gray-700 dark:text-gray-300">
+                    <Settings className="h-4 w-4 mr-2 text-muted-foreground dark:text-gray-400" />
                     Settings
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="dark:border-gray-600" />
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="cursor-pointer text-red-500 focus:text-red-500 rounded-md p-2 focus:bg-red-50 hover:bg-red-50"
+                  className="cursor-pointer text-red-500 focus:text-red-500 dark:text-red-400 dark:focus:text-red-400 rounded-md p-2 focus:bg-red-50 hover:bg-red-50 dark:focus:bg-red-900/20 dark:hover:bg-red-900/20"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
@@ -376,7 +379,7 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-gray-900">
           <div className="animate-fade-in max-w-7xl mx-auto">{children}</div>
         </main>
 
@@ -391,18 +394,18 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
         </button>
         {/* SOS Confirmation Dialog */}
         <Dialog open={sosDialogOpen} onOpenChange={setSosDialogOpen}>
-          <DialogContent className="max-w-sm">
+          <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-600">
             <DialogHeader>
-              <DialogTitle>Trigger SOS Emergency?</DialogTitle>
+              <DialogTitle className="dark:text-white">Trigger SOS Emergency?</DialogTitle>
             </DialogHeader>
-            <div className="py-2 text-center text-lg text-red-600 font-semibold flex flex-col items-center">
+            <div className="py-2 text-center text-lg text-red-600 dark:text-red-400 font-semibold flex flex-col items-center">
               <AlertTriangle className="w-10 h-10 mb-2 animate-pulse" />
               This will alert campus authorities immediately.
             </div>
             <div className="mb-2">
               <label
                 htmlFor="sos-reason"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
                 Reason for SOS <span className="text-red-500">*</span>
               </label>
@@ -410,7 +413,7 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
                 id="sos-reason"
                 ref={reasonInputRef}
                 type="text"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400"
                 placeholder="Describe the emergency..."
                 value={sosReason}
                 onChange={(e) => setSosReason(e.target.value)}
@@ -438,7 +441,7 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
         </Dialog>
 
         {/* Footer */}
-        <footer className="border-t py-4 px-6 text-center text-sm text-muted-foreground bg-white">
+        <footer className="border-t py-4 px-6 text-center text-sm text-muted-foreground bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
           <p>
             © {new Date().getFullYear()} Campus Bus Assistant. All rights
             reserved.

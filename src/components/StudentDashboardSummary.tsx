@@ -172,24 +172,25 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
     };
   }, []);
 
-  const getSeverityStyles = (severity: string) => {
+    const getSeverityStyles = (severity: string) => {
     switch (severity) {
       case "critical":
         return {
-          bg: "bg-red-100 text-red-600",
-          badge: "bg-red-50 hover:bg-red-100 text-red-600 border-red-200",
+          bg: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300",
+          badge:
+            "bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700",
         };
       case "important":
         return {
-          bg: "bg-amber-100 text-amber-600",
+          bg: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300",
           badge:
-            "bg-amber-50 hover:bg-amber-100 text-amber-600 border-amber-200",
+            "bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-700",
         };
       default:
         return {
-          bg: "bg-green-100 text-green-600",
+          bg: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400",
           badge:
-            "bg-green-50 hover:bg-green-100 text-green-600 border-green-200",
+            "bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 text-green-600 dark:text-green-400 border-green-200 dark:border-green-700",
         };
     }
   };
@@ -217,15 +218,15 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
       animate="show"
     >
       <motion.div variants={item}>
-        <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary overflow-hidden h-full bg-gradient-to-br from-white to-primary/5">
-          <CardHeader className="pb-2 bg-gradient-to-r from-primary/5 to-transparent">
+        <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary overflow-hidden h-full bg-gradient-to-br from-background to-primary/5 dark:from-gray-800 dark:to-primary/10">
+          <CardHeader className="pb-2 bg-gradient-to-r from-primary/5 to-transparent dark:from-primary/10 dark:to-transparent">
             <CardTitle className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary/10 ring-1 ring-primary/20">
+              <div className="p-2.5 rounded-xl bg-primary/10 ring-1 ring-primary/20 dark:bg-primary/20 dark:ring-primary/30">
                 <Bus className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">Available Buses</h2>
-                <CardDescription className="text-sm mt-1">
+                <h2 className="text-xl font-bold text-foreground dark:text-white">Available Buses</h2>
+                <CardDescription className="text-sm mt-1 text-muted-foreground dark:text-gray-300">
                   Browse bus information for your region
                 </CardDescription>
               </div>
@@ -294,13 +295,13 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="bg-primary/5 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <div className="bg-primary/5 dark:bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                   <Bus className="h-8 w-8 text-primary/50" />
                 </div>
-                <p className="text-lg font-medium mb-1">
+                <p className="text-lg font-medium mb-1 text-foreground dark:text-white">
                   No bus information available
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground dark:text-gray-300">
                   Check back later for updates
                 </p>
               </div>
@@ -309,7 +310,7 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
           <CardFooter className="pt-4">
             <Button
               variant="outline"
-              className="w-full bg-white hover:bg-primary/5 border-primary/20 hover:border-primary/30 transition-colors"
+              className="w-full bg-background dark:bg-gray-800 hover:bg-primary/5 dark:hover:bg-primary/10 border-primary/20 hover:border-primary/30 transition-colors text-foreground dark:text-white"
               onClick={() => navigate("/student/buses")}
             >
               <Bus className="mr-2 h-4 w-4" />
@@ -320,15 +321,15 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
       </motion.div>
 
       <motion.div variants={item}>
-        <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500 overflow-hidden bg-gradient-to-br from-white to-blue-50">
-          <CardHeader className="pb-2 bg-gradient-to-r from-blue-500/5 to-transparent">
+        <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500 overflow-hidden bg-gradient-to-br from-background to-blue-50 dark:from-gray-800 dark:to-blue-900/20">
+          <CardHeader className="pb-2 bg-gradient-to-r from-blue-500/5 to-transparent dark:from-blue-500/10 dark:to-transparent">
             <CardTitle className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-blue-500/10 ring-1 ring-blue-500/20">
+              <div className="p-2.5 rounded-xl bg-blue-500/10 ring-1 ring-blue-500/20 dark:bg-blue-500/20 dark:ring-blue-500/30">
                 <Vote className="h-6 w-6 text-blue-500" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">Bus Requests</h2>
-                <CardDescription className="text-sm mt-1">
+                <h2 className="text-xl font-bold text-foreground dark:text-white">Bus Requests</h2>
+                <CardDescription className="text-sm mt-1 text-muted-foreground dark:text-gray-300">
                   Active bus voting requests
                 </CardDescription>
               </div>
@@ -353,7 +354,7 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
               </div>
               <Button
                 variant="default"
-                className="w-full max-w-md bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition-all duration-300"
+                className="w-full max-w-md bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition-all duration-300 dark:bg-blue-600 dark:hover:bg-blue-700"
                 onClick={() => navigate("/student/voting")}
               >
                 <Vote className="mr-2 h-4 w-4" />
@@ -365,35 +366,35 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
       </motion.div>
 
       <motion.div variants={item}>
-        <Card className="hover:shadow-lg transition-all duration-300 overflow-hidden border-t-4 border-t-green-500 bg-gradient-to-br from-white to-green-50">
-          <CardHeader className="pb-2 bg-gradient-to-r from-green-500/5 to-transparent">
+        <Card className="hover:shadow-lg transition-all duration-300 overflow-hidden border-t-4 border-t-green-500 bg-gradient-to-br from-background to-green-50 dark:from-gray-800 dark:to-green-900/20">
+          <CardHeader className="pb-2 bg-gradient-to-r from-green-500/5 to-transparent dark:from-green-500/10 dark:to-transparent">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-green-500/10 ring-1 ring-green-500/20">
+                <div className="p-2.5 rounded-xl bg-green-500/10 ring-1 ring-green-500/20 dark:bg-green-500/20 dark:ring-green-500/30">
                   <BookOpen className="h-6 w-6 text-green-500" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-bold">
+                  <CardTitle className="text-xl font-bold text-foreground dark:text-white">
                     Campus Updates
                   </CardTitle>
-                  <CardDescription className="text-sm mt-1">
+                  <CardDescription className="text-sm mt-1 text-muted-foreground dark:text-gray-300">
                     Latest announcements and important updates
                   </CardDescription>
                 </div>
               </div>
               <Badge
                 variant="outline"
-                className="ml-auto bg-green-50 hover:bg-green-100 text-green-700 border-green-200 px-3 py-1"
+                className="ml-auto bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-700 px-3 py-1"
               >
                 {announcements.length} Updates
               </Badge>
             </div>
           </CardHeader>
-          <CardContent className="pb-0 divide-y divide-green-100">
+          <CardContent className="pb-0 divide-y divide-green-100 dark:divide-green-800">
             {loadingAnnouncements ? (
               <div className="flex justify-center items-center py-12">
                 <div className="animate-spin h-8 w-8 border-3 border-green-500 border-t-transparent rounded-full"></div>
-                <span className="ml-3 text-muted-foreground">
+                <span className="ml-3 text-muted-foreground dark:text-gray-300">
                   Loading announcements...
                 </span>
               </div>
@@ -403,7 +404,7 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
                 return (
                   <div
                     key={announcement.id}
-                    className="flex items-center justify-between p-4 transition-colors hover:bg-green-50/50 group"
+                    className="flex items-center justify-between p-4 transition-colors hover:bg-green-50/50 dark:hover:bg-green-900/20 group"
                   >
                     <div className="flex items-center gap-4">
                       <div
@@ -412,10 +413,10 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
                         <Bell className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="font-medium text-base">
+                        <p className="font-medium text-base text-foreground dark:text-white">
                           {announcement.title}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-muted-foreground dark:text-gray-300 mt-1">
                           {new Date(announcement.postedAt).toLocaleDateString(
                             "en-US",
                             {
@@ -440,23 +441,23 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
               })
             ) : (
               <div className="text-center py-12">
-                <div className="bg-green-500/5 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <div className="bg-green-500/5 dark:bg-green-500/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                   <Bell className="h-8 w-8 text-green-500/50" />
                 </div>
-                <p className="text-lg font-medium mb-1">
+                <p className="text-lg font-medium mb-1 text-foreground dark:text-white">
                   No announcements available
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground dark:text-gray-300">
                   Check back later for updates
                 </p>
               </div>
             )}
           </CardContent>
-          <CardFooter className="py-4 bg-green-50/30">
+          <CardFooter className="py-4 bg-green-50/30 dark:bg-green-900/10">
             <Button
               variant="ghost"
               size="sm"
-              className="ml-auto text-green-600 hover:text-green-700 hover:bg-green-100/50 flex items-center gap-2 px-4"
+              className="ml-auto text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-100/50 dark:hover:bg-green-900/30 flex items-center gap-2 px-4"
               onClick={() => navigate("/student/announcements")}
             >
               View all announcements

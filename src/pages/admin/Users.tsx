@@ -200,10 +200,10 @@ const AdminUsers = () => {
   return (
     <DashboardLayout pageTitle="User Management">
       <div className="space-y-6">
-        <Card className="border shadow-sm">
+        <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>User Management</CardTitle>
-            <CardDescription>
+            <CardTitle className="dark:text-white">User Management</CardTitle>
+            <CardDescription className="dark:text-gray-300">
               Manage all users of the Campus Bus Assistant platform
             </CardDescription>
           </CardHeader>
@@ -215,7 +215,7 @@ const AdminUsers = () => {
                   <Input
                     type="search"
                     placeholder="Search users..."
-                    className="pl-8"
+                    className="pl-8 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
@@ -256,36 +256,36 @@ const AdminUsers = () => {
             </div>
             
             <div className="grid grid-cols-4 gap-4">
-              <Card className="border shadow-sm cursor-pointer" onClick={() => setSelectedTab("students")}>
+              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("students")}>
                 <CardHeader className={`p-4 pb-2 ${selectedTab === "students" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base">Students</CardTitle>
+                  <CardTitle className="text-base dark:text-white">Students</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold">{students.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">{students.length}</p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer" onClick={() => setSelectedTab("drivers")}>
+              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("drivers")}>
                 <CardHeader className={`p-4 pb-2 ${selectedTab === "drivers" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base">Drivers</CardTitle>
+                  <CardTitle className="text-base dark:text-white">Drivers</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold">{drivers.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">{drivers.length}</p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer" onClick={() => setSelectedTab("coordinators")}>
+              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("coordinators")}>
                 <CardHeader className={`p-4 pb-2 ${selectedTab === "coordinators" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base">Coordinators</CardTitle>
+                  <CardTitle className="text-base dark:text-white">Coordinators</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold">{coordinators.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">{coordinators.length}</p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer" onClick={() => setSelectedTab("admins")}>
+              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("admins")}>
                 <CardHeader className={`p-4 pb-2 ${selectedTab === "admins" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base">Admins</CardTitle>
+                  <CardTitle className="text-base dark:text-white">Admins</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold">{admins.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">{admins.length}</p>
                 </CardContent>
               </Card>
             </div>
@@ -293,18 +293,18 @@ const AdminUsers = () => {
         </Card>
 
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 max-w-md mb-6">
-            <TabsTrigger value="students">Students</TabsTrigger>
-            <TabsTrigger value="drivers">Drivers</TabsTrigger>
-            <TabsTrigger value="coordinators">Coordinators</TabsTrigger>
-            <TabsTrigger value="admins">Admins</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 max-w-md mb-6 dark:bg-gray-800">
+            <TabsTrigger value="students" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Students</TabsTrigger>
+            <TabsTrigger value="drivers" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Drivers</TabsTrigger>
+            <TabsTrigger value="coordinators" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Coordinators</TabsTrigger>
+            <TabsTrigger value="admins" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Admins</TabsTrigger>
           </TabsList>
 
           <TabsContent value="students">
-            <Card className="border shadow-sm">
+            <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Students</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Students</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Manage student accounts and access
                 </CardDescription>
               </CardHeader>
@@ -314,48 +314,48 @@ const AdminUsers = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>USN</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Phone</TableHead>
-                          <TableHead>Region</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Name</TableHead>
+                          <TableHead className="dark:text-gray-300">USN</TableHead>
+                          <TableHead className="dark:text-gray-300">Email</TableHead>
+                          <TableHead className="dark:text-gray-300">Phone</TableHead>
+                          <TableHead className="dark:text-gray-300">Region</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
+                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredStudents.length > 0 ? (
                           filteredStudents.map((student) => (
-                            <TableRow key={student.id}>
-                              <TableCell className="font-medium">{student.name}</TableCell>
-                              <TableCell>{student.usn}</TableCell>
-                              <TableCell>{student.email}</TableCell>
-                              <TableCell>{student.phone || 'N/A'}</TableCell>
-                              <TableCell>{student.region}</TableCell>
+                            <TableRow key={student.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
+                              <TableCell className="font-medium dark:text-white">{student.name}</TableCell>
+                              <TableCell className="dark:text-gray-300">{student.usn}</TableCell>
+                              <TableCell className="dark:text-gray-300">{student.email}</TableCell>
+                              <TableCell className="dark:text-gray-300">{student.phone || 'N/A'}</TableCell>
+                              <TableCell className="dark:text-gray-300">{student.region}</TableCell>
                               <TableCell>{getStatusBadge(student.status)}</TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => handleViewUser(student)}>
+                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
+                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="dark:border-gray-600" />
+                                    <DropdownMenuItem onClick={() => handleViewUser(student)} className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Edit className="h-4 w-4 mr-2" />
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteUser(student)}>
+                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(student)}>
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -365,8 +365,8 @@ const AdminUsers = () => {
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={7} className="text-center py-6 text-muted-foreground dark:text-gray-400">
                               No students found
                             </TableCell>
                           </TableRow>
@@ -380,10 +380,10 @@ const AdminUsers = () => {
           </TabsContent>
 
           <TabsContent value="drivers">
-            <Card className="border shadow-sm">
+            <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Drivers</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Drivers</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Manage driver accounts and assignments
                 </CardDescription>
               </CardHeader>
@@ -393,50 +393,50 @@ const AdminUsers = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Phone</TableHead>
-                          <TableHead>Bus Assigned</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Name</TableHead>
+                          <TableHead className="dark:text-gray-300">Email</TableHead>
+                          <TableHead className="dark:text-gray-300">Phone</TableHead>
+                          <TableHead className="dark:text-gray-300">Bus Assigned</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
+                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredDrivers.length > 0 ? (
                           filteredDrivers.map((driver) => (
-                            <TableRow key={driver.id}>
-                              <TableCell className="font-medium">{driver.name}</TableCell>
-                              <TableCell>{driver.email}</TableCell>
-                              <TableCell>{driver.phone || 'N/A'}</TableCell>
-                              <TableCell>{driver.busAssigned || "Not assigned"}</TableCell>
+                            <TableRow key={driver.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
+                              <TableCell className="font-medium dark:text-white">{driver.name}</TableCell>
+                              <TableCell className="dark:text-gray-300">{driver.email}</TableCell>
+                              <TableCell className="dark:text-gray-300">{driver.phone || 'N/A'}</TableCell>
+                              <TableCell className="dark:text-gray-300">{driver.busAssigned || "Not assigned"}</TableCell>
                               <TableCell>{getStatusBadge(driver.status)}</TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => handleViewUser(driver)}>
+                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
+                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="dark:border-gray-600" />
+                                    <DropdownMenuItem onClick={() => handleViewUser(driver)} className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Edit className="h-4 w-4 mr-2" />
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <UserCog className="h-4 w-4 mr-2" />
                                       Assign Bus
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteUser(driver)}>
+                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(driver)}>
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -446,8 +446,8 @@ const AdminUsers = () => {
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
                               No drivers found
                             </TableCell>
                           </TableRow>
@@ -461,10 +461,10 @@ const AdminUsers = () => {
           </TabsContent>
 
           <TabsContent value="coordinators">
-            <Card className="border shadow-sm">
+            <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Coordinators</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Coordinators</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Manage coordinator accounts and regional assignments
                 </CardDescription>
               </CardHeader>
@@ -474,46 +474,46 @@ const AdminUsers = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Phone</TableHead>
-                          <TableHead>Region</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Name</TableHead>
+                          <TableHead className="dark:text-gray-300">Email</TableHead>
+                          <TableHead className="dark:text-gray-300">Phone</TableHead>
+                          <TableHead className="dark:text-gray-300">Region</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
+                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredCoordinators.length > 0 ? (
                           filteredCoordinators.map((coordinator) => (
-                            <TableRow key={coordinator.id}>
-                              <TableCell className="font-medium">{coordinator.name}</TableCell>
-                              <TableCell>{coordinator.email}</TableCell>
-                              <TableCell>{coordinator.phone || 'N/A'}</TableCell>
-                              <TableCell>{coordinator.region}</TableCell>
+                            <TableRow key={coordinator.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
+                              <TableCell className="font-medium dark:text-white">{coordinator.name}</TableCell>
+                              <TableCell className="dark:text-gray-300">{coordinator.email}</TableCell>
+                              <TableCell className="dark:text-gray-300">{coordinator.phone || 'N/A'}</TableCell>
+                              <TableCell className="dark:text-gray-300">{coordinator.region}</TableCell>
                               <TableCell>{getStatusBadge(coordinator.status)}</TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => handleViewUser(coordinator)}>
+                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
+                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="dark:border-gray-600" />
+                                    <DropdownMenuItem onClick={() => handleViewUser(coordinator)} className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Edit className="h-4 w-4 mr-2" />
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteUser(coordinator)}>
+                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(coordinator)}>
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -523,8 +523,8 @@ const AdminUsers = () => {
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
                               No coordinators found
                             </TableCell>
                           </TableRow>
@@ -538,10 +538,10 @@ const AdminUsers = () => {
           </TabsContent>
 
           <TabsContent value="admins">
-            <Card className="border shadow-sm">
+            <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Administrators</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Administrators</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Manage administrator accounts and permissions
                 </CardDescription>
               </CardHeader>
@@ -551,48 +551,48 @@ const AdminUsers = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Phone</TableHead>
-                          <TableHead>Role</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Name</TableHead>
+                          <TableHead className="dark:text-gray-300">Email</TableHead>
+                          <TableHead className="dark:text-gray-300">Phone</TableHead>
+                          <TableHead className="dark:text-gray-300">Role</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
+                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredAdmins.length > 0 ? (
                           filteredAdmins.map((admin) => (
-                            <TableRow key={admin.id}>
-                              <TableCell className="font-medium">{admin.name}</TableCell>
-                              <TableCell>{admin.email}</TableCell>
-                              <TableCell>{admin.phone || 'N/A'}</TableCell>
-                              <TableCell>{admin.role}</TableCell>
+                            <TableRow key={admin.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
+                              <TableCell className="font-medium dark:text-white">{admin.name}</TableCell>
+                              <TableCell className="dark:text-gray-300">{admin.email}</TableCell>
+                              <TableCell className="dark:text-gray-300">{admin.phone || 'N/A'}</TableCell>
+                              <TableCell className="dark:text-gray-300">{admin.role}</TableCell>
                               <TableCell>{getStatusBadge(admin.status)}</TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" disabled={admin.id === currentUser?.id}>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600" disabled={admin.id === currentUser?.id}>
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => handleViewUser(admin)}>
+                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
+                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="dark:border-gray-600" />
+                                    <DropdownMenuItem onClick={() => handleViewUser(admin)} className="dark:text-gray-300 dark:hover:bg-gray-700">
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
                                     {admin.id !== currentUser?.id && (
                                       <>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem className="dark:text-gray-300 dark:hover:bg-gray-700">
                                           <Edit className="h-4 w-4 mr-2" />
                                           Edit
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteUser(admin)}>
+                                        <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(admin)}>
                                           <Trash2 className="h-4 w-4 mr-2" />
                                           Delete
                                         </DropdownMenuItem>
@@ -604,8 +604,8 @@ const AdminUsers = () => {
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
                               No admins found
                             </TableCell>
                           </TableRow>
@@ -621,10 +621,10 @@ const AdminUsers = () => {
 
         {selectedUser && (
           <Dialog open={userDetailsDialogOpen} onOpenChange={setUserDetailsDialogOpen}>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-600">
               <DialogHeader>
-                <DialogTitle>User Details</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="dark:text-white">User Details</DialogTitle>
+                <DialogDescription className="dark:text-gray-300">
                   Detailed information for {selectedUser.name}
                 </DialogDescription>
               </DialogHeader>
@@ -634,55 +634,55 @@ const AdminUsers = () => {
                     {selectedUser.profile_photo_url ? (
                       <AvatarImage src={selectedUser.profile_photo_url} alt={selectedUser.name} />
                     ) : (
-                      <AvatarFallback className="text-xl bg-primary/10">{selectedUser.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="text-xl bg-primary/10 dark:bg-primary/20 dark:text-white">{selectedUser.name.charAt(0)}</AvatarFallback>
                     )}
                   </Avatar>
-                  <h2 className="text-xl font-bold">{selectedUser.name}</h2>
+                  <h2 className="text-xl font-bold dark:text-white">{selectedUser.name}</h2>
                   <div className="mt-1">{getStatusBadge(selectedUser.status)}</div>
                 </div>
                 
                 <div className="grid gap-4">
                   {selectedUser.usn && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground text-right">USN</p>
-                      <p className="col-span-2">{selectedUser.usn}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">USN</p>
+                      <p className="col-span-2 dark:text-white">{selectedUser.usn}</p>
                     </div>
                   )}
                   
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground text-right">Email</p>
-                    <p className="col-span-2">{selectedUser.email}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Email</p>
+                    <p className="col-span-2 dark:text-white">{selectedUser.email}</p>
                   </div>
                   
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground text-right">Phone</p>
-                    <p className="col-span-2">{selectedUser.phone || 'Not provided'}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Phone</p>
+                    <p className="col-span-2 dark:text-white">{selectedUser.phone || 'Not provided'}</p>
                   </div>
                   
                   {selectedUser.region && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground text-right">Region</p>
-                      <p className="col-span-2">{selectedUser.region}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Region</p>
+                      <p className="col-span-2 dark:text-white">{selectedUser.region}</p>
                     </div>
                   )}
                   
                   {selectedUser.busAssigned && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground text-right">Bus Assigned</p>
-                      <p className="col-span-2">{selectedUser.busAssigned}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Bus Assigned</p>
+                      <p className="col-span-2 dark:text-white">{selectedUser.busAssigned}</p>
                     </div>
                   )}
                   
                   {selectedUser.role && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground text-right">Role</p>
-                      <p className="col-span-2">{selectedUser.role}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Role</p>
+                      <p className="col-span-2 dark:text-white">{selectedUser.role}</p>
                     </div>
                   )}
                   
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground text-right">Joined On</p>
-                    <p className="col-span-2">{selectedUser.joinDate}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Joined On</p>
+                    <p className="col-span-2 dark:text-white">{selectedUser.joinDate}</p>
                   </div>
                 </div>
               </div>

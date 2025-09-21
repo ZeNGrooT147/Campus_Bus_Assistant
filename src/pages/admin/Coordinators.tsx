@@ -33,7 +33,7 @@ const AdminCoordinators = () => {
     <DashboardLayout pageTitle="Coordinator Management">
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Coordinator Management</h1>
+          <h1 className="text-2xl font-bold dark:text-white">Coordinator Management</h1>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={refreshData} disabled={isLoading}>
               {isLoading ? (
@@ -50,10 +50,10 @@ const AdminCoordinators = () => {
           </div>
         </div>
 
-        <Card className="mb-6">
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
           <CardHeader className="pb-3">
-            <CardTitle>Bus Coordinators</CardTitle>
-            <CardDescription>Manage all coordinators in the system</CardDescription>
+            <CardTitle className="dark:text-white">Bus Coordinators</CardTitle>
+            <CardDescription className="dark:text-gray-300">Manage all coordinators in the system</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSearch} className="flex w-full max-w-sm mb-4 items-center space-x-2">
@@ -62,6 +62,7 @@ const AdminCoordinators = () => {
                 placeholder="Search coordinators..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
               <Button type="submit" size="sm">
                 <Search className="h-4 w-4 mr-2" />
@@ -69,8 +70,8 @@ const AdminCoordinators = () => {
               </Button>
             </form>
 
-            <div className="rounded-md border">
-              <div className="p-4 text-center text-muted-foreground">
+            <div className="rounded-md border dark:border-gray-700">
+              <div className="p-4 text-center text-muted-foreground dark:text-gray-400">
                 <p>Coordinator management panel will be displayed here.</p>
                 <p className="text-sm mt-1">You can add, edit, or manage coordinator accounts.</p>
               </div>

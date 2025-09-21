@@ -265,15 +265,15 @@ const StudentVoting = () => {
     <DashboardLayout pageTitle="Bus Voting">
       <div className="mb-6">
         {/* Redesigned Active Bus Requests Card */}
-        <Card className="border-l-4 border-primary shadow-lg rounded-2xl bg-gradient-to-br from-primary/5 to-white mb-6 transition-all hover:shadow-xl">
+        <Card className="border-l-4 border-primary shadow-lg rounded-2xl bg-gradient-to-br from-primary/5 to-background dark:from-primary/10 dark:to-gray-800 mb-6 transition-all hover:shadow-xl">
           <CardContent className="flex flex-col gap-2 p-6">
             <div className="flex items-center gap-3 mb-2">
               <Bus className="h-8 w-8 text-primary" />
-              <h2 className="text-xl font-bold flex items-center gap-1">
+              <h2 className="text-xl font-bold flex items-center gap-1 text-foreground dark:text-white">
                 Bus Requests
                 <span className="relative group">
-                  <svg className="h-4 w-4 text-muted-foreground ml-1 cursor-pointer" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                  <span className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-white text-xs text-muted-foreground rounded shadow-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                  <svg className="h-4 w-4 text-muted-foreground dark:text-gray-300 ml-1 cursor-pointer" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  <span className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-background dark:bg-gray-800 text-xs text-muted-foreground dark:text-gray-300 rounded shadow-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 border border-border dark:border-gray-600">
                     This shows the number of active bus voting requests from your region. Vote to help your request get approved!
                   </span>
                 </span>

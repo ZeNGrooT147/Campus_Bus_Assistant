@@ -168,7 +168,7 @@ const DashboardSidebar = ({ userRole }: SidebarProps) => {
 
   return (
     <div className={cn(
-      "h-screen border-r bg-white transition-all duration-300 z-20",
+      "h-screen border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 z-20",
       isCollapsed ? "w-[70px]" : "w-64"
     )}>
       <div className="h-full flex flex-col">
@@ -179,7 +179,7 @@ const DashboardSidebar = ({ userRole }: SidebarProps) => {
           <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
             <Bus className="h-5 w-5 text-white" />
           </div>
-          {!isCollapsed && <span className="font-semibold text-lg">Campus Bus</span>}
+          {!isCollapsed && <span className="font-semibold text-lg text-gray-900 dark:text-white">Campus Bus</span>}
         </div>
         
         <Separator />
@@ -194,8 +194,8 @@ const DashboardSidebar = ({ userRole }: SidebarProps) => {
             </div>
             {!isCollapsed && (
               <div className="flex-1">
-                <div className="font-medium truncate">{user?.name || 'User'}</div>
-                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <div className="font-medium truncate text-gray-900 dark:text-white">{user?.name || 'User'}</div>
+                <div className="text-xs text-muted-foreground dark:text-gray-400 flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
                   <span className="capitalize">{userRole}</span>
                 </div>

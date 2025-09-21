@@ -39,21 +39,21 @@ const StudentAnnouncements = () => {
     switch (severity) {
       case 'critical':
         return {
-          bg: 'bg-red-100 text-red-700',
-          badge: 'bg-red-50 text-red-600 border-red-200',
-          avatar: 'bg-red-100 text-red-700'
+          bg: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
+          badge: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700',
+          avatar: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
         };
       case 'important':
         return {
-          bg: 'bg-amber-100 text-amber-700',
-          badge: 'bg-amber-50 text-amber-600 border-amber-200',
-          avatar: 'bg-amber-100 text-amber-700'
+          bg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300',
+          badge: 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-700',
+          avatar: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
         };
       default:
         return {
-          bg: 'bg-blue-100 text-blue-700',
-          badge: 'bg-blue-50 text-blue-600 border-blue-200',
-          avatar: 'bg-blue-100 text-blue-700'
+          bg: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+          badge: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-700',
+          avatar: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
         };
     }
   };
@@ -61,16 +61,16 @@ const StudentAnnouncements = () => {
   return (
     <DashboardLayout pageTitle="Announcements">
       <div className="mb-6">
-        <Card>
+        <Card className="bg-card dark:bg-gray-800 border-border dark:border-gray-700">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-primary/10">
+                <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20">
                   <Megaphone className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle>Campus Announcements</CardTitle>
-                  <CardDescription>Stay updated with the latest campus news</CardDescription>
+                  <CardTitle className="text-foreground dark:text-white">Campus Announcements</CardTitle>
+                  <CardDescription className="text-muted-foreground dark:text-gray-300">Stay updated with the latest campus news</CardDescription>
                 </div>
               </div>
             </div>
@@ -82,9 +82,9 @@ const StudentAnnouncements = () => {
                   placeholder="Search announcements..."
                   value={searchTerm}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-                  className="pl-10 max-w-md"
+                  className="pl-10 max-w-md bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-gray-400"
                 />
-                <Info className="h-4 w-4 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <Info className="h-4 w-4 text-muted-foreground dark:text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
 
@@ -94,10 +94,10 @@ const StudentAnnouncements = () => {
               value={activeTab}
               onValueChange={setActiveTab}
             >
-              <TabsList className="grid w-full grid-cols-3 max-w-md mb-6">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="urgent">Urgent</TabsTrigger>
-                <TabsTrigger value="regular">Regular</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 max-w-md mb-6 bg-muted dark:bg-gray-800">
+                <TabsTrigger value="all" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">All</TabsTrigger>
+                <TabsTrigger value="urgent" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Urgent</TabsTrigger>
+                <TabsTrigger value="regular" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Regular</TabsTrigger>
               </TabsList>
 
               <TabsContent value={activeTab}>

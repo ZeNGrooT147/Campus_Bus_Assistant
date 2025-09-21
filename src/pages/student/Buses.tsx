@@ -223,17 +223,17 @@ const StudentBuses = () => {
     <DashboardLayout pageTitle="Buses & Routes">
       <div className="space-y-6">
         {/* Header Card */}
-        <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-background border-none shadow-md">
+        <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-background dark:to-gray-800 border-none shadow-md dark:bg-gray-800">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-              <div className="bg-primary/10 p-3 rounded-full">
+              <div className="bg-primary/10 dark:bg-primary/20 p-3 rounded-full">
                 <Bus className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">
+                <h2 className="text-xl font-semibold mb-1 text-foreground dark:text-white">
                   Campus Bus Services
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground dark:text-gray-300">
                   Find information about available buses, schedules, and routes
                   to help you commute between campus and city.
                 </p>
@@ -243,20 +243,20 @@ const StudentBuses = () => {
         </Card>
 
         <Tabs defaultValue="buses" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 max-w-md mb-6">
-            <TabsTrigger value="buses">Available Buses</TabsTrigger>
-            <TabsTrigger value="schedule">Schedule</TabsTrigger>
-            <TabsTrigger value="map">Route Map</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 max-w-md mb-6 bg-muted dark:bg-gray-800">
+            <TabsTrigger value="buses" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Available Buses</TabsTrigger>
+            <TabsTrigger value="schedule" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Schedule</TabsTrigger>
+            <TabsTrigger value="map" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Route Map</TabsTrigger>
           </TabsList>
 
           <TabsContent value="buses" className="space-y-4 animate-fade-in">
             <div className="flex items-center space-x-2 mb-4">
               <div className="relative flex-1">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground dark:text-gray-400" />
                 <Input
                   type="search"
                   placeholder="Search buses or routes..."
-                  className="pl-8"
+                  className="pl-8 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-gray-400"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -268,28 +268,28 @@ const StudentBuses = () => {
                 {filteredBuses.map((bus) => (
                   <Card
                     key={bus.id}
-                    className={`overflow-hidden transition-all duration-200 ${
+                    className={`overflow-hidden transition-all duration-200 bg-card dark:bg-gray-800 border-border dark:border-gray-700 ${
                       selectedBus === bus.id
                         ? "ring-2 ring-primary"
                         : "hover:shadow-lg"
                     }`}
                   >
                     {/* Bus Image */}
-                    <div className="h-48 w-full overflow-hidden bg-gray-100">
+                    <div className="h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-700">
                       <img
                         src={bus.busImage}
                         alt={`${bus.name} bus`}
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <CardHeader className="bg-primary/5 pb-2">
+                    <CardHeader className="bg-primary/5 dark:bg-primary/10 pb-2">
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle className="flex items-center text-lg">
+                          <CardTitle className="flex items-center text-lg text-foreground dark:text-white">
                             <Bus className="h-5 w-5 mr-2 text-primary" />
                             {bus.name}
                           </CardTitle>
-                          <CardDescription className="font-mono">
+                          <CardDescription className="font-mono text-muted-foreground dark:text-gray-300">
                             {bus.number}
                           </CardDescription>
                         </div>

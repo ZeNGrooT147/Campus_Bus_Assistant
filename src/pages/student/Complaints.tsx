@@ -100,17 +100,17 @@ const StudentComplaints = () => {
   return (
     <DashboardLayout pageTitle="Complaints">
       <div className="mb-6">
-        <Card className="border-t-4 border-t-primary overflow-hidden shadow-md transition-all hover:shadow-lg">
+        <Card className="border-t-4 border-t-primary overflow-hidden shadow-md transition-all hover:shadow-lg bg-card dark:bg-gray-800">
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-              <div className="bg-primary/10 p-4 rounded-full">
+              <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-full">
                 <MessageSquare className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">
+                <h2 className="text-xl font-semibold mb-1 text-foreground dark:text-white">
                   Bus Complaint System
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground dark:text-gray-300">
                   Submit complaints about any issues you've encountered with the
                   bus service. Our coordinators will review and address your
                   concerns.

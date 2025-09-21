@@ -189,8 +189,8 @@ const AdminReports = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Reports</h1>
-            <p className="text-muted-foreground">Generate and export system reports</p>
+            <h1 className="text-3xl font-bold tracking-tight dark:text-white">Reports</h1>
+            <p className="text-muted-foreground dark:text-gray-300">Generate and export system reports</p>
           </div>
           
           <div className="flex items-center gap-2">
@@ -199,13 +199,13 @@ const AdminReports = () => {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-auto justify-start text-left font-normal"
+                    className="w-auto justify-start text-left font-normal dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? format(startDate, "MMM dd, yyyy") : "Select start date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="end">
+                <PopoverContent className="w-auto p-0 dark:bg-gray-800 dark:border-gray-600" align="end">
                   <Calendar
                     mode="single"
                     selected={startDate}
@@ -215,19 +215,19 @@ const AdminReports = () => {
                 </PopoverContent>
               </Popover>
               
-              <span className="text-muted-foreground">to</span>
+              <span className="text-muted-foreground dark:text-gray-400">to</span>
               
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-auto justify-start text-left font-normal"
+                    className="w-auto justify-start text-left font-normal dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? format(endDate, "MMM dd, yyyy") : "Select end date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="end">
+                <PopoverContent className="w-auto p-0 dark:bg-gray-800 dark:border-gray-600" align="end">
                   <Calendar
                     mode="single"
                     selected={endDate}
@@ -251,17 +251,17 @@ const AdminReports = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="usage">Bus Usage</TabsTrigger>
-            <TabsTrigger value="complaints">Complaint Reports</TabsTrigger>
-            <TabsTrigger value="utilization">Bus Utilization</TabsTrigger>
+          <TabsList className="dark:bg-gray-800">
+            <TabsTrigger value="usage" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Bus Usage</TabsTrigger>
+            <TabsTrigger value="complaints" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Complaint Reports</TabsTrigger>
+            <TabsTrigger value="utilization" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Bus Utilization</TabsTrigger>
           </TabsList>
           
           <TabsContent value="usage" className="space-y-4">
-            <Card>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Bus Usage Report</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Bus Usage Report</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Report showing all bus trips from {startDate ? format(startDate, "MMM dd, yyyy") : "start"} to {endDate ? format(endDate, "MMM dd, yyyy") : "now"}
                 </CardDescription>
               </CardHeader>
@@ -271,49 +271,49 @@ const AdminReports = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Bus</TableHead>
-                          <TableHead>Driver</TableHead>
-                          <TableHead>Start Time</TableHead>
-                          <TableHead>End Time</TableHead>
-                          <TableHead>Duration</TableHead>
-                          <TableHead>Status</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Bus</TableHead>
+                          <TableHead className="dark:text-gray-300">Driver</TableHead>
+                          <TableHead className="dark:text-gray-300">Start Time</TableHead>
+                          <TableHead className="dark:text-gray-300">End Time</TableHead>
+                          <TableHead className="dark:text-gray-300">Duration</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {usageData.length > 0 ? (
                           usageData.map((trip) => (
-                            <TableRow key={trip.tripId}>
+                            <TableRow key={trip.tripId} className="dark:border-gray-700 dark:hover:bg-gray-700">
                               <TableCell>
-                                <div className="font-medium">{trip.busName}</div>
-                                <div className="text-xs text-muted-foreground">{trip.busNumber}</div>
+                                <div className="font-medium dark:text-white">{trip.busName}</div>
+                                <div className="text-xs text-muted-foreground dark:text-gray-400">{trip.busNumber}</div>
                               </TableCell>
-                              <TableCell>{trip.driverName}</TableCell>
-                              <TableCell>{trip.startTime}</TableCell>
-                              <TableCell>{trip.endTime}</TableCell>
-                              <TableCell>{trip.duration}</TableCell>
+                              <TableCell className="dark:text-gray-300">{trip.driverName}</TableCell>
+                              <TableCell className="dark:text-gray-300">{trip.startTime}</TableCell>
+                              <TableCell className="dark:text-gray-300">{trip.endTime}</TableCell>
+                              <TableCell className="dark:text-gray-300">{trip.duration}</TableCell>
                               <TableCell>
                                 {trip.status === 'completed' && (
-                                  <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Completed</Badge>
+                                  <Badge className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300">Completed</Badge>
                                 )}
                                 {trip.status === 'in_progress' && (
-                                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">In Progress</Badge>
+                                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300">In Progress</Badge>
                                 )}
                                 {trip.status === 'cancelled' && (
-                                  <Badge className="bg-red-100 text-red-800 hover:bg-red-200">Cancelled</Badge>
+                                  <Badge className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-300">Cancelled</Badge>
                                 )}
                                 {trip.status === 'scheduled' && (
-                                  <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">Scheduled</Badge>
+                                  <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-300">Scheduled</Badge>
                                 )}
                               </TableCell>
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="h-24 text-center">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={6} className="h-24 text-center dark:text-gray-400">
                               No bus usage data found for the selected period
                             </TableCell>
                           </TableRow>
@@ -327,10 +327,10 @@ const AdminReports = () => {
           </TabsContent>
           
           <TabsContent value="complaints" className="space-y-4">
-            <Card>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Complaints Report</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Complaints Report</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Report showing all student complaints from {startDate ? format(startDate, "MMM dd, yyyy") : "start"} to {endDate ? format(endDate, "MMM dd, yyyy") : "now"}
                 </CardDescription>
               </CardHeader>
@@ -340,52 +340,52 @@ const AdminReports = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Student</TableHead>
-                          <TableHead>Bus</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Submitted On</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Resolved On</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Student</TableHead>
+                          <TableHead className="dark:text-gray-300">Bus</TableHead>
+                          <TableHead className="dark:text-gray-300">Type</TableHead>
+                          <TableHead className="dark:text-gray-300">Submitted On</TableHead>
+                          <TableHead className="dark:text-gray-300">Status</TableHead>
+                          <TableHead className="dark:text-gray-300">Resolved On</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {complaintsData.length > 0 ? (
                           complaintsData.map((complaint) => (
-                            <TableRow key={complaint.complaintId}>
-                              <TableCell className="font-medium">{complaint.studentName}</TableCell>
+                            <TableRow key={complaint.complaintId} className="dark:border-gray-700 dark:hover:bg-gray-700">
+                              <TableCell className="font-medium dark:text-white">{complaint.studentName}</TableCell>
                               <TableCell>
                                 {complaint.busName !== 'N/A' ? (
                                   <>
-                                    <div>{complaint.busName}</div>
-                                    <div className="text-xs text-muted-foreground">{complaint.busNumber}</div>
+                                    <div className="dark:text-white">{complaint.busName}</div>
+                                    <div className="text-xs text-muted-foreground dark:text-gray-400">{complaint.busNumber}</div>
                                   </>
                                 ) : (
-                                  'General'
+                                  <span className="dark:text-gray-300">General</span>
                                 )}
                               </TableCell>
-                              <TableCell>{complaint.complaintType}</TableCell>
-                              <TableCell>{complaint.submittedOn}</TableCell>
+                              <TableCell className="dark:text-gray-300">{complaint.complaintType}</TableCell>
+                              <TableCell className="dark:text-gray-300">{complaint.submittedOn}</TableCell>
                               <TableCell>
                                 {complaint.status === 'resolved' && (
-                                  <Badge className="bg-green-100 text-green-800">Resolved</Badge>
+                                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Resolved</Badge>
                                 )}
                                 {complaint.status === 'pending' && (
-                                  <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                                  <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pending</Badge>
                                 )}
                                 {complaint.status === 'in_progress' && (
-                                  <Badge className="bg-blue-100 text-blue-800">In Progress</Badge>
+                                  <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">In Progress</Badge>
                                 )}
                               </TableCell>
-                              <TableCell>{complaint.resolvedOn}</TableCell>
+                              <TableCell className="dark:text-gray-300">{complaint.resolvedOn}</TableCell>
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="h-24 text-center">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={6} className="h-24 text-center dark:text-gray-400">
                               No complaint data found for the selected period
                             </TableCell>
                           </TableRow>
@@ -399,10 +399,10 @@ const AdminReports = () => {
           </TabsContent>
           
           <TabsContent value="utilization" className="space-y-4">
-            <Card>
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Bus Utilization Report</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Bus Utilization Report</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Report showing bus utilization statistics for the last 30 days
                 </CardDescription>
               </CardHeader>
@@ -412,56 +412,56 @@ const AdminReports = () => {
                     <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
                   </div>
                 ) : (
-                  <div className="rounded-md border">
+                  <div className="rounded-md border dark:border-gray-700">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Bus</TableHead>
-                          <TableHead>Driver</TableHead>
-                          <TableHead>Capacity</TableHead>
-                          <TableHead>Total Trips</TableHead>
-                          <TableHead>Completed</TableHead>
-                          <TableHead>Cancelled</TableHead>
-                          <TableHead>Utilization Rate</TableHead>
+                        <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
+                          <TableHead className="dark:text-gray-300">Bus</TableHead>
+                          <TableHead className="dark:text-gray-300">Driver</TableHead>
+                          <TableHead className="dark:text-gray-300">Capacity</TableHead>
+                          <TableHead className="dark:text-gray-300">Total Trips</TableHead>
+                          <TableHead className="dark:text-gray-300">Completed</TableHead>
+                          <TableHead className="dark:text-gray-300">Cancelled</TableHead>
+                          <TableHead className="dark:text-gray-300">Utilization Rate</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {busUtilizationData.length > 0 ? (
                           busUtilizationData.map((bus) => (
-                            <TableRow key={bus.busId}>
+                            <TableRow key={bus.busId} className="dark:border-gray-700 dark:hover:bg-gray-700">
                               <TableCell>
-                                <div className="font-medium">{bus.busName}</div>
-                                <div className="text-xs text-muted-foreground">{bus.busNumber}</div>
+                                <div className="font-medium dark:text-white">{bus.busName}</div>
+                                <div className="text-xs text-muted-foreground dark:text-gray-400">{bus.busNumber}</div>
                               </TableCell>
-                              <TableCell>{bus.driverName}</TableCell>
-                              <TableCell>{bus.capacity}</TableCell>
-                              <TableCell>{bus.totalTrips}</TableCell>
+                              <TableCell className="dark:text-gray-300">{bus.driverName}</TableCell>
+                              <TableCell className="dark:text-gray-300">{bus.capacity}</TableCell>
+                              <TableCell className="dark:text-gray-300">{bus.totalTrips}</TableCell>
                               <TableCell>
-                                <Badge className="bg-green-100 text-green-800">
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                                   {bus.completedTrips}
                                 </Badge>
                               </TableCell>
                               <TableCell>
-                                <Badge className="bg-red-100 text-red-800">
+                                <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
                                   {bus.cancelledTrips}
                                 </Badge>
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center">
-                                  <div className="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5 mr-2">
                                     <div
                                       className="bg-primary h-2.5 rounded-full"
                                       style={{ width: bus.utilizationRate }}
                                     ></div>
                                   </div>
-                                  <span className="text-sm">{bus.utilizationRate}</span>
+                                  <span className="text-sm dark:text-gray-300">{bus.utilizationRate}</span>
                                 </div>
                               </TableCell>
                             </TableRow>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={7} className="h-24 text-center">
+                          <TableRow className="dark:border-gray-700">
+                            <TableCell colSpan={7} className="h-24 text-center dark:text-gray-400">
                               No utilization data available
                             </TableCell>
                           </TableRow>

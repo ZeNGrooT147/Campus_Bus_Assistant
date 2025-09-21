@@ -120,12 +120,12 @@ const StudentLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col">
       <Link to="/login" className="absolute top-4 left-6 z-10">
         <Button
           variant="ghost"
           size="sm"
-          className="flex items-center gap-1 hover:bg-black/5"
+          className="flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10"
         >
           <ChevronLeft className="h-4 w-4" />
           Back to Selection
@@ -142,7 +142,7 @@ const StudentLogin = () => {
           <Card className="border-0 shadow-lg">
             <CardHeader className="space-y-1 text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <div className="p-2 bg-blue-50 rounded-full">
+                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-full">
                   <Bus className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-2xl font-bold">
@@ -259,7 +259,7 @@ const StudentLogin = () => {
         </motion.div>
       </div>
 
-      <footer className="py-6 text-center text-sm text-gray-600 border-t">
+      <footer className="py-6 text-center text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
         <p>
           © {new Date().getFullYear()} Campus Bus Assistant. All rights
           reserved.
