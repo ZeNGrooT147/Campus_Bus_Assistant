@@ -827,10 +827,20 @@ const Index = () => {
 
           <div className="border-t border-slate-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-slate-400 text-center md:text-left">
-                © {new Date().getFullYear()} Campus Bus Assistant. All rights
-                reserved.
-              </p>
+              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+                <p className="text-slate-400 text-center md:text-left">
+                  © {new Date().getFullYear()} Campus Bus Assistant. All rights
+                  reserved.
+                </p>
+                <a
+                  href="https://your-portfolio-link.com" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-slate-200 transition-colors text-sm border-l border-slate-700 pl-4"
+                >
+                  Made by Zen Groot
+                </a>
+              </div>
 
               <div className="flex items-center space-x-4 mt-4 md:mt-0 text-sm text-slate-400">
                 <span className="flex items-center space-x-1">
@@ -858,7 +868,7 @@ const features = [
   {
     title: "Voting System",
     description:
-      "Request additional buses through democratic voting when regular schedules don't meet demand.",
+      "Request additional buses through democratic voting for enhanced services.",
     icon: Users,
   },
   {
