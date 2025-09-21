@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { useThrottle } from "@/hooks/useApiOptimization";
 
 interface Route {
   id: string;
@@ -88,7 +89,7 @@ export function useRealVotingTopics() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(
+  const fetchDataInternal = useCallback(
     async (force = false) => {
       if (!user) return;
 
@@ -400,6 +401,9 @@ export function useRealVotingTopics() {
     },
     [user]
   );
+
+  // Throttled version to prevent API spam
+  const fetchData = useThrottle(fetchDataInternal, 2000);
 
   // Set up polling to check for expired votes every minute
   useEffect(() => {
