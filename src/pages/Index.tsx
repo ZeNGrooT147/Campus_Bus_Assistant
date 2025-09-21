@@ -14,28 +14,24 @@ import {
   ArrowRight,
   CheckCircle,
   ChevronDown,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/context/AuthContext";
-import { Card, CardContent } from "@/components/ui/card";
 
-const LandingPage = () => {
-  const { isAuthenticated, user } = useAuth();
-  const [scrollY, setScrollY] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Index = () => {
+  const [isHeaderSolid, setIsHeaderSolid] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      setIsHeaderSolid(window.scrollY > 50);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const isHeaderSolid = scrollY > 20;
 
   // Animation variants
   const fadeInUp = {
@@ -61,521 +57,407 @@ const LandingPage = () => {
         className={cn(
           "fixed top-0 w-full z-50 transition-all duration-300",
           isHeaderSolid
-            ? "bg-background/90 backdrop-blur-sm shadow-subtle py-4 border-b border-border"
-            : "bg-transparent py-6"
+            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800"
+            : "bg-transparent"
         )}
       >
-        <div className="container mx-auto flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="relative">
-              <Bus className="h-6 w-6 text-primary z-10 relative" />
-              <div className="absolute -inset-1 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors"></div>
-            </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              Campus Bus Assistant
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a
-              href="#features"
-              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
-              onClick={(e) => {
-                e.preventDefault();
-                const section = document.getElementById("features");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              Features
-            </a>
-            <a
-              href="#how-it-works"
-              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
-              onClick={(e) => {
-                e.preventDefault();
-                const section = document.getElementById("how-it-works");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              How It Works
-            </a>
-            <a
-              href="#roles"
-              className="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
-              onClick={(e) => {
-                e.preventDefault();
-                const section = document.getElementById("roles");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              User Roles
-            </a>
-          </nav>
-
-          {/* Right side: Theme Toggle, Mobile Menu Button, and CTA */}
-          <div className="flex items-center space-x-4">
-            {/* Theme Toggle - always visible */}
-            <ThemeToggle />
-
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <div className="w-6 h-5 flex flex-col justify-between">
-                <span
-                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-transform ${
-                    mobileMenuOpen ? "rotate-45 translate-y-2" : ""
-                  }`}
-                ></span>
-                <span
-                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-opacity ${
-                    mobileMenuOpen ? "opacity-0" : "opacity-100"
-                  }`}
-                ></span>
-                <span
-                  className={`h-0.5 w-full bg-gray-600 dark:bg-gray-300 transition-transform ${
-                    mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-                  }`}
-                ></span>
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-8 h-8 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                <Bus className="h-5 w-5 text-white dark:text-slate-800" />
               </div>
-            </button>
+              <span className="font-semibold text-xl text-slate-900 dark:text-slate-100">
+                Campus Bus Assistant
+              </span>
+            </Link>
 
-            {/* Desktop CTA Button */}
-            <div className="hidden md:block">
-              {isAuthenticated ? (
-                <Link to={`/${user?.role}`}>
-                  <Button className="shadow-md hover:shadow-lg transition-shadow">
-                    Go to Dashboard
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
-                <Link to="/login">
-                  <Button className="shadow-md hover:shadow-lg transition-shadow group">
-                    Get Started
-                    <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <div
-          className={cn(
-            "md:hidden fixed inset-x-0 top-[72px] bg-background border-b border-border transition-all duration-300",
-            mobileMenuOpen
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-full pointer-events-none"
-          )}
-        >
-          <div className="container mx-auto flex flex-col space-y-4 px-4">
-            <a
-              href="#features"
-              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
-              onClick={(e) => {
-                e.preventDefault();
-                setMobileMenuOpen(false);
-                const section = document.getElementById("features");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              Features
-            </a>
-            <a
-              href="#how-it-works"
-              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
-              onClick={(e) => {
-                e.preventDefault();
-                setMobileMenuOpen(false);
-                const section = document.getElementById("how-it-works");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              How It Works
-            </a>
-            <a
-              href="#roles"
-              className="text-sm font-medium py-2 border-b border-gray-100 dark:border-gray-700 dark:text-gray-300 hover:dark:text-white"
-              onClick={(e) => {
-                e.preventDefault();
-                setMobileMenuOpen(false);
-                const section = document.getElementById("roles");
-                if (section) {
-                  const rect = section.getBoundingClientRect();
-                  const scrollTop =
-                    window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition =
-                    rect.top +
-                    scrollTop -
-                    window.innerHeight / 2 +
-                    rect.height / 2;
-                  window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
-                  });
-                }
-              }}
-            >
-              User Roles
-            </a>
-
-            {isAuthenticated ? (
-              <Link
-                to={`/${user?.role}`}
-                className="w-full"
-                onClick={() => setMobileMenuOpen(false)}
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a
+                href="#features"
+                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const section = document.getElementById("features");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
               >
-                <Button className="w-full shadow-md">
-                  Go to Dashboard
-                  <ChevronRight className="ml-2 h-4 w-4" />
+                Features
+              </a>
+              <a
+                href="#how-it-works"
+                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const section = document.getElementById("how-it-works");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              >
+                How It Works
+              </a>
+              <a
+                href="#roles"
+                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const section = document.getElementById("roles");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              >
+                User Roles
+              </a>
+            </nav>
+
+            {/* Right side buttons */}
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <Link to="/login">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden sm:inline-flex border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                >
+                  Sign In
                 </Button>
               </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="w-full"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Button className="w-full shadow-md">
+              <Link to="/register/student">
+                <Button
+                  size="sm"
+                  className="bg-slate-800 hover:bg-slate-900 dark:bg-slate-200 dark:hover:bg-slate-100 text-white dark:text-slate-900 shadow-sm"
+                >
                   Get Started
-                  <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-            )}
 
-            {/* Theme Toggle for Mobile */}
-            <div className="py-2 border-t border-gray-100 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium dark:text-gray-300">
-                  Theme
-                </span>
-                <ThemeToggle />
-              </div>
+              {/* Mobile menu button */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="md:hidden">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-80">
+                  <div className="flex flex-col space-y-4 mt-8">
+                    <a
+                      href="#features"
+                      className="text-lg font-medium text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors py-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const section = document.getElementById("features");
+                        if (section) {
+                          section.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                    >
+                      Features
+                    </a>
+                    <a
+                      href="#how-it-works"
+                      className="text-lg font-medium text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors py-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const section = document.getElementById("how-it-works");
+                        if (section) {
+                          section.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                    >
+                      How It Works
+                    </a>
+                    <a
+                      href="#roles"
+                      className="text-lg font-medium text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors py-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const section = document.getElementById("roles");
+                        if (section) {
+                          section.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                    >
+                      User Roles
+                    </a>
+                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <Link to="/login" className="block w-full mb-3">
+                        <Button
+                          variant="outline"
+                          className="w-full border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                        >
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/register/student" className="block w-full">
+                        <Button className="w-full bg-slate-800 hover:bg-slate-900 dark:bg-slate-200 dark:hover:bg-slate-100 text-white dark:text-slate-900">
+                          Get Started
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background pointer-events-none" />
+      <section className="relative min-h-screen flex items-center pt-24 pb-20 overflow-hidden">
+        {/* Unified background matching features section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-stone-50/50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-stone-900/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-slate-500/5 to-transparent" />
 
-        {/* Animated background elements */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <motion.div
-            className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blue-100/50 dark:bg-blue-900/30 blur-3xl"
-            animate={{
-              x: [0, 10, 0],
-              y: [0, -15, 0],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 8,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 -left-20 w-80 h-80 rounded-full bg-indigo-100/40 dark:bg-indigo-900/20 blur-3xl"
-            animate={{
-              x: [0, -20, 0],
-              y: [0, 20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 10,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-          />
-          <motion.div
-            className="absolute top-1/4 left-1/3 w-60 h-60 rounded-full bg-blue-50/30 dark:bg-blue-900/20 blur-3xl"
-            animate={{
-              x: [0, 15, 0],
-              y: [0, 15, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 12,
-              ease: "easeInOut",
-              delay: 2,
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center py-10">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="flex flex-col space-y-6 px-4 md:px-0"
-          >
-            <div>
+        <div className="container mx-auto px-4 relative">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center lg:text-left space-y-8"
+            >
+              {/* Natural Badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center px-3 py-1.5 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium"
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="inline-flex items-center px-5 py-3 rounded-full border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm text-slate-700 dark:text-slate-300 text-sm font-semibold shadow-sm"
               >
-                <CheckCircle className="w-4 h-4 mr-2" /> Reliable Campus
-                Transportation
-              </motion.div>
-            </div>
-
-            <motion.h1
-              variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white"
-            >
-              Campus Bus{" "}
-              <span className="relative">
-                <span className="relative z-10 text-primary">
-                  Transportation
+                <CheckCircle className="w-4 h-4 mr-2 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-slate-800 dark:text-slate-200">
+                  Smart Campus Transportation
                 </span>
-                <span className="absolute bottom-2 left-0 right-0 h-3 bg-primary/10 rounded-sm -z-0"></span>
-              </span>{" "}
-              Made Effortless
-            </motion.h1>
+              </motion.div>
 
-            <motion.p
-              variants={fadeInUp}
-              className="text-lg text-gray-600 dark:text-gray-300 max-w-lg"
-            >
-              A seamless platform connecting students, drivers, and
-              administrators for efficient campus transportation management.
-            </motion.p>
+              {/* Main Headline with natural colors */}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                <span className="block text-slate-900 dark:text-slate-100 mb-2">
+                  Campus Bus Transportation
+                </span>
+                <span className="block text-slate-700 dark:text-slate-300">
+                  Made Effortless
+                </span>
+              </h1>
 
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4"
-            >
-              <Link to="/login">
-                <Button
-                  size="lg"
-                  className="font-medium text-base shadow-lg hover:shadow-xl transition-shadow hover:-translate-y-0.5 duration-300 w-full sm:w-auto"
-                >
-                  Login Now
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Button
-                variant="outline"
-                size="lg"
-                className="font-medium text-base border-2 hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-600 w-full sm:w-auto"
-                onClick={() => {
-                  const howItWorksSection =
-                    document.getElementById("how-it-works");
-                  if (howItWorksSection) {
-                    const rect = howItWorksSection.getBoundingClientRect();
-                    const scrollTop =
-                      window.pageYOffset || document.documentElement.scrollTop;
-                    const targetPosition =
-                      rect.top +
-                      scrollTop -
-                      window.innerHeight / 2 +
-                      rect.height / 2;
-                    window.scrollTo({
-                      top: targetPosition,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-              >
-                Learn More
-              </Button>
-            </motion.div>
+              {/* Enhanced Description with natural highlights */}
+              <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl font-medium">
+                A seamless platform connecting{" "}
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
+                  students
+                </span>
+                ,{" "}
+                <span className="text-slate-800 dark:text-slate-300 font-semibold">
+                  drivers
+                </span>
+                , and{" "}
+                <span className="text-amber-700 dark:text-amber-400 font-semibold">
+                  administrators
+                </span>{" "}
+                for efficient campus transportation management.
+              </p>
 
-            <motion.div
-              variants={fadeInUp}
-              className="flex items-center space-x-4 pt-6 text-sm text-gray-500 dark:text-gray-400"
-            >
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-primary-400 flex items-center justify-center text-white text-xs font-medium ring-2 ring-white dark:ring-gray-800"
+              {/* Natural CTAs */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <Link to="/register/student">
+                  <Button
+                    size="lg"
+                    className="group bg-slate-800 hover:bg-slate-900 dark:bg-slate-200 dark:hover:bg-slate-100 text-white dark:text-slate-900 px-10 py-4 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                   >
-                    {i}
-                  </div>
-                ))}
+                    Get Started Free
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group px-10 py-4 text-lg font-bold border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100 hover:border-slate-400 dark:hover:border-slate-500 transition-all duration-300 transform hover:scale-105"
+                  onClick={() => {
+                    try {
+                      const featuresSection =
+                        document.getElementById("features");
+                      if (featuresSection) {
+                        featuresSection.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                          inline: "nearest",
+                        });
+                      }
+                    } catch (error) {
+                      console.warn("Scroll to features failed:", error);
+                    }
+                  }}
+                >
+                  Learn More
+                  <ChevronDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
+                </Button>
               </div>
-              <p>Trusted by 2000+ students across campuses</p>
             </motion.div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative h-[400px] flex items-center justify-center"
-          >
-            <div className="relative w-full h-full">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-gradient-to-br from-blue-400/5 to-primary/5 rounded-full flex items-center justify-center animate-spin-slow">
-                  <div className="w-4 h-4 bg-primary rounded-full absolute top-0" />
-                </div>
-              </div>
+            {/* Enhanced Right side illustration with natural colors - positioned lower */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative flex items-center justify-center -mt-8 lg:-mt-10"
+            >
+              <div className="relative w-full max-w-xl">
+                {/* Main dashboard mockup with natural styling */}
+                <div className="relative w-full h-[500px] bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+                  {/* Header */}
+                  <div className="p-6 border-b border-slate-200 dark:border-slate-700">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-slate-800 dark:bg-slate-200 rounded-xl flex items-center justify-center">
+                        <Bus className="w-6 h-6 text-white dark:text-slate-800" />
+                      </div>
+                      <div>
+                        <div className="h-4 bg-slate-200 dark:bg-slate-600 rounded w-32 mb-1"></div>
+                        <div className="h-3 bg-slate-100 dark:bg-slate-700 rounded w-20"></div>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[250px] h-[250px] md:w-[350px] md:h-[350px] backdrop-blur-sm bg-white/30 rounded-full shadow-card flex items-center justify-center overflow-hidden">
-                  <div className="relative w-full h-full">
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-blue-500/5" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Bus className="w-32 h-32 text-primary/80 animate-pulse" />
+                  {/* Content area */}
+                  <div className="p-6 space-y-6">
+                    {/* Live tracking section */}
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <div className="h-3 bg-slate-200 dark:bg-slate-600 rounded w-24"></div>
+                      </div>
+                      <div className="h-20 bg-slate-50 dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-700/50 flex items-center justify-center">
+                        <MapPin className="w-8 h-8 text-slate-600 dark:text-slate-400 animate-pulse" />
+                      </div>
+                    </div>
+
+                    {/* Status cards */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="h-16 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800/50 flex items-center justify-center">
+                        <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="h-16 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800/50 flex items-center justify-center">
+                        <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Natural Floating elements */}
+                <motion.div
+                  animate={{
+                    y: [-15, 15, -15],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute -top-6 -right-6 w-20 h-20 bg-slate-800 dark:bg-slate-200 rounded-2xl shadow-2xl flex items-center justify-center backdrop-blur-sm"
+                >
+                  <MapPin className="w-10 h-10 text-white dark:text-slate-800" />
+                </motion.div>
+
+                <motion.div
+                  animate={{
+                    y: [15, -15, 15],
+                    rotate: [0, -5, 5, 0],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute -bottom-6 -left-6 w-20 h-20 bg-emerald-600 dark:bg-emerald-500 rounded-2xl shadow-2xl flex items-center justify-center backdrop-blur-sm"
+                >
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </motion.div>
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.7, 1, 0.7],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute top-1/3 -left-4 w-16 h-16 bg-amber-600 dark:bg-amber-500 rounded-xl shadow-xl flex items-center justify-center backdrop-blur-sm"
+                >
+                  <Bell className="w-8 h-8 text-white" />
+                </motion.div>
               </div>
-
-              {/* Floating elements */}
-              <motion.div
-                animate={{ y: [-5, 5, -5], rotate: [0, 5, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 3,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-10 right-10 bg-white p-3 rounded-xl shadow-lg"
-              >
-                <MapPin className="h-5 w-5 text-red-500" />
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [5, -5, 5], rotate: [0, -5, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 4,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute bottom-20 left-10 bg-white p-3 rounded-xl shadow-lg"
-              >
-                <Clock className="h-5 w-5 text-primary" />
-              </motion.div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <a
-            href="#features"
-            className="flex flex-col items-center text-sm text-gray-500 hover:text-primary transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              const section = document.getElementById("features");
-              if (section) {
-                const rect = section.getBoundingClientRect();
-                const scrollTop =
-                  window.pageYOffset || document.documentElement.scrollTop;
-                const targetPosition =
-                  rect.top +
-                  scrollTop -
-                  window.innerHeight / 2 +
-                  rect.height / 2;
-                window.scrollTo({
-                  top: targetPosition,
-                  behavior: "smooth",
-                });
+        {/* Enhanced Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer group"
+            onClick={() => {
+              const featuresSection = document.getElementById("features");
+              if (featuresSection) {
+                featuresSection.scrollIntoView({ behavior: "smooth" });
               }
             }}
           >
-            <span>Scroll Down</span>
-            <ChevronDown className="w-5 h-5 mt-1" />
-          </a>
+            <span className="text-sm mb-2 font-medium group-hover:text-slate-700 dark:group-hover:text-slate-300">
+              Discover Features
+            </span>
+            <ChevronDown className="w-6 h-6 group-hover:animate-bounce" />
+          </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section
-        id="features"
-        className="py-20 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800"
-      >
-        <div className="container mx-auto px-4">
+      {/* Features Section with unified background */}
+      <section id="features" className="relative py-24 overflow-hidden">
+        {/* Same background as hero section */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-stone-50/50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-stone-900/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-slate-500/5 to-transparent" />
+
+        <div className="container mx-auto px-4 relative">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-20"
           >
-            <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
-              <CheckCircle className="w-4 h-4 mr-2" /> Powerful Features
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Everything You Need
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center px-6 py-3 mb-8 rounded-full border border-slate-200/50 dark:border-slate-700/50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm text-slate-700 dark:text-slate-300 text-sm font-semibold shadow-lg"
+            >
+              <CheckCircle className="w-4 h-4 mr-2 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-slate-800 dark:text-slate-200">
+                Powerful Features
+              </span>
+            </motion.div>
+
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-slate-900 dark:text-slate-100">
+                Everything You Need
+              </span>
+              <br />
+              <span className="text-slate-700 dark:text-slate-300">
+                In One Platform
+              </span>
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Our platform offers a comprehensive set of tools designed to
-              streamline campus transportation logistics.
+
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Our comprehensive platform offers intelligent tools designed to
+              revolutionize campus transportation management with cutting-edge
+              technology.
             </p>
           </motion.div>
 
@@ -584,24 +466,29 @@ const LandingPage = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerChildren}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
           >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 hover:shadow-lg dark:hover:shadow-xl transition-shadow relative overflow-hidden group border border-gray-100 dark:border-gray-700"
+                className="group relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 dark:from-blue-400/10 dark:to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4 relative z-10">
-                  <feature.icon className="w-6 h-6 text-primary" />
+                <div className="absolute inset-0 bg-slate-100/50 dark:bg-slate-700/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110" />
+                <div className="relative bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 border border-slate-200/50 dark:border-slate-700/50 group-hover:border-slate-300 dark:group-hover:border-slate-600 group-hover:-translate-y-2">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <feature.icon className="w-8 h-8 text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors duration-300" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100 group-hover:text-slate-800 dark:group-hover:text-white transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {feature.description}
+                  </p>
+
+                  {/* Hover effect indicator */}
+                  <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-slate-500 dark:bg-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 relative z-10 text-gray-900 dark:text-white">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 relative z-10">
-                  {feature.description}
-                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -609,59 +496,101 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
+      <section id="how-it-works" className="relative py-24 overflow-hidden">
+        {/* Natural background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-stone-50 via-slate-50/30 to-gray-50/30 dark:from-slate-900 dark:via-stone-900/20 dark:to-slate-900/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-slate-300/10 via-transparent to-transparent" />
+
+        <div className="container mx-auto px-4 relative">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-20"
           >
-            <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
-              <CheckCircle className="w-4 h-4 mr-2" /> Easy Process
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              How It Works
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center px-4 py-2 mb-6 rounded-full border border-slate-200/50 dark:border-slate-700/50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm text-slate-700 dark:text-slate-300 text-sm font-semibold shadow-lg"
+            >
+              <CheckCircle className="w-4 h-4 mr-2 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-slate-800 dark:text-slate-200">
+                Simple Process
+              </span>
+            </motion.div>
+
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-slate-900 dark:text-slate-100">How It</span>{" "}
+              <span className="text-slate-700 dark:text-slate-300">Works</span>
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Our platform connects all stakeholders in the campus
-              transportation ecosystem through a simple process.
+
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Our platform seamlessly connects all stakeholders in the campus
+              transportation ecosystem through an intuitive and streamlined
+              process.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="flex flex-col items-center text-center"
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="relative flex flex-col items-center text-center group"
               >
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white text-xl font-bold mb-4 shadow-md">
-                    {index + 1}
+                {/* Connection line */}
+                {index < steps.length - 1 && (
+                  <div className="absolute top-8 left-1/2 w-full h-0.5 bg-slate-200 dark:bg-slate-700 hidden md:block z-0">
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: 0.8 + index * 0.3 }}
+                      className="absolute inset-0 bg-emerald-500 dark:bg-emerald-400 origin-left rounded-full"
+                    />
                   </div>
-                  {index < steps.length - 1 && (
-                    <div className="absolute top-8 left-full w-full h-0.5 bg-primary/20 hidden md:block">
-                      <motion.div
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                        className="absolute inset-0 bg-primary origin-left"
-                      />
-                    </div>
-                  )}
+                )}
+
+                {/* Step number with natural styling */}
+                <div className="relative mb-8">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-20 h-20 rounded-full bg-slate-800 dark:bg-slate-200 flex items-center justify-center text-white dark:text-slate-900 text-2xl font-bold shadow-2xl relative z-10 group-hover:shadow-slate-500/50 dark:group-hover:shadow-slate-300/50 transition-all duration-300"
+                  >
+                    {index + 1}
+                  </motion.div>
+
+                  {/* Pulsing background effect */}
+                  <div className="absolute inset-0 w-20 h-20 rounded-full bg-slate-600 dark:bg-slate-400 animate-ping opacity-20" />
+
+                  {/* Outer glow ring */}
+                  <div className="absolute inset-0 w-20 h-20 rounded-full border-2 border-slate-300 dark:border-slate-600 group-hover:border-slate-400 dark:group-hover:border-slate-500 transition-all duration-300 scale-125" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+
+                <motion.h3
+                  whileHover={{ scale: 1.05 }}
+                  className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100 group-hover:text-slate-800 dark:group-hover:text-white transition-colors duration-300"
+                >
                   {step.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                </motion.h3>
+
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg max-w-sm">
                   {step.description}
                 </p>
+
+                {/* Subtle indicator */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 1 + index * 0.2 }}
+                  className="mt-6 w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 opacity-60"
+                />
               </motion.div>
             ))}
           </div>
@@ -671,58 +600,59 @@ const LandingPage = () => {
       {/* User Roles */}
       <section
         id="roles"
-        className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900"
+        className="relative py-20 bg-slate-50 dark:bg-slate-900"
       >
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center px-3 py-1 mb-4 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium">
-              <CheckCircle className="w-4 h-4 mr-2" /> User Roles
+            <div className="inline-flex items-center px-4 py-2 mb-6 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium border border-slate-200 dark:border-slate-700">
+              <CheckCircle className="w-4 h-4 mr-2 text-emerald-600 dark:text-emerald-400" />
+              User Roles
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Choose Your Role
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 dark:text-slate-100">
+              Choose Your{" "}
+              <span className="text-slate-700 dark:text-slate-300">Role</span>
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
               Our platform caters to different stakeholders in the campus bus
-              ecosystem, each with tailored features.
+              ecosystem, each with tailored features and experiences.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {roles.map((role, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="rounded-xl overflow-hidden shadow-card hover:-translate-y-1 transition-transform"
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div
-                  className={`h-28 flex items-center justify-center ${role.bgClass} relative overflow-hidden`}
-                >
-                  <div className="absolute inset-0 opacity-20">
-                    <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
-                    <div className="absolute -left-6 -bottom-6 w-24 h-24 rounded-full bg-white/10" />
-                  </div>
-                  <role.icon className="w-12 h-12 text-white relative z-10" />
+                <div className="h-24 flex items-center justify-center bg-slate-700 dark:bg-slate-600">
+                  <role.icon className="w-8 h-8 text-white" />
                 </div>
-                <div className="p-6 bg-white dark:bg-gray-800">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-slate-900 dark:text-slate-100">
                     {role.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
+
+                  <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                     {role.description}
                   </p>
+
                   <Link to={role.loginPath}>
                     <Button
                       variant="outline"
-                      className="w-full group hover:bg-gray-50/80 dark:hover:bg-gray-700/80"
+                      className="w-full group-hover:bg-slate-50 dark:group-hover:bg-slate-700/50 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-500"
                     >
                       Login as {role.title}
                       <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -736,236 +666,179 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary/10 to-blue-600/10 dark:from-primary/20 dark:to-blue-600/20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-20 bg-slate-100 dark:bg-slate-900">
+        <div className="container mx-auto px-4 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="max-w-4xl mx-auto text-center"
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
-              Ready to Simplify Campus Transportation?
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
+              Ready to Transform Your Campus Transportation?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+
+            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
               Join thousands of students, drivers, and coordinators who are
               already using our platform to make campus transportation more
               efficient.
             </p>
-            <Link to="/login">
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/register/student">
+                <Button
+                  size="lg"
+                  className="group bg-slate-800 dark:bg-white text-white dark:text-slate-800 hover:bg-slate-900 dark:hover:bg-slate-50 px-10 py-4 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
+                  Get Started Free
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+
               <Button
+                variant="outline"
                 size="lg"
-                className="shadow-lg hover:shadow-xl transition-shadow text-lg px-8"
+                className="group px-10 py-4 text-lg font-bold border-2 border-slate-800 dark:border-white text-slate-800 dark:text-white hover:bg-slate-800 dark:hover:bg-white hover:text-white dark:hover:text-slate-800 transition-all duration-300 transform hover:scale-105"
+                onClick={() => {
+                  try {
+                    const featuresSection = document.getElementById("features");
+                    if (featuresSection) {
+                      featuresSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                        inline: "nearest",
+                      });
+                    }
+                  } catch (error) {
+                    console.warn("Scroll to features failed:", error);
+                  }
+                }}
               >
-                Get Started Now
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Learn More
               </Button>
-            </Link>
+            </div>
+
+            <div className="flex items-center justify-center space-x-8 mt-8 text-slate-500 dark:text-slate-400">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>Free to Start</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>24/7 Support</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <span>Instant Setup</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+      <footer className="relative py-16 bg-slate-900 dark:bg-slate-950">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand section */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <Bus className="h-6 w-6 text-primary" />
-                <span className="font-bold text-xl text-gray-900 dark:text-white">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center">
+                  <Bus className="h-5 w-5 text-white dark:text-slate-800" />
+                </div>
+                <span className="font-semibold text-xl text-white">
                   Campus Bus Assistant
                 </span>
               </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Simplifying campus transportation for students and
-                administrators.
+
+              <p className="text-slate-400 leading-relaxed">
+                Revolutionizing campus transportation with smart technology,
+                real-time insights, and seamless user experiences.
               </p>
             </div>
 
+            {/* Features */}
             <div>
-              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
-                Features
-              </h3>
+              <h3 className="font-semibold mb-4 text-white">Features</h3>
               <ul className="space-y-2">
-                <li>
-                  <a
-                    href="#features"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Real-time Tracking
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#features"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Voting System
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#features"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Route Guidance
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#features"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Emergency Assistance
-                  </a>
-                </li>
+                {[
+                  "Real-time Tracking",
+                  "Voting System",
+                  "Route Guidance",
+                  "Emergency Assistance",
+                ].map((item, index) => (
+                  <li key={index}>
+                    <a
+                      href="#features"
+                      className="text-slate-400 hover:text-slate-200 transition-colors"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 
+            {/* User Roles */}
             <div>
-              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
-                User Roles
-              </h3>
+              <h3 className="font-semibold mb-4 text-white">User Roles</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link
-                    to="/login/student"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Student
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/login/driver"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Driver
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/login/coordinator"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Coordinator
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/login/admin"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Administrator
-                  </Link>
-                </li>
+                {[
+                  { name: "Student", path: "/login/student" },
+                  { name: "Driver", path: "/login/driver" },
+                  { name: "Coordinator", path: "/login/coordinator" },
+                  { name: "Administrator", path: "/login/admin" },
+                ].map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      to={item.path}
+                      className="text-slate-400 hover:text-slate-200 transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
+            {/* Support */}
             <div>
-              <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">
-                Connect
-              </h3>
+              <h3 className="font-semibold mb-4 text-white">Support</h3>
               <ul className="space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Contact Support
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-500 dark:text-gray-400 hover:text-primary text-sm"
-                  >
-                    Help Center
-                  </a>
-                </li>
+                {[
+                  "Contact Support",
+                  "Help Center",
+                  "Privacy Policy",
+                  "Terms of Service",
+                ].map((item, index) => (
+                  <li key={index}>
+                    <a
+                      href="#"
+                      className="text-slate-400 hover:text-slate-200 transition-colors"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-            <p className="mb-2">
-              © {new Date().getFullYear()} Campus Bus Assistant. All rights
-              reserved.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <a
-                href="#"
-                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 dark:text-gray-500 hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />
-                </svg>
-              </a>
+          <div className="border-t border-slate-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-slate-400 text-center md:text-left">
+                © {new Date().getFullYear()} Campus Bus Assistant. All rights
+                reserved.
+              </p>
+
+              <div className="flex items-center space-x-4 mt-4 md:mt-0 text-sm text-slate-400">
+                <span className="flex items-center space-x-1">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>System Operational</span>
+                </span>
+                <span>Version 2.0</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1040,33 +913,29 @@ const roles = [
     description:
       "View bus schedules, vote for additional services, and report issues as needed.",
     icon: User,
-    bgClass: "bg-gradient-to-r from-blue-500 to-blue-600",
     loginPath: "/login/student",
   },
   {
     title: "Driver",
     description:
-      "Manage your bus schedule, respond to student needs, and provide safe transportation.",
-    icon: Bus,
-    bgClass: "bg-gradient-to-r from-green-500 to-green-600",
+      "Manage routes, update locations, and respond to emergency requests.",
+    icon: Users,
     loginPath: "/login/driver",
   },
   {
     title: "Coordinator",
     description:
-      "Oversee bus operations, manage voting requests, and resolve complaints.",
-    icon: Users,
-    bgClass: "bg-gradient-to-r from-purple-500 to-purple-600",
+      "Oversee operations, manage schedules, and coordinate between all stakeholders.",
+    icon: ShieldCheck,
     loginPath: "/login/coordinator",
   },
   {
-    title: "Admin",
+    title: "Administrator",
     description:
-      "Full system control including user management, bus allocation, and data analytics.",
-    icon: ShieldCheck,
-    bgClass: "bg-gradient-to-r from-red-500 to-red-600",
+      "Full system access with user management, analytics, and configuration controls.",
+    icon: Shield,
     loginPath: "/login/admin",
   },
 ];
 
-export default LandingPage;
+export default Index;
