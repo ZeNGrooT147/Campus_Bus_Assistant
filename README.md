@@ -8,10 +8,7 @@ A comprehensive campus transportation management system built with React, TypeSc
 Campus_Bus_Assistant/
 ├── 📁 config/                     # Configuration files
 │   ├── components.json            # Shadcn/ui components config
-│   ├── eslint.config.js          # ESLint configuration
-│   ├── postcss.config.js         # PostCSS configuration
-│   ├── tailwind.config.js        # Tailwind CSS configuration (JS)
-│   └── tailwind.config.ts        # Tailwind CSS configuration (TS)
+│   └── eslint.config.js          # ESLint configuration
 │
 ├── 📁 database/                   # Database related files
 │   ├── 📁 migrations/            # Supabase migrations
@@ -62,6 +59,9 @@ Campus_Bus_Assistant/
 │
 ├── 📄 index.html                # HTML entry point
 ├── 📄 package.json              # Project dependencies and scripts
+├── 📄 postcss.config.js         # PostCSS configuration  
+├── 📄 tailwind.config.js        # Tailwind CSS configuration (JS)
+├── 📄 tailwind.config.ts        # Tailwind CSS configuration (TS)
 ├── 📄 tsconfig.*.json           # TypeScript configurations
 ├── 📄 vercel.json               # Vercel deployment config
 └── 📄 vite.config.ts            # Vite build configuration
