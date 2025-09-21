@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "build:prod": "NODE_ENV=production vite build --mode production",
     "build:secure": "NODE_ENV=production VITE_DISABLE_DEVTOOLS=true vite build --mode production",
-    "lint": "eslint .",
+    "lint": "eslint . --config config/eslint.config.js",
     "preview": "vite preview",
     "analyze": "vite build && npx vite-bundle-analyzer dist/stats.html",
     "security-audit": "npm audit && npm run build:secure"
