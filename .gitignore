@@ -38,6 +38,7 @@ build
 # Security and sensitive files
 *.key
 *.pem
+vercel.json
 *.crt
 *.p12
 *.pfx
