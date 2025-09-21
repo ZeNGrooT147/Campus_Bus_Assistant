@@ -51,3 +51,25 @@ bundle-report.html
 # Coverage and test reports
 coverage/
 .nyc_output
+
+# Vercel
+.vercel
+*.vercel.json.backup
+
+# Database files (development artifacts)
+*.sql.backup
+*_backup.sql
+database/migrations-archive/
+database/schemas/safe_schema_update.sql
+database/schemas/ultra_safe_schema_update.sql
+database/schemas/fix_foreign_key_conflicts.sql
+database/schemas/complete_schema.sql
+database/schemas/schema_complete.sql
+
+# Development documentation
+docs/DATABASE_SCHEMA.md
+
+# Supabase
+supabase/.temp/
+supabase/.branches/
+supabase/.env.local
