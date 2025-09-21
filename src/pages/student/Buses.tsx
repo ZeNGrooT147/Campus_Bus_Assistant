@@ -244,9 +244,24 @@ const StudentBuses = () => {
 
         <Tabs defaultValue="buses" className="w-full">
           <TabsList className="grid w-full grid-cols-3 max-w-md mb-6 bg-muted dark:bg-gray-800">
-            <TabsTrigger value="buses" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Available Buses</TabsTrigger>
-            <TabsTrigger value="schedule" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Schedule</TabsTrigger>
-            <TabsTrigger value="map" className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700">Route Map</TabsTrigger>
+            <TabsTrigger
+              value="buses"
+              className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700"
+            >
+              Available Buses
+            </TabsTrigger>
+            <TabsTrigger
+              value="schedule"
+              className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700"
+            >
+              Schedule
+            </TabsTrigger>
+            <TabsTrigger
+              value="map"
+              className="data-[state=active]:bg-background dark:data-[state=active]:bg-gray-700"
+            >
+              Route Map
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="buses" className="space-y-4 animate-fade-in">

@@ -1,15 +1,29 @@
-
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { User, Phone, Mail, Check, FileText, Calendar, Shield, Clock } from "lucide-react";
+import {
+  User,
+  Phone,
+  Mail,
+  Check,
+  FileText,
+  Calendar,
+  Shield,
+  Clock,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const DriverProfile = () => {
@@ -23,7 +37,7 @@ const DriverProfile = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,10 +57,14 @@ const DriverProfile = () => {
           <CardHeader className="flex flex-row items-center gap-4 pb-2 -mt-16 z-10 relative px-8">
             <Avatar className="h-24 w-24 ring-4 ring-white dark:ring-gray-800 shadow-lg">
               <AvatarImage src="/placeholder.svg" alt={user?.name} />
-              <AvatarFallback className="text-3xl bg-gradient-to-br from-primary to-blue-700 text-white">{user?.name?.[0]?.toUpperCase()}</AvatarFallback>
+              <AvatarFallback className="text-3xl bg-gradient-to-br from-primary to-blue-700 text-white">
+                {user?.name?.[0]?.toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div className="pt-16 md:pt-0">
-              <CardTitle className="text-2xl text-gray-800 dark:text-white">{user?.name}</CardTitle>
+              <CardTitle className="text-2xl text-gray-800 dark:text-white">
+                {user?.name}
+              </CardTitle>
               <CardDescription className="text-sm flex items-center gap-1 text-muted-foreground dark:text-gray-300">
                 <span className="inline-block h-2 w-2 rounded-full bg-green-500 mr-1"></span>
                 Driver
@@ -55,67 +73,78 @@ const DriverProfile = () => {
           </CardHeader>
           <CardContent className="px-8">
             <Separator className="my-6" />
-            
+
             {isEditing ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="flex items-center gap-1.5 text-gray-700">
+                    <Label
+                      htmlFor="name"
+                      className="flex items-center gap-1.5 text-gray-700"
+                    >
                       <User className="h-4 w-4 text-primary" />
                       Full Name
                     </Label>
-                    <Input 
-                      id="name" 
-                      name="name" 
-                      value={formData.name} 
-                      onChange={handleChange} 
-                      required 
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
                       className="shadow-sm"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="flex items-center gap-1.5 text-gray-700">
+                    <Label
+                      htmlFor="email"
+                      className="flex items-center gap-1.5 text-gray-700"
+                    >
                       <Mail className="h-4 w-4 text-primary" />
                       Email Address
                     </Label>
-                    <Input 
-                      id="email" 
-                      name="email" 
-                      type="email" 
-                      value={formData.email} 
-                      onChange={handleChange} 
-                      required 
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
                       className="shadow-sm"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="flex items-center gap-1.5 text-gray-700">
+                    <Label
+                      htmlFor="phone"
+                      className="flex items-center gap-1.5 text-gray-700"
+                    >
                       <Phone className="h-4 w-4 text-primary" />
                       Phone Number
                     </Label>
-                    <Input 
-                      id="phone" 
-                      name="phone" 
-                      value={formData.phone} 
-                      onChange={handleChange} 
-                      required 
+                    <Input
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
                       className="shadow-sm"
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-end gap-3 pt-4">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => setIsEditing(false)}
                     className="shadow-sm"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="shadow-sm">Save Changes</Button>
+                  <Button type="submit" className="shadow-sm">
+                    Save Changes
+                  </Button>
                 </div>
               </form>
             ) : (
@@ -128,7 +157,7 @@ const DriverProfile = () => {
                     </h3>
                     <p className="text-base font-medium">{user?.name}</p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-1.5 mb-2">
                       <Mail className="h-4 w-4 text-primary" />
@@ -136,7 +165,7 @@ const DriverProfile = () => {
                     </h3>
                     <p className="text-base font-medium">{user?.email}</p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-1.5 mb-2">
                       <Phone className="h-4 w-4 text-primary" />
@@ -144,7 +173,7 @@ const DriverProfile = () => {
                     </h3>
                     <p className="text-base font-medium">{user?.phone}</p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-1.5 mb-2">
                       <Shield className="h-4 w-4 text-primary" />
@@ -156,9 +185,12 @@ const DriverProfile = () => {
                     </Badge>
                   </div>
                 </div>
-                
+
                 <div className="mt-8 flex justify-end">
-                  <Button onClick={() => setIsEditing(true)} className="shadow-sm">
+                  <Button
+                    onClick={() => setIsEditing(true)}
+                    className="shadow-sm"
+                  >
                     Edit Profile
                   </Button>
                 </div>
@@ -166,7 +198,7 @@ const DriverProfile = () => {
             )}
           </CardContent>
         </Card>
-        
+
         <Card className="mt-6 shadow-md overflow-hidden border-0">
           <CardHeader className="bg-gray-50">
             <div className="flex items-center gap-2">
@@ -175,13 +207,15 @@ const DriverProfile = () => {
               </div>
               <div>
                 <CardTitle>Security Settings</CardTitle>
-                <CardDescription>Manage your password and account security</CardDescription>
+                <CardDescription>
+                  Manage your password and account security
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full sm:w-auto shadow-sm group hover:bg-primary/5"
             >
               <Shield className="h-4 w-4 mr-2 group-hover:text-primary" />
@@ -189,7 +223,7 @@ const DriverProfile = () => {
             </Button>
           </CardContent>
         </Card>
-        
+
         <Card className="mt-6 shadow-md overflow-hidden border-0">
           <CardHeader className="bg-gray-50">
             <div className="flex items-center gap-2">
@@ -198,7 +232,9 @@ const DriverProfile = () => {
               </div>
               <div>
                 <CardTitle>Documents & Certifications</CardTitle>
-                <CardDescription>Keep your driving documents up to date</CardDescription>
+                <CardDescription>
+                  Keep your driving documents up to date
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -220,16 +256,21 @@ const DriverProfile = () => {
                       <span>Expires: May 15, 2025</span>
                     </div>
                   </div>
-                  <Badge variant="outline" className="bg-green-50 text-green-800 border-green-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-800 border-green-200"
+                  >
                     Active
                   </Badge>
                 </div>
                 <Separator className="my-3" />
                 <div className="flex justify-end">
-                  <Button size="sm" variant="outline" className="text-sm">Update</Button>
+                  <Button size="sm" variant="outline" className="text-sm">
+                    Update
+                  </Button>
                 </div>
               </div>
-              
+
               <div className="bg-white rounded-xl shadow-sm border p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between">
                   <div>
@@ -246,13 +287,18 @@ const DriverProfile = () => {
                       <span>Expires: Dec 10, 2023</span>
                     </div>
                   </div>
-                  <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-amber-50 text-amber-800 border-amber-200"
+                  >
                     Renewal Needed
                   </Badge>
                 </div>
                 <Separator className="my-3" />
                 <div className="flex justify-end">
-                  <Button size="sm" variant="outline" className="text-sm">Update</Button>
+                  <Button size="sm" variant="outline" className="text-sm">
+                    Update
+                  </Button>
                 </div>
               </div>
             </div>
@@ -260,7 +306,11 @@ const DriverProfile = () => {
             <div className="bg-gray-50 p-4 rounded-lg text-sm text-muted-foreground">
               <p className="flex items-start gap-2">
                 <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                <span>Keep your documents up to date to ensure compliance with transportation regulations. Expired documents may restrict your ability to operate buses.</span>
+                <span>
+                  Keep your documents up to date to ensure compliance with
+                  transportation regulations. Expired documents may restrict
+                  your ability to operate buses.
+                </span>
               </p>
             </div>
           </CardContent>

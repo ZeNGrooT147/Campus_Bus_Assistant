@@ -1,38 +1,61 @@
-import { useState } from 'react';
+import { useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserRound, Mail, School, Phone, MapPin, Pencil, Clock, Shield, Calendar } from "lucide-react";
+import {
+  UserRound,
+  Mail,
+  School,
+  Phone,
+  MapPin,
+  Pencil,
+  Clock,
+  Shield,
+  Calendar,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 
 const StudentProfile = () => {
   const { user } = useAuth();
-  
+
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [region, setRegion] = useState(user?.region || "");
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const handleUpdateProfile = async () => {
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({
           name,
           phone,
           region,
         })
-        .eq('id', user?.id);
-      
+        .eq("id", user?.id);
+
       if (error) throw error;
-      
+
       toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (error) {
@@ -42,9 +65,10 @@ const StudentProfile = () => {
   };
 
   // Format the created_at date if it exists
-  const formattedJoinDate = user && 'created_at' in user 
-    ? new Date(user.created_at as string).toLocaleDateString() 
-    : "Unknown";
+  const formattedJoinDate =
+    user && "created_at" in user
+      ? new Date(user.created_at as string).toLocaleDateString()
+      : "Unknown";
 
   return (
     <DashboardLayout pageTitle="My Profile">
@@ -53,67 +77,93 @@ const StudentProfile = () => {
           <CardHeader className="relative">
             <div className="flex justify-center mb-4">
               <Avatar className="h-24 w-24">
-                <AvatarImage src={user?.profile_photo_url || ""} alt={user?.name || "User"} />
+                <AvatarImage
+                  src={user?.profile_photo_url || ""}
+                  alt={user?.name || "User"}
+                />
                 <AvatarFallback className="text-2xl bg-primary/10 dark:bg-primary/20 text-foreground dark:text-white">
                   {user?.name?.charAt(0) || "?"}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <CardTitle className="text-center text-foreground dark:text-white">{user?.name}</CardTitle>
+            <CardTitle className="text-center text-foreground dark:text-white">
+              {user?.name}
+            </CardTitle>
             <CardDescription className="text-center flex justify-center items-center gap-1 text-muted-foreground dark:text-gray-300">
               <School className="h-3.5 w-3.5" />
               <span>{user?.usn || "USN not set"}</span>
             </CardDescription>
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
+
+            <Button
+              variant="ghost"
+              size="icon"
               className="absolute right-4 top-4 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={() => setIsEditing(true)}
             >
               <Pencil className="h-4 w-4" />
             </Button>
           </CardHeader>
-          
+
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-2">
                 <Mail className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">Email</p>
-                  <p className="font-medium break-all text-foreground dark:text-white">{user?.email}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
+                    Email
+                  </p>
+                  <p className="font-medium break-all text-foreground dark:text-white">
+                    {user?.email}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-2">
                 <Phone className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">Phone</p>
-                  <p className="font-medium text-foreground dark:text-white">{user?.phone || "Not provided"}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
+                    Phone
+                  </p>
+                  <p className="font-medium text-foreground dark:text-white">
+                    {user?.phone || "Not provided"}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-2">
                 <MapPin className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">Region</p>
-                  <p className="font-medium text-foreground dark:text-white">{user?.region || "Not specified"}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
+                    Region
+                  </p>
+                  <p className="font-medium text-foreground dark:text-white">
+                    {user?.region || "Not specified"}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-2">
                 <Clock className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">Joined</p>
-                  <p className="font-medium text-foreground dark:text-white">{formattedJoinDate}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
+                    Joined
+                  </p>
+                  <p className="font-medium text-foreground dark:text-white">
+                    {formattedJoinDate}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-2">
                 <Shield className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground dark:text-gray-400">Account Status</p>
-                  <Badge variant="outline" className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-700">
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">
+                    Account Status
+                  </p>
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-700"
+                  >
                     Active
                   </Badge>
                 </div>
@@ -121,7 +171,7 @@ const StudentProfile = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <div className="md:col-span-2 space-y-6">
           <Card className="bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
             <CardHeader>
@@ -129,7 +179,9 @@ const StudentProfile = () => {
                 <Calendar className="h-5 w-5 text-primary" />
                 Recent Activity
               </CardTitle>
-              <CardDescription className="text-muted-foreground dark:text-gray-300">Your recent interactions with the system</CardDescription>
+              <CardDescription className="text-muted-foreground dark:text-gray-300">
+                Your recent interactions with the system
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -138,18 +190,26 @@ const StudentProfile = () => {
                     <Clock className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-medium text-foreground dark:text-white">Last Login</p>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">{new Date().toLocaleString()}</p>
+                    <p className="font-medium text-foreground dark:text-white">
+                      Last Login
+                    </p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                      {new Date().toLocaleString()}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50 dark:bg-gray-700/50">
                   <div className="h-10 w-10 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center">
                     <Shield className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <p className="font-medium text-foreground dark:text-white">Profile Updated</p>
-                    <p className="text-sm text-muted-foreground dark:text-gray-300">{formattedJoinDate}</p>
+                    <p className="font-medium text-foreground dark:text-white">
+                      Profile Updated
+                    </p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">
+                      {formattedJoinDate}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -157,19 +217,24 @@ const StudentProfile = () => {
           </Card>
         </div>
       </div>
-      
+
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
         <DialogContent className="bg-background dark:bg-gray-800 border border-border dark:border-gray-700">
           <DialogHeader>
-            <DialogTitle className="text-foreground dark:text-white">Edit Profile</DialogTitle>
+            <DialogTitle className="text-foreground dark:text-white">
+              Edit Profile
+            </DialogTitle>
             <DialogDescription className="text-muted-foreground dark:text-gray-300">
               Update your profile information
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right text-foreground dark:text-white">
+              <Label
+                htmlFor="name"
+                className="text-right text-foreground dark:text-white"
+              >
                 Name
               </Label>
               <Input
@@ -179,9 +244,12 @@ const StudentProfile = () => {
                 className="col-span-3 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right text-foreground dark:text-white">
+              <Label
+                htmlFor="phone"
+                className="text-right text-foreground dark:text-white"
+              >
                 Phone
               </Label>
               <Input
@@ -191,9 +259,12 @@ const StudentProfile = () => {
                 className="col-span-3 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="region" className="text-right text-foreground dark:text-white">
+              <Label
+                htmlFor="region"
+                className="text-right text-foreground dark:text-white"
+              >
                 Region
               </Label>
               <Input
@@ -204,14 +275,16 @@ const StudentProfile = () => {
               />
             </div>
           </div>
-          
+
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditing(false)} className="border-border dark:border-gray-600 text-foreground dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              className="border-border dark:border-gray-600 text-foreground dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
               Cancel
             </Button>
-            <Button onClick={handleUpdateProfile}>
-              Save Changes
-            </Button>
+            <Button onClick={handleUpdateProfile}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

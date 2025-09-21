@@ -304,7 +304,9 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{pageTitle}</h1>
+            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {pageTitle}
+            </h1>
           </div>
 
           <div className="flex items-center gap-4">
@@ -342,7 +344,9 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
                     {getInitial()}
                   </div>
                   <div className="flex flex-col">
-                    <span className="font-medium dark:text-white">{user.name || "User"}</span>
+                    <span className="font-medium dark:text-white">
+                      {user.name || "User"}
+                    </span>
                     <span className="text-xs text-muted-foreground dark:text-gray-400 flex items-center gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
                       {user.role &&
@@ -396,7 +400,9 @@ const DashboardLayout = ({ children, pageTitle }: DashboardLayoutProps) => {
         <Dialog open={sosDialogOpen} onOpenChange={setSosDialogOpen}>
           <DialogContent className="max-w-sm dark:bg-gray-800 dark:border-gray-600">
             <DialogHeader>
-              <DialogTitle className="dark:text-white">Trigger SOS Emergency?</DialogTitle>
+              <DialogTitle className="dark:text-white">
+                Trigger SOS Emergency?
+              </DialogTitle>
             </DialogHeader>
             <div className="py-2 text-center text-lg text-red-600 dark:text-red-400 font-semibold flex flex-col items-center">
               <AlertTriangle className="w-10 h-10 mb-2 animate-pulse" />

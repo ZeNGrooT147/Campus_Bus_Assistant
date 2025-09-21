@@ -1,19 +1,24 @@
-
-import DashboardLayout from '@/components/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, RefreshCw, Search } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import DashboardLayout from "@/components/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, RefreshCw, Search } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const AdminCoordinators = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    console.log("Searching for:", searchQuery);
     toast.info(`Searching for coordinator: ${searchQuery}`);
     // Implement search functionality
   };
@@ -21,7 +26,7 @@ const AdminCoordinators = () => {
   const refreshData = () => {
     setIsLoading(true);
     toast.loading("Refreshing coordinator data...");
-    
+
     // Simulate data refresh
     setTimeout(() => {
       setIsLoading(false);
@@ -33,9 +38,16 @@ const AdminCoordinators = () => {
     <DashboardLayout pageTitle="Coordinator Management">
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold dark:text-white">Coordinator Management</h1>
+          <h1 className="text-2xl font-bold dark:text-white">
+            Coordinator Management
+          </h1>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={refreshData} disabled={isLoading}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={refreshData}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <RefreshCw className="h-4 w-4 animate-spin" />
               ) : (
@@ -43,7 +55,10 @@ const AdminCoordinators = () => {
               )}
               <span className="ml-2">Refresh</span>
             </Button>
-            <Button size="sm" onClick={() => toast.info("Add coordinator feature coming soon")}>
+            <Button
+              size="sm"
+              onClick={() => toast.info("Add coordinator feature coming soon")}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add Coordinator
             </Button>
@@ -53,10 +68,15 @@ const AdminCoordinators = () => {
         <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
           <CardHeader className="pb-3">
             <CardTitle className="dark:text-white">Bus Coordinators</CardTitle>
-            <CardDescription className="dark:text-gray-300">Manage all coordinators in the system</CardDescription>
+            <CardDescription className="dark:text-gray-300">
+              Manage all coordinators in the system
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSearch} className="flex w-full max-w-sm mb-4 items-center space-x-2">
+            <form
+              onSubmit={handleSearch}
+              className="flex w-full max-w-sm mb-4 items-center space-x-2"
+            >
               <Input
                 type="search"
                 placeholder="Search coordinators..."
@@ -73,7 +93,9 @@ const AdminCoordinators = () => {
             <div className="rounded-md border dark:border-gray-700">
               <div className="p-4 text-center text-muted-foreground dark:text-gray-400">
                 <p>Coordinator management panel will be displayed here.</p>
-                <p className="text-sm mt-1">You can add, edit, or manage coordinator accounts.</p>
+                <p className="text-sm mt-1">
+                  You can add, edit, or manage coordinator accounts.
+                </p>
               </div>
             </div>
           </CardContent>
