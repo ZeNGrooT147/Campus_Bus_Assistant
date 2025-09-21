@@ -1,32 +1,45 @@
-
-import { useCallback, useState, useMemo } from 'react';
-import DashboardLayout from '@/components/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, RefreshCw, Search } from 'lucide-react';
-import { toast } from 'sonner';
-import AddBusForm from '@/components/coordinator/AddBusForm';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useCallback, useState, useMemo } from "react";
+import DashboardLayout from "@/components/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, RefreshCw, Search } from "lucide-react";
+import { toast } from "sonner";
+import AddBusForm from "@/components/coordinator/AddBusForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const AdminBuses = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showAddBusDialog, setShowAddBusDialog] = useState(false);
 
   // Memoize the search handler to prevent unnecessary re-renders
-  const handleSearch = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    toast.info(`Searching for bus: ${searchQuery}`);
-    // Implement search functionality
-  }, [searchQuery]);
+  const handleSearch = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log("Searching for:", searchQuery);
+      toast.info(`Searching for bus: ${searchQuery}`);
+      // Implement search functionality
+    },
+    [searchQuery]
+  );
 
   // Memoize the refresh handler
   const refreshData = useCallback(() => {
     setIsLoading(true);
     toast.loading("Refreshing bus data...");
-    
+
     // Simulate data refresh
     setTimeout(() => {
       setIsLoading(false);
@@ -35,11 +48,32 @@ const AdminBuses = () => {
   }, []);
 
   // Demo bus data - memoized to prevent re-renders
-  const busesData = useMemo(() => [
-    { id: 1, number: 'KA-25-F-1234', name: 'Varada Express', route: 'Dharwad Region', status: 'active' },
-    { id: 2, number: 'KA-25-G-5678', name: 'Campus Shuttle', route: 'Hubli Region', status: 'active' },
-    { id: 3, number: 'KA-25-H-9012', name: 'University Link', route: 'Dharwad Region', status: 'maintenance' },
-  ], []);
+  const busesData = useMemo(
+    () => [
+      {
+        id: 1,
+        number: "KA-25-F-1234",
+        name: "Varada Express",
+        route: "Dharwad Region",
+        status: "active",
+      },
+      {
+        id: 2,
+        number: "KA-25-G-5678",
+        name: "Campus Shuttle",
+        route: "Hubli Region",
+        status: "active",
+      },
+      {
+        id: 3,
+        number: "KA-25-H-9012",
+        name: "University Link",
+        route: "Dharwad Region",
+        status: "maintenance",
+      },
+    ],
+    []
+  );
 
   return (
     <DashboardLayout pageTitle="Bus Management">
@@ -47,7 +81,12 @@ const AdminBuses = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold dark:text-white">Bus Management</h1>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={refreshData} disabled={isLoading}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={refreshData}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <RefreshCw className="h-4 w-4 animate-spin" />
               ) : (
@@ -64,11 +103,18 @@ const AdminBuses = () => {
 
         <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
           <CardHeader className="pb-3">
-            <CardTitle className="dark:text-white">Bus Fleet Overview</CardTitle>
-            <CardDescription className="dark:text-gray-300">Manage and monitor all buses in the system</CardDescription>
+            <CardTitle className="dark:text-white">
+              Bus Fleet Overview
+            </CardTitle>
+            <CardDescription className="dark:text-gray-300">
+              Manage and monitor all buses in the system
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSearch} className="flex w-full max-w-sm mb-4 items-center space-x-2">
+            <form
+              onSubmit={handleSearch}
+              className="flex w-full max-w-sm mb-4 items-center space-x-2"
+            >
               <Input
                 type="search"
                 placeholder="Search by bus number..."
@@ -88,27 +134,46 @@ const AdminBuses = () => {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b bg-muted/50 dark:bg-gray-700 dark:border-gray-600">
-                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Bus Number</th>
-                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Name</th>
-                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Route</th>
-                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Status</th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">
+                          Bus Number
+                        </th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">
+                          Name
+                        </th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">
+                          Route
+                        </th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">
+                          Status
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {busesData.map((bus) => (
-                        <tr key={bus.id} className="border-b hover:bg-muted/50 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <tr
+                          key={bus.id}
+                          className="border-b hover:bg-muted/50 dark:border-gray-700 dark:hover:bg-gray-700"
+                        >
                           <td className="p-4 dark:text-white">{bus.number}</td>
                           <td className="p-4 dark:text-white">{bus.name}</td>
-                          <td className="p-4 dark:text-gray-300">{bus.route}</td>
+                          <td className="p-4 dark:text-gray-300">
+                            {bus.route}
+                          </td>
                           <td className="p-4">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              bus.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 
-                              bus.status === 'maintenance' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300' : 
-                              'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                            }`}>
-                              {bus.status === 'active' ? 'Active' : 
-                               bus.status === 'maintenance' ? 'Maintenance' : 
-                               'Inactive'}
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                bus.status === "active"
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                                  : bus.status === "maintenance"
+                                  ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300"
+                                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                              }`}
+                            >
+                              {bus.status === "active"
+                                ? "Active"
+                                : bus.status === "maintenance"
+                                ? "Maintenance"
+                                : "Inactive"}
                             </span>
                           </td>
                         </tr>
@@ -119,13 +184,15 @@ const AdminBuses = () => {
               ) : (
                 <div className="p-4 text-center text-muted-foreground dark:text-gray-400">
                   <p>Bus management console will be displayed here.</p>
-                  <p className="text-sm mt-1">You can add, edit, or remove buses from the fleet.</p>
+                  <p className="text-sm mt-1">
+                    You can add, edit, or remove buses from the fleet.
+                  </p>
                 </div>
               )}
             </div>
           </CardContent>
         </Card>
-        
+
         <Dialog open={showAddBusDialog} onOpenChange={setShowAddBusDialog}>
           <DialogContent className="sm:max-w-[500px] dark:bg-gray-800 dark:border-gray-600">
             <DialogHeader>

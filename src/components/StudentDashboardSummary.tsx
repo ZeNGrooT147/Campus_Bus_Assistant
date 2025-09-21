@@ -172,7 +172,7 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
     };
   }, []);
 
-    const getSeverityStyles = (severity: string) => {
+  const getSeverityStyles = (severity: string) => {
     switch (severity) {
       case "critical":
         return {
@@ -225,7 +225,9 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
                 <Bus className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground dark:text-white">Available Buses</h2>
+                <h2 className="text-xl font-bold text-foreground dark:text-white">
+                  Available Buses
+                </h2>
                 <CardDescription className="text-sm mt-1 text-muted-foreground dark:text-gray-300">
                   Browse bus information for your region
                 </CardDescription>
@@ -328,7 +330,9 @@ const StudentDashboardSummary = ({ stats }: { stats: StudentStats }) => {
                 <Vote className="h-6 w-6 text-blue-500" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground dark:text-white">Bus Requests</h2>
+                <h2 className="text-xl font-bold text-foreground dark:text-white">
+                  Bus Requests
+                </h2>
                 <CardDescription className="text-sm mt-1 text-muted-foreground dark:text-gray-300">
                   Active bus voting requests
                 </CardDescription>

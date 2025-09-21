@@ -1,13 +1,37 @@
-
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { CalendarIcon, ChevronUpIcon, Users, Bus, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
+  CalendarIcon,
+  ChevronUpIcon,
+  Users,
+  Bus,
+  AlertTriangle,
+  CheckCircle2,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 const AdminDashboardSummary = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,43 +44,56 @@ const AdminDashboardSummary = () => {
     inactiveBuses: 0,
     totalComplaints: 0,
     resolvedComplaints: 0,
-    pendingComplaints: 0
+    pendingComplaints: 0,
   });
   const [chartData, setChartData] = useState({
     userStats: [],
     complaintsData: [],
     busUsageData: [],
-    regionData: []
+    regionData: [],
   });
-  
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
-  
+
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
       // Fetch user counts
       const [
-        { count: studentCount }, 
-        { count: driverCount }, 
+        { count: studentCount },
+        { count: driverCount },
         { count: coordinatorCount },
         { data: busesData },
-        { data: complaintsData }
+        { data: complaintsData },
       ] = await Promise.all([
-        supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'student'),
-        supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'driver'),
-        supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'coordinator'),
-        supabase.from('buses').select('*'),
-        supabase.from('complaints').select('*')
+        supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .eq("role", "student"),
+        supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .eq("role", "driver"),
+        supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .eq("role", "coordinator"),
+        supabase.from("buses").select("*"),
+        supabase.from("complaints").select("*"),
       ]);
-      
-      const activeBuses = busesData?.filter(bus => bus.status === 'active').length || 0;
+
+      const activeBuses =
+        busesData?.filter((bus) => bus.status === "active").length || 0;
       const inactiveBuses = (busesData?.length || 0) - activeBuses;
-      
-      const resolvedComplaints = complaintsData?.filter(complaint => complaint.status === 'resolved').length || 0;
-      const pendingComplaints = (complaintsData?.length || 0) - resolvedComplaints;
-      
+
+      const resolvedComplaints =
+        complaintsData?.filter((complaint) => complaint.status === "resolved")
+          .length || 0;
+      const pendingComplaints =
+        (complaintsData?.length || 0) - resolvedComplaints;
+
       setStats({
         totalStudents: studentCount || 0,
         totalDrivers: driverCount || 0,
@@ -66,48 +103,49 @@ const AdminDashboardSummary = () => {
         inactiveBuses,
         totalComplaints: complaintsData?.length || 0,
         resolvedComplaints,
-        pendingComplaints
+        pendingComplaints,
       });
-      
+
       // Prepare chart data
       const userStatData = [
-        { name: 'Students', count: studentCount || 0 },
-        { name: 'Drivers', count: driverCount || 0 },
-        { name: 'Coordinators', count: coordinatorCount || 0 }
+        { name: "Students", count: studentCount || 0 },
+        { name: "Drivers", count: driverCount || 0 },
+        { name: "Coordinators", count: coordinatorCount || 0 },
       ];
-      
+
       const complaintChartData = [
-        { name: 'Resolved', value: resolvedComplaints },
-        { name: 'Pending', value: pendingComplaints }
+        { name: "Resolved", value: resolvedComplaints },
+        { name: "Pending", value: pendingComplaints },
       ];
-      
+
       const busData = [
-        { name: 'Active', value: activeBuses },
-        { name: 'Inactive', value: inactiveBuses }
+        { name: "Active", value: activeBuses },
+        { name: "Inactive", value: inactiveBuses },
       ];
-      
+
       // Get region distribution
       const { data: regionData } = await supabase
-        .from('profiles')
-        .select('region')
-        .eq('role', 'student')
-        .not('region', 'is', null);
-        
+        .from("profiles")
+        .select("region")
+        .eq("role", "student")
+        .not("region", "is", null);
+
       const regionCounts: Record<string, number> = {};
-      regionData?.forEach(profile => {
+      regionData?.forEach((profile) => {
         const region = profile.region as string;
         regionCounts[region] = (regionCounts[region] || 0) + 1;
       });
-      
-      const regionChartData = Object.entries(regionCounts).map(([name, value]) => ({ name, value }));
-      
+
+      const regionChartData = Object.entries(regionCounts).map(
+        ([name, value]) => ({ name, value })
+      );
+
       setChartData({
         userStats: userStatData,
         complaintsData: complaintChartData,
         busUsageData: busData,
-        regionData: regionChartData
+        regionData: regionChartData,
       });
-      
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
       toast.error("Failed to load dashboard statistics");
@@ -115,124 +153,174 @@ const AdminDashboardSummary = () => {
       setIsLoading(false);
     }
   };
-  
+
   // Colors for charts
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
-  
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="border shadow-sm bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">
+              Total Users
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-foreground dark:text-white">
-                  {isLoading ? '...' : stats.totalStudents + stats.totalDrivers + stats.totalCoordinators}
+                  {isLoading
+                    ? "..."
+                    : stats.totalStudents +
+                      stats.totalDrivers +
+                      stats.totalCoordinators}
                 </span>
-                <span className="text-xs text-muted-foreground dark:text-gray-300">Active accounts</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">
+                  Active accounts
+                </span>
               </div>
               <div className="h-9 w-9 rounded-full bg-blue-100 dark:bg-blue-800/50 flex items-center justify-center">
                 <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
             <div className="mt-4 flex items-center text-xs">
-              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
+              <Badge
+                variant="outline"
+                className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700"
+              >
                 <ChevronUpIcon className="h-3 w-3 mr-1" />
-                <span>{isLoading ? '...' : stats.totalStudents}</span>
+                <span>{isLoading ? "..." : stats.totalStudents}</span>
               </Badge>
-              <span className="ml-2 text-muted-foreground dark:text-gray-300">Students</span>
+              <span className="ml-2 text-muted-foreground dark:text-gray-300">
+                Students
+              </span>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Buses</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">
+              Buses
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-foreground dark:text-white">
-                  {isLoading ? '...' : stats.totalBuses}
+                  {isLoading ? "..." : stats.totalBuses}
                 </span>
-                <span className="text-xs text-muted-foreground dark:text-gray-300">Total vehicles</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">
+                  Total vehicles
+                </span>
               </div>
               <div className="h-9 w-9 rounded-full bg-yellow-100 dark:bg-yellow-800/50 flex items-center justify-center">
                 <Bus className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
               </div>
             </div>
             <div className="mt-4 flex justify-between items-center text-xs">
-              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
-                <span>{isLoading ? '...' : stats.activeBuses}</span>
+              <Badge
+                variant="outline"
+                className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700"
+              >
+                <span>{isLoading ? "..." : stats.activeBuses}</span>
               </Badge>
-              <span className="text-muted-foreground dark:text-gray-300">Active</span>
-              <Badge variant="outline" className="text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-600">
-                <span>{isLoading ? '...' : stats.inactiveBuses}</span>
+              <span className="text-muted-foreground dark:text-gray-300">
+                Active
+              </span>
+              <Badge
+                variant="outline"
+                className="text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-600"
+              >
+                <span>{isLoading ? "..." : stats.inactiveBuses}</span>
               </Badge>
-              <span className="text-muted-foreground dark:text-gray-300">Inactive</span>
+              <span className="text-muted-foreground dark:text-gray-300">
+                Inactive
+              </span>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border shadow-sm bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Complaints</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">
+              Complaints
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-foreground dark:text-white">
-                  {isLoading ? '...' : stats.totalComplaints}
+                  {isLoading ? "..." : stats.totalComplaints}
                 </span>
-                <span className="text-xs text-muted-foreground dark:text-gray-300">Total complaints</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">
+                  Total complaints
+                </span>
               </div>
               <div className="h-9 w-9 rounded-full bg-red-100 dark:bg-red-800/50 flex items-center justify-center">
                 <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
               </div>
             </div>
             <div className="mt-4 flex justify-between items-center text-xs">
-              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
+              <Badge
+                variant="outline"
+                className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700"
+              >
                 <CheckCircle2 className="h-3 w-3 mr-1" />
-                <span>{isLoading ? '...' : stats.resolvedComplaints}</span>
+                <span>{isLoading ? "..." : stats.resolvedComplaints}</span>
               </Badge>
-              <span className="text-muted-foreground dark:text-gray-300">Resolved</span>
-              <Badge variant="outline" className="text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700">
-                <span>{isLoading ? '...' : stats.pendingComplaints}</span>
+              <span className="text-muted-foreground dark:text-gray-300">
+                Resolved
+              </span>
+              <Badge
+                variant="outline"
+                className="text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700"
+              >
+                <span>{isLoading ? "..." : stats.pendingComplaints}</span>
               </Badge>
-              <span className="text-muted-foreground dark:text-gray-300">Pending</span>
+              <span className="text-muted-foreground dark:text-gray-300">
+                Pending
+              </span>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="border shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Date</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">
+              Date
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-foreground dark:text-white">
-                  {format(new Date(), 'dd MMM yyyy')}
+                  {format(new Date(), "dd MMM yyyy")}
                 </span>
-                <span className="text-xs text-muted-foreground dark:text-gray-300">{format(new Date(), 'EEEE')}</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">
+                  {format(new Date(), "EEEE")}
+                </span>
               </div>
               <div className="h-9 w-9 rounded-full bg-purple-100 dark:bg-purple-800/50 flex items-center justify-center">
                 <CalendarIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
             <div className="mt-4 flex items-center text-xs">
-              <Badge variant="outline" className="text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30 border-purple-200 dark:border-purple-700">
-                <span>{format(new Date(), 'HH:mm:ss')}</span>
+              <Badge
+                variant="outline"
+                className="text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30 border-purple-200 dark:border-purple-700"
+              >
+                <span>{format(new Date(), "HH:mm:ss")}</span>
               </Badge>
-              <span className="ml-2 text-muted-foreground dark:text-gray-300">Current time</span>
+              <span className="ml-2 text-muted-foreground dark:text-gray-300">
+                Current time
+              </span>
             </div>
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="border shadow-sm">
           <CardHeader>
@@ -251,8 +339,8 @@ const AdminDashboardSummary = () => {
                 <div className="h-80">
                   {!isLoading && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart 
-                        data={chartData.userStats} 
+                      <BarChart
+                        data={chartData.userStats}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -276,13 +364,18 @@ const AdminDashboardSummary = () => {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
                           outerRadius={80}
                           fill="#8884d8"
                           dataKey="count"
                         >
                           {chartData.userStats.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
                           ))}
                         </Pie>
                         <Tooltip />
@@ -295,11 +388,13 @@ const AdminDashboardSummary = () => {
             </Tabs>
           </CardContent>
         </Card>
-        
+
         <Card className="border shadow-sm">
           <CardHeader>
             <CardTitle>Complaints Status</CardTitle>
-            <CardDescription>Overview of resolved vs. pending complaints</CardDescription>
+            <CardDescription>
+              Overview of resolved vs. pending complaints
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Tabs defaultValue="pie">
@@ -338,8 +433,8 @@ const AdminDashboardSummary = () => {
                 <div className="h-80">
                   {!isLoading && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart 
-                        data={chartData.complaintsData} 
+                      <BarChart
+                        data={chartData.complaintsData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -360,7 +455,7 @@ const AdminDashboardSummary = () => {
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="border shadow-sm">
           <CardHeader>
@@ -404,8 +499,8 @@ const AdminDashboardSummary = () => {
                 <div className="h-80">
                   {!isLoading && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart 
-                        data={chartData.busUsageData} 
+                      <BarChart
+                        data={chartData.busUsageData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -425,7 +520,7 @@ const AdminDashboardSummary = () => {
             </Tabs>
           </CardContent>
         </Card>
-        
+
         <Card className="border shadow-sm">
           <CardHeader>
             <CardTitle>Student Region Distribution</CardTitle>
@@ -443,8 +538,8 @@ const AdminDashboardSummary = () => {
                 <div className="h-80">
                   {!isLoading && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart 
-                        data={chartData.regionData} 
+                      <BarChart
+                        data={chartData.regionData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -468,13 +563,18 @@ const AdminDashboardSummary = () => {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
                           outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
                         >
                           {chartData.regionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
                           ))}
                         </Pie>
                         <Tooltip />

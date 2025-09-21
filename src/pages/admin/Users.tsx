@@ -1,19 +1,65 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
-import { Search, UserPlus, Filter, Eye, Edit, Trash2, UserCog, MoreHorizontal, Check, X, Download } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  Search,
+  UserPlus,
+  Filter,
+  Eye,
+  Edit,
+  Trash2,
+  UserCog,
+  MoreHorizontal,
+  Check,
+  X,
+  Download,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import AddUserDialog from "@/components/admin/AddUserDialog";
@@ -23,178 +69,192 @@ const AdminUsers = () => {
   const { user: currentUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get("tab") || "students";
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [userDetailsDialogOpen, setUserDetailsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [students, setStudents] = useState<any[]>([]);
   const [drivers, setDrivers] = useState<any[]>([]);
   const [coordinators, setCoordinators] = useState<any[]>([]);
   const [admins, setAdmins] = useState<any[]>([]);
-  
-  const [addUserRole, setAddUserRole] = useState<'student' | 'driver' | 'coordinator'>('student');
-  
+
+  const [addUserRole, setAddUserRole] = useState<
+    "student" | "driver" | "coordinator"
+  >("student");
+
   useEffect(() => {
     fetchUsers();
   }, []);
-  
+
   useEffect(() => {
     setSearchParams({ tab: selectedTab });
   }, [selectedTab, setSearchParams]);
-  
+
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
       const { data: studentsData, error: studentsError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'student')
-        .order('name');
-        
+        .from("profiles")
+        .select("*")
+        .eq("role", "student")
+        .order("name");
+
       if (studentsError) throw studentsError;
-      
+
       const { data: driversData, error: driversError } = await supabase
-        .from('profiles')
-        .select('*, buses:buses(id, name, bus_number)')
-        .eq('role', 'driver')
-        .order('name');
-        
+        .from("profiles")
+        .select("*, buses:buses(id, name, bus_number)")
+        .eq("role", "driver")
+        .order("name");
+
       if (driversError) throw driversError;
-      
-      const { data: coordinatorsData, error: coordinatorsError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'coordinator')
-        .order('name');
-        
+
+      const { data: coordinatorsData, error: coordinatorsError } =
+        await supabase
+          .from("profiles")
+          .select("*")
+          .eq("role", "coordinator")
+          .order("name");
+
       if (coordinatorsError) throw coordinatorsError;
-      
+
       const { data: adminsData, error: adminsError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'admin')
-        .order('name');
-        
+        .from("profiles")
+        .select("*")
+        .eq("role", "admin")
+        .order("name");
+
       if (adminsError) throw adminsError;
-      
-      setStudents(studentsData.map(student => ({
-        ...student,
-        status: 'active',
-        joinDate: new Date(student.created_at).toLocaleDateString()
-      })));
-      
-      setDrivers(driversData.map(driver => {
-        const busInfo = driver.buses as unknown as { 
-          id: string; 
-          name: string; 
-          bus_number: string;
-        } | null;
-        
-        return {
-          ...driver,
-          status: 'active',
-          busAssigned: busInfo ? busInfo.name : "Not assigned",
-          joinDate: new Date(driver.created_at).toLocaleDateString()
-        };
-      }));
-      
-      setCoordinators(coordinatorsData.map(coordinator => ({
-        ...coordinator,
-        status: 'active',
-        joinDate: new Date(coordinator.created_at).toLocaleDateString()
-      })));
-      
-      setAdmins(adminsData.map(admin => ({
-        ...admin,
-        status: 'active',
-        role: admin.id === currentUser?.id ? 'Super Admin' : 'Admin',
-        joinDate: new Date(admin.created_at).toLocaleDateString()
-      })));
-      
+
+      setStudents(
+        studentsData.map((student) => ({
+          ...student,
+          status: "active",
+          joinDate: new Date(student.created_at).toLocaleDateString(),
+        }))
+      );
+
+      setDrivers(
+        driversData.map((driver) => {
+          const busInfo = driver.buses as unknown as {
+            id: string;
+            name: string;
+            bus_number: string;
+          } | null;
+
+          return {
+            ...driver,
+            status: "active",
+            busAssigned: busInfo ? busInfo.name : "Not assigned",
+            joinDate: new Date(driver.created_at).toLocaleDateString(),
+          };
+        })
+      );
+
+      setCoordinators(
+        coordinatorsData.map((coordinator) => ({
+          ...coordinator,
+          status: "active",
+          joinDate: new Date(coordinator.created_at).toLocaleDateString(),
+        }))
+      );
+
+      setAdmins(
+        adminsData.map((admin) => ({
+          ...admin,
+          status: "active",
+          role: admin.id === currentUser?.id ? "Super Admin" : "Admin",
+          joinDate: new Date(admin.created_at).toLocaleDateString(),
+        }))
+      );
     } catch (error) {
-      console.error('Error fetching users:', error);
-      toast.error('Failed to load users');
+      console.error("Error fetching users:", error);
+      toast.error("Failed to load users");
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-  
+
   const handleViewUser = (user: any) => {
     setSelectedUser(user);
     setUserDetailsDialogOpen(true);
   };
-  
+
   const handleToggleUserStatus = async (user: any) => {
     toast.success(`User status updated`);
     setUserDetailsDialogOpen(false);
     fetchUsers();
   };
-  
+
   const handleDeleteUser = async (user: any) => {
     if (!confirm(`Are you sure you want to delete ${user.name}?`)) {
       return;
     }
-    
+
     try {
       const { error } = await supabase.auth.admin.deleteUser(user.id);
-      
+
       if (error) throw error;
-      
+
       toast.success(`User deleted successfully`);
-      
+
       setUserDetailsDialogOpen(false);
-      
+
       fetchUsers();
-      
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete user');
+      toast.error(error.message || "Failed to delete user");
     }
   };
-  
+
   const getStatusBadge = (status: string) => {
-    switch(status) {
-      case 'active':
+    switch (status) {
+      case "active":
         return <Badge className="bg-green-500">Active</Badge>;
-      case 'inactive':
+      case "inactive":
         return <Badge variant="outline">Inactive</Badge>;
-      case 'on-leave':
+      case "on-leave":
         return <Badge variant="secondary">On Leave</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
   };
-  
-  const filteredStudents = students.filter(student => 
-    student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.usn?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.region?.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredStudents = students.filter(
+    (student) =>
+      student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.usn?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.region?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  const filteredDrivers = drivers.filter(driver => 
-    driver.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    driver.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (driver.busAssigned && driver.busAssigned.toLowerCase().includes(searchTerm.toLowerCase()))
+
+  const filteredDrivers = drivers.filter(
+    (driver) =>
+      driver.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      driver.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (driver.busAssigned &&
+        driver.busAssigned.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  
-  const filteredCoordinators = coordinators.filter(coordinator => 
-    coordinator.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    coordinator.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    coordinator.region?.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredCoordinators = coordinators.filter(
+    (coordinator) =>
+      coordinator.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coordinator.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coordinator.region?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  const filteredAdmins = admins.filter(admin => 
-    admin.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.role?.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredAdmins = admins.filter(
+    (admin) =>
+      admin.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.role?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -220,84 +280,173 @@ const AdminUsers = () => {
                     onChange={handleSearchChange}
                   />
                 </div>
-                
+
                 <Button variant="outline" size="icon">
                   <Filter className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               <div className="flex items-center gap-2">
-                <ExportToExcel 
+                <ExportToExcel
                   data={
-                    selectedTab === 'students' ? filteredStudents : 
-                    selectedTab === 'drivers' ? filteredDrivers :
-                    selectedTab === 'coordinators' ? filteredCoordinators :
-                    filteredAdmins
+                    selectedTab === "students"
+                      ? filteredStudents
+                      : selectedTab === "drivers"
+                      ? filteredDrivers
+                      : selectedTab === "coordinators"
+                      ? filteredCoordinators
+                      : filteredAdmins
                   }
                   filename={`campus-bus-${selectedTab}`}
-                  sheetName={selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}
+                  sheetName={
+                    selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)
+                  }
                 />
-                
-                <Button onClick={() => {
-                  setAddUserRole(selectedTab === 'students' ? 'student' : selectedTab === 'drivers' ? 'driver' : 'coordinator');
-                  setAddUserDialogOpen(true);
-                }}>
+
+                <Button
+                  onClick={() => {
+                    setAddUserRole(
+                      selectedTab === "students"
+                        ? "student"
+                        : selectedTab === "drivers"
+                        ? "driver"
+                        : "coordinator"
+                    );
+                    setAddUserDialogOpen(true);
+                  }}
+                >
                   <UserPlus className="h-4 w-4 mr-2" />
-                  Add {selectedTab === 'admins' ? 'User' : selectedTab.slice(0, -1).charAt(0).toUpperCase() + selectedTab.slice(0, -1).slice(1)}
+                  Add{" "}
+                  {selectedTab === "admins"
+                    ? "User"
+                    : selectedTab.slice(0, -1).charAt(0).toUpperCase() +
+                      selectedTab.slice(0, -1).slice(1)}
                 </Button>
               </div>
-              
-              <AddUserDialog 
-                open={addUserDialogOpen} 
-                onOpenChange={setAddUserDialogOpen} 
+
+              <AddUserDialog
+                open={addUserDialogOpen}
+                onOpenChange={setAddUserDialogOpen}
                 defaultRole={addUserRole}
-                onSuccess={fetchUsers} 
+                onSuccess={fetchUsers}
               />
             </div>
-            
+
             <div className="grid grid-cols-4 gap-4">
-              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("students")}>
-                <CardHeader className={`p-4 pb-2 ${selectedTab === "students" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base dark:text-white">Students</CardTitle>
+              <Card
+                className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+                onClick={() => setSelectedTab("students")}
+              >
+                <CardHeader
+                  className={`p-4 pb-2 ${
+                    selectedTab === "students"
+                      ? "border-b-2 border-primary"
+                      : ""
+                  }`}
+                >
+                  <CardTitle className="text-base dark:text-white">
+                    Students
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold dark:text-white">{students.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">
+                    {students.length}
+                  </p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("drivers")}>
-                <CardHeader className={`p-4 pb-2 ${selectedTab === "drivers" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base dark:text-white">Drivers</CardTitle>
+              <Card
+                className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+                onClick={() => setSelectedTab("drivers")}
+              >
+                <CardHeader
+                  className={`p-4 pb-2 ${
+                    selectedTab === "drivers" ? "border-b-2 border-primary" : ""
+                  }`}
+                >
+                  <CardTitle className="text-base dark:text-white">
+                    Drivers
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold dark:text-white">{drivers.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">
+                    {drivers.length}
+                  </p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("coordinators")}>
-                <CardHeader className={`p-4 pb-2 ${selectedTab === "coordinators" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base dark:text-white">Coordinators</CardTitle>
+              <Card
+                className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+                onClick={() => setSelectedTab("coordinators")}
+              >
+                <CardHeader
+                  className={`p-4 pb-2 ${
+                    selectedTab === "coordinators"
+                      ? "border-b-2 border-primary"
+                      : ""
+                  }`}
+                >
+                  <CardTitle className="text-base dark:text-white">
+                    Coordinators
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold dark:text-white">{coordinators.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">
+                    {coordinators.length}
+                  </p>
                 </CardContent>
               </Card>
-              <Card className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700" onClick={() => setSelectedTab("admins")}>
-                <CardHeader className={`p-4 pb-2 ${selectedTab === "admins" ? "border-b-2 border-primary" : ""}`}>
-                  <CardTitle className="text-base dark:text-white">Admins</CardTitle>
+              <Card
+                className="border shadow-sm cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+                onClick={() => setSelectedTab("admins")}
+              >
+                <CardHeader
+                  className={`p-4 pb-2 ${
+                    selectedTab === "admins" ? "border-b-2 border-primary" : ""
+                  }`}
+                >
+                  <CardTitle className="text-base dark:text-white">
+                    Admins
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold dark:text-white">{admins.length}</p>
+                  <p className="text-2xl font-bold dark:text-white">
+                    {admins.length}
+                  </p>
                 </CardContent>
               </Card>
             </div>
           </CardContent>
         </Card>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-4 max-w-md mb-6 dark:bg-gray-800">
-            <TabsTrigger value="students" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Students</TabsTrigger>
-            <TabsTrigger value="drivers" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Drivers</TabsTrigger>
-            <TabsTrigger value="coordinators" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Coordinators</TabsTrigger>
-            <TabsTrigger value="admins" className="dark:data-[state=active]:bg-gray-700 dark:text-white">Admins</TabsTrigger>
+            <TabsTrigger
+              value="students"
+              className="dark:data-[state=active]:bg-gray-700 dark:text-white"
+            >
+              Students
+            </TabsTrigger>
+            <TabsTrigger
+              value="drivers"
+              className="dark:data-[state=active]:bg-gray-700 dark:text-white"
+            >
+              Drivers
+            </TabsTrigger>
+            <TabsTrigger
+              value="coordinators"
+              className="dark:data-[state=active]:bg-gray-700 dark:text-white"
+            >
+              Coordinators
+            </TabsTrigger>
+            <TabsTrigger
+              value="admins"
+              className="dark:data-[state=active]:bg-gray-700 dark:text-white"
+            >
+              Admins
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="students">
@@ -318,36 +467,77 @@ const AdminUsers = () => {
                     <Table>
                       <TableHeader>
                         <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
-                          <TableHead className="dark:text-gray-300">Name</TableHead>
-                          <TableHead className="dark:text-gray-300">USN</TableHead>
-                          <TableHead className="dark:text-gray-300">Email</TableHead>
-                          <TableHead className="dark:text-gray-300">Phone</TableHead>
-                          <TableHead className="dark:text-gray-300">Region</TableHead>
-                          <TableHead className="dark:text-gray-300">Status</TableHead>
-                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Name
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            USN
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Email
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Phone
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Region
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Status
+                          </TableHead>
+                          <TableHead className="text-right dark:text-gray-300">
+                            Actions
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredStudents.length > 0 ? (
                           filteredStudents.map((student) => (
-                            <TableRow key={student.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
-                              <TableCell className="font-medium dark:text-white">{student.name}</TableCell>
-                              <TableCell className="dark:text-gray-300">{student.usn}</TableCell>
-                              <TableCell className="dark:text-gray-300">{student.email}</TableCell>
-                              <TableCell className="dark:text-gray-300">{student.phone || 'N/A'}</TableCell>
-                              <TableCell className="dark:text-gray-300">{student.region}</TableCell>
-                              <TableCell>{getStatusBadge(student.status)}</TableCell>
+                            <TableRow
+                              key={student.id}
+                              className="dark:border-gray-700 dark:hover:bg-gray-700"
+                            >
+                              <TableCell className="font-medium dark:text-white">
+                                {student.name}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {student.usn}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {student.email}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {student.phone || "N/A"}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {student.region}
+                              </TableCell>
+                              <TableCell>
+                                {getStatusBadge(student.status)}
+                              </TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 dark:hover:bg-gray-600"
+                                    >
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
-                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="dark:bg-gray-800 dark:border-gray-600"
+                                  >
+                                    <DropdownMenuLabel className="dark:text-white">
+                                      Actions
+                                    </DropdownMenuLabel>
                                     <DropdownMenuSeparator className="dark:border-gray-600" />
-                                    <DropdownMenuItem onClick={() => handleViewUser(student)} className="dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <DropdownMenuItem
+                                      onClick={() => handleViewUser(student)}
+                                      className="dark:text-gray-300 dark:hover:bg-gray-700"
+                                    >
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
@@ -355,7 +545,10 @@ const AdminUsers = () => {
                                       <Edit className="h-4 w-4 mr-2" />
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(student)}>
+                                    <DropdownMenuItem
+                                      className="text-destructive dark:hover:bg-gray-700"
+                                      onClick={() => handleDeleteUser(student)}
+                                    >
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -366,7 +559,10 @@ const AdminUsers = () => {
                           ))
                         ) : (
                           <TableRow className="dark:border-gray-700">
-                            <TableCell colSpan={7} className="text-center py-6 text-muted-foreground dark:text-gray-400">
+                            <TableCell
+                              colSpan={7}
+                              className="text-center py-6 text-muted-foreground dark:text-gray-400"
+                            >
                               No students found
                             </TableCell>
                           </TableRow>
@@ -397,34 +593,71 @@ const AdminUsers = () => {
                     <Table>
                       <TableHeader>
                         <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
-                          <TableHead className="dark:text-gray-300">Name</TableHead>
-                          <TableHead className="dark:text-gray-300">Email</TableHead>
-                          <TableHead className="dark:text-gray-300">Phone</TableHead>
-                          <TableHead className="dark:text-gray-300">Bus Assigned</TableHead>
-                          <TableHead className="dark:text-gray-300">Status</TableHead>
-                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Name
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Email
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Phone
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Bus Assigned
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Status
+                          </TableHead>
+                          <TableHead className="text-right dark:text-gray-300">
+                            Actions
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredDrivers.length > 0 ? (
                           filteredDrivers.map((driver) => (
-                            <TableRow key={driver.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
-                              <TableCell className="font-medium dark:text-white">{driver.name}</TableCell>
-                              <TableCell className="dark:text-gray-300">{driver.email}</TableCell>
-                              <TableCell className="dark:text-gray-300">{driver.phone || 'N/A'}</TableCell>
-                              <TableCell className="dark:text-gray-300">{driver.busAssigned || "Not assigned"}</TableCell>
-                              <TableCell>{getStatusBadge(driver.status)}</TableCell>
+                            <TableRow
+                              key={driver.id}
+                              className="dark:border-gray-700 dark:hover:bg-gray-700"
+                            >
+                              <TableCell className="font-medium dark:text-white">
+                                {driver.name}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {driver.email}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {driver.phone || "N/A"}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {driver.busAssigned || "Not assigned"}
+                              </TableCell>
+                              <TableCell>
+                                {getStatusBadge(driver.status)}
+                              </TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 dark:hover:bg-gray-600"
+                                    >
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
-                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="dark:bg-gray-800 dark:border-gray-600"
+                                  >
+                                    <DropdownMenuLabel className="dark:text-white">
+                                      Actions
+                                    </DropdownMenuLabel>
                                     <DropdownMenuSeparator className="dark:border-gray-600" />
-                                    <DropdownMenuItem onClick={() => handleViewUser(driver)} className="dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <DropdownMenuItem
+                                      onClick={() => handleViewUser(driver)}
+                                      className="dark:text-gray-300 dark:hover:bg-gray-700"
+                                    >
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
@@ -436,7 +669,10 @@ const AdminUsers = () => {
                                       <UserCog className="h-4 w-4 mr-2" />
                                       Assign Bus
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(driver)}>
+                                    <DropdownMenuItem
+                                      className="text-destructive dark:hover:bg-gray-700"
+                                      onClick={() => handleDeleteUser(driver)}
+                                    >
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -447,7 +683,10 @@ const AdminUsers = () => {
                           ))
                         ) : (
                           <TableRow className="dark:border-gray-700">
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
+                            <TableCell
+                              colSpan={6}
+                              className="text-center py-6 text-muted-foreground dark:text-gray-400"
+                            >
                               No drivers found
                             </TableCell>
                           </TableRow>
@@ -478,34 +717,73 @@ const AdminUsers = () => {
                     <Table>
                       <TableHeader>
                         <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
-                          <TableHead className="dark:text-gray-300">Name</TableHead>
-                          <TableHead className="dark:text-gray-300">Email</TableHead>
-                          <TableHead className="dark:text-gray-300">Phone</TableHead>
-                          <TableHead className="dark:text-gray-300">Region</TableHead>
-                          <TableHead className="dark:text-gray-300">Status</TableHead>
-                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Name
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Email
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Phone
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Region
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Status
+                          </TableHead>
+                          <TableHead className="text-right dark:text-gray-300">
+                            Actions
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredCoordinators.length > 0 ? (
                           filteredCoordinators.map((coordinator) => (
-                            <TableRow key={coordinator.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
-                              <TableCell className="font-medium dark:text-white">{coordinator.name}</TableCell>
-                              <TableCell className="dark:text-gray-300">{coordinator.email}</TableCell>
-                              <TableCell className="dark:text-gray-300">{coordinator.phone || 'N/A'}</TableCell>
-                              <TableCell className="dark:text-gray-300">{coordinator.region}</TableCell>
-                              <TableCell>{getStatusBadge(coordinator.status)}</TableCell>
+                            <TableRow
+                              key={coordinator.id}
+                              className="dark:border-gray-700 dark:hover:bg-gray-700"
+                            >
+                              <TableCell className="font-medium dark:text-white">
+                                {coordinator.name}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {coordinator.email}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {coordinator.phone || "N/A"}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {coordinator.region}
+                              </TableCell>
+                              <TableCell>
+                                {getStatusBadge(coordinator.status)}
+                              </TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 dark:hover:bg-gray-600"
+                                    >
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
-                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="dark:bg-gray-800 dark:border-gray-600"
+                                  >
+                                    <DropdownMenuLabel className="dark:text-white">
+                                      Actions
+                                    </DropdownMenuLabel>
                                     <DropdownMenuSeparator className="dark:border-gray-600" />
-                                    <DropdownMenuItem onClick={() => handleViewUser(coordinator)} className="dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleViewUser(coordinator)
+                                      }
+                                      className="dark:text-gray-300 dark:hover:bg-gray-700"
+                                    >
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
@@ -513,7 +791,12 @@ const AdminUsers = () => {
                                       <Edit className="h-4 w-4 mr-2" />
                                       Edit
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(coordinator)}>
+                                    <DropdownMenuItem
+                                      className="text-destructive dark:hover:bg-gray-700"
+                                      onClick={() =>
+                                        handleDeleteUser(coordinator)
+                                      }
+                                    >
                                       <Trash2 className="h-4 w-4 mr-2" />
                                       Delete
                                     </DropdownMenuItem>
@@ -524,7 +807,10 @@ const AdminUsers = () => {
                           ))
                         ) : (
                           <TableRow className="dark:border-gray-700">
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
+                            <TableCell
+                              colSpan={6}
+                              className="text-center py-6 text-muted-foreground dark:text-gray-400"
+                            >
                               No coordinators found
                             </TableCell>
                           </TableRow>
@@ -540,7 +826,9 @@ const AdminUsers = () => {
           <TabsContent value="admins">
             <Card className="border shadow-sm dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="dark:text-white">Administrators</CardTitle>
+                <CardTitle className="dark:text-white">
+                  Administrators
+                </CardTitle>
                 <CardDescription className="dark:text-gray-300">
                   Manage administrator accounts and permissions
                 </CardDescription>
@@ -555,34 +843,72 @@ const AdminUsers = () => {
                     <Table>
                       <TableHeader>
                         <TableRow className="dark:border-gray-700 dark:hover:bg-gray-700">
-                          <TableHead className="dark:text-gray-300">Name</TableHead>
-                          <TableHead className="dark:text-gray-300">Email</TableHead>
-                          <TableHead className="dark:text-gray-300">Phone</TableHead>
-                          <TableHead className="dark:text-gray-300">Role</TableHead>
-                          <TableHead className="dark:text-gray-300">Status</TableHead>
-                          <TableHead className="text-right dark:text-gray-300">Actions</TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Name
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Email
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Phone
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Role
+                          </TableHead>
+                          <TableHead className="dark:text-gray-300">
+                            Status
+                          </TableHead>
+                          <TableHead className="text-right dark:text-gray-300">
+                            Actions
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredAdmins.length > 0 ? (
                           filteredAdmins.map((admin) => (
-                            <TableRow key={admin.id} className="dark:border-gray-700 dark:hover:bg-gray-700">
-                              <TableCell className="font-medium dark:text-white">{admin.name}</TableCell>
-                              <TableCell className="dark:text-gray-300">{admin.email}</TableCell>
-                              <TableCell className="dark:text-gray-300">{admin.phone || 'N/A'}</TableCell>
-                              <TableCell className="dark:text-gray-300">{admin.role}</TableCell>
-                              <TableCell>{getStatusBadge(admin.status)}</TableCell>
+                            <TableRow
+                              key={admin.id}
+                              className="dark:border-gray-700 dark:hover:bg-gray-700"
+                            >
+                              <TableCell className="font-medium dark:text-white">
+                                {admin.name}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {admin.email}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {admin.phone || "N/A"}
+                              </TableCell>
+                              <TableCell className="dark:text-gray-300">
+                                {admin.role}
+                              </TableCell>
+                              <TableCell>
+                                {getStatusBadge(admin.status)}
+                              </TableCell>
                               <TableCell className="text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 dark:hover:bg-gray-600" disabled={admin.id === currentUser?.id}>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 dark:hover:bg-gray-600"
+                                      disabled={admin.id === currentUser?.id}
+                                    >
                                       <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-600">
-                                    <DropdownMenuLabel className="dark:text-white">Actions</DropdownMenuLabel>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="dark:bg-gray-800 dark:border-gray-600"
+                                  >
+                                    <DropdownMenuLabel className="dark:text-white">
+                                      Actions
+                                    </DropdownMenuLabel>
                                     <DropdownMenuSeparator className="dark:border-gray-600" />
-                                    <DropdownMenuItem onClick={() => handleViewUser(admin)} className="dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <DropdownMenuItem
+                                      onClick={() => handleViewUser(admin)}
+                                      className="dark:text-gray-300 dark:hover:bg-gray-700"
+                                    >
                                       <Eye className="h-4 w-4 mr-2" />
                                       View
                                     </DropdownMenuItem>
@@ -592,7 +918,12 @@ const AdminUsers = () => {
                                           <Edit className="h-4 w-4 mr-2" />
                                           Edit
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive dark:hover:bg-gray-700" onClick={() => handleDeleteUser(admin)}>
+                                        <DropdownMenuItem
+                                          className="text-destructive dark:hover:bg-gray-700"
+                                          onClick={() =>
+                                            handleDeleteUser(admin)
+                                          }
+                                        >
                                           <Trash2 className="h-4 w-4 mr-2" />
                                           Delete
                                         </DropdownMenuItem>
@@ -605,7 +936,10 @@ const AdminUsers = () => {
                           ))
                         ) : (
                           <TableRow className="dark:border-gray-700">
-                            <TableCell colSpan={6} className="text-center py-6 text-muted-foreground dark:text-gray-400">
+                            <TableCell
+                              colSpan={6}
+                              className="text-center py-6 text-muted-foreground dark:text-gray-400"
+                            >
                               No admins found
                             </TableCell>
                           </TableRow>
@@ -620,10 +954,15 @@ const AdminUsers = () => {
         </Tabs>
 
         {selectedUser && (
-          <Dialog open={userDetailsDialogOpen} onOpenChange={setUserDetailsDialogOpen}>
+          <Dialog
+            open={userDetailsDialogOpen}
+            onOpenChange={setUserDetailsDialogOpen}
+          >
             <DialogContent className="max-w-md dark:bg-gray-800 dark:border-gray-600">
               <DialogHeader>
-                <DialogTitle className="dark:text-white">User Details</DialogTitle>
+                <DialogTitle className="dark:text-white">
+                  User Details
+                </DialogTitle>
                 <DialogDescription className="dark:text-gray-300">
                   Detailed information for {selectedUser.name}
                 </DialogDescription>
@@ -632,66 +971,103 @@ const AdminUsers = () => {
                 <div className="flex flex-col items-center mb-4">
                   <Avatar className="h-20 w-20 mb-4">
                     {selectedUser.profile_photo_url ? (
-                      <AvatarImage src={selectedUser.profile_photo_url} alt={selectedUser.name} />
+                      <AvatarImage
+                        src={selectedUser.profile_photo_url}
+                        alt={selectedUser.name}
+                      />
                     ) : (
-                      <AvatarFallback className="text-xl bg-primary/10 dark:bg-primary/20 dark:text-white">{selectedUser.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="text-xl bg-primary/10 dark:bg-primary/20 dark:text-white">
+                        {selectedUser.name.charAt(0)}
+                      </AvatarFallback>
                     )}
                   </Avatar>
-                  <h2 className="text-xl font-bold dark:text-white">{selectedUser.name}</h2>
-                  <div className="mt-1">{getStatusBadge(selectedUser.status)}</div>
+                  <h2 className="text-xl font-bold dark:text-white">
+                    {selectedUser.name}
+                  </h2>
+                  <div className="mt-1">
+                    {getStatusBadge(selectedUser.status)}
+                  </div>
                 </div>
-                
+
                 <div className="grid gap-4">
                   {selectedUser.usn && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">USN</p>
-                      <p className="col-span-2 dark:text-white">{selectedUser.usn}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                        USN
+                      </p>
+                      <p className="col-span-2 dark:text-white">
+                        {selectedUser.usn}
+                      </p>
                     </div>
                   )}
-                  
+
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Email</p>
-                    <p className="col-span-2 dark:text-white">{selectedUser.email}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                      Email
+                    </p>
+                    <p className="col-span-2 dark:text-white">
+                      {selectedUser.email}
+                    </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Phone</p>
-                    <p className="col-span-2 dark:text-white">{selectedUser.phone || 'Not provided'}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                      Phone
+                    </p>
+                    <p className="col-span-2 dark:text-white">
+                      {selectedUser.phone || "Not provided"}
+                    </p>
                   </div>
-                  
+
                   {selectedUser.region && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Region</p>
-                      <p className="col-span-2 dark:text-white">{selectedUser.region}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                        Region
+                      </p>
+                      <p className="col-span-2 dark:text-white">
+                        {selectedUser.region}
+                      </p>
                     </div>
                   )}
-                  
+
                   {selectedUser.busAssigned && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Bus Assigned</p>
-                      <p className="col-span-2 dark:text-white">{selectedUser.busAssigned}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                        Bus Assigned
+                      </p>
+                      <p className="col-span-2 dark:text-white">
+                        {selectedUser.busAssigned}
+                      </p>
                     </div>
                   )}
-                  
+
                   {selectedUser.role && (
                     <div className="grid grid-cols-3 items-center gap-4">
-                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Role</p>
-                      <p className="col-span-2 dark:text-white">{selectedUser.role}</p>
+                      <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                        Role
+                      </p>
+                      <p className="col-span-2 dark:text-white">
+                        {selectedUser.role}
+                      </p>
                     </div>
                   )}
-                  
+
                   <div className="grid grid-cols-3 items-center gap-4">
-                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">Joined On</p>
-                    <p className="col-span-2 dark:text-white">{selectedUser.joinDate}</p>
+                    <p className="text-sm font-medium text-muted-foreground dark:text-gray-400 text-right">
+                      Joined On
+                    </p>
+                    <p className="col-span-2 dark:text-white">
+                      {selectedUser.joinDate}
+                    </p>
                   </div>
                 </div>
               </div>
               <DialogFooter className="flex justify-between">
                 <div>
-                  {selectedUser.status === 'active' ? (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                  {selectedUser.status === "active" ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="text-destructive border-destructive"
                       onClick={() => handleToggleUserStatus(selectedUser)}
                     >
@@ -699,9 +1075,9 @@ const AdminUsers = () => {
                       Deactivate
                     </Button>
                   ) : (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="text-green-600 border-green-600"
                       onClick={() => handleToggleUserStatus(selectedUser)}
                     >
@@ -715,8 +1091,8 @@ const AdminUsers = () => {
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Button>
-                  <Button 
-                    variant="destructive" 
+                  <Button
+                    variant="destructive"
                     size="sm"
                     onClick={() => handleDeleteUser(selectedUser)}
                     disabled={selectedUser.id === currentUser?.id}

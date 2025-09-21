@@ -1,23 +1,48 @@
-
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '@/context/AuthContext';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Bus, Key, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/context/AuthContext";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Bus,
+  Key,
+  ArrowRight,
+  AlertTriangle,
+  Eye,
+  EyeOff,
+  ChevronLeft,
+} from "lucide-react";
+import { toast } from "sonner";
 
 // Define form schema
 const loginSchema = z.object({
-  identifier: z.string().min(1, { message: 'Phone number or email is required' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  identifier: z
+    .string()
+    .min(1, { message: "Phone number or email is required" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -26,7 +51,7 @@ const DriverLogin = () => {
   const navigate = useNavigate();
   const { login, forgotPassword } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
+  const [resetEmail, setResetEmail] = useState("");
   const [showResetForm, setShowResetForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,8 +59,8 @@ const DriverLogin = () => {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      identifier: '',
-      password: '',
+      identifier: "",
+      password: "",
     },
   });
 
@@ -45,11 +70,11 @@ const DriverLogin = () => {
       await login({
         identifier: values.identifier,
         password: values.password,
-        role: 'driver'
+        role: "driver",
       });
-      navigate('/driver');
+      navigate("/driver");
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       // No toast() call here as the error is already handled in useAuthActions
     } finally {
       setIsSubmitting(false);
@@ -59,29 +84,33 @@ const DriverLogin = () => {
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetEmail.trim()) {
-      toast.error('Please enter your registered email');
+      toast.error("Please enter your registered email");
       return;
     }
 
     try {
       await forgotPassword(resetEmail);
-      toast.success('Password reset instructions sent to your email');
+      toast.success("Password reset instructions sent to your email");
       setShowResetForm(false);
     } catch (error) {
-      console.error('Password reset failed:', error);
-      toast.error('Failed to send reset instructions. Please try again.');
+      console.error("Password reset failed:", error);
+      toast.error("Failed to send reset instructions. Please try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8">
       <Link to="/login" className="absolute top-4 left-6 z-10">
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10"
+        >
           <ChevronLeft className="h-4 w-4" />
           Back to Selection
         </Button>
       </Link>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,7 +121,9 @@ const DriverLogin = () => {
           <div className="mx-auto h-14 w-14 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
             <Bus className="h-7 w-7 text-primary" />
           </div>
-          <h2 className="mt-4 text-3xl font-extrabold text-gray-900 dark:text-white">Driver Login</h2>
+          <h2 className="mt-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+            Driver Login
+          </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Enter your credentials to access the driver dashboard
           </p>
@@ -104,12 +135,17 @@ const DriverLogin = () => {
               <Key className="h-5 w-5 text-primary" />
               Sign in
             </CardTitle>
-            <CardDescription>Enter your phone number/email and password</CardDescription>
+            <CardDescription>
+              Enter your phone number/email and password
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {!showResetForm ? (
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={form.control}
                     name="identifier"
@@ -117,7 +153,10 @@ const DriverLogin = () => {
                       <FormItem>
                         <FormLabel>Phone Number / Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your phone number or email" {...field} />
+                          <Input
+                            placeholder="Enter your phone number or email"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -131,11 +170,11 @@ const DriverLogin = () => {
                         <FormLabel>Password</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input 
-                              type={showPassword ? "text" : "password"} 
-                              placeholder="••••••••" 
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
                               className="pr-10"
-                              {...field} 
+                              {...field}
                             />
                             <Button
                               type="button"
@@ -166,7 +205,7 @@ const DriverLogin = () => {
                       Forgot password?
                     </Button>
                   </div>
-                  
+
                   <Button
                     type="submit"
                     className="w-full"
@@ -189,32 +228,30 @@ const DriverLogin = () => {
               <form onSubmit={handleForgotPassword} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
-                  <Input 
-                    type="email" 
-                    placeholder="Enter your registered email" 
-                    value={resetEmail} 
-                    onChange={(e) => setResetEmail(e.target.value)} 
+                  <Input
+                    type="email"
+                    placeholder="Enter your registered email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
                   />
                 </div>
                 <div className="bg-amber-50 p-3 rounded-md flex items-start text-sm gap-2">
                   <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                   <p className="text-amber-800">
-                    We'll send password reset instructions to this email address.
+                    We'll send password reset instructions to this email
+                    address.
                   </p>
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={() => setShowResetForm(false)}
                     className="flex-1"
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    type="submit" 
-                    className="flex-1"
-                  >
+                  <Button type="submit" className="flex-1">
                     Send Instructions
                   </Button>
                 </div>
@@ -232,7 +269,7 @@ const DriverLogin = () => {
             </div>
           </CardFooter>
         </Card>
-        
+
         <div className="mt-6 flex justify-center">
           <Badge variant="outline" className="bg-gray-50">
             Campus Transit Management System
