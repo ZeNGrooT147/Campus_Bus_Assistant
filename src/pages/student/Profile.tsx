@@ -49,18 +49,18 @@ const StudentProfile = () => {
   return (
     <DashboardLayout pageTitle="My Profile">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1">
+        <Card className="md:col-span-1 bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
           <CardHeader className="relative">
             <div className="flex justify-center mb-4">
               <Avatar className="h-24 w-24">
                 <AvatarImage src={user?.profile_photo_url || ""} alt={user?.name || "User"} />
-                <AvatarFallback className="text-2xl bg-primary/10">
+                <AvatarFallback className="text-2xl bg-primary/10 dark:bg-primary/20 text-foreground dark:text-white">
                   {user?.name?.charAt(0) || "?"}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <CardTitle className="text-center">{user?.name}</CardTitle>
-            <CardDescription className="text-center flex justify-center items-center gap-1">
+            <CardTitle className="text-center text-foreground dark:text-white">{user?.name}</CardTitle>
+            <CardDescription className="text-center flex justify-center items-center gap-1 text-muted-foreground dark:text-gray-300">
               <School className="h-3.5 w-3.5" />
               <span>{user?.usn || "USN not set"}</span>
             </CardDescription>
@@ -68,7 +68,7 @@ const StudentProfile = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="absolute right-4 top-4"
+              className="absolute right-4 top-4 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={() => setIsEditing(true)}
             >
               <Pencil className="h-4 w-4" />
@@ -78,42 +78,42 @@ const StudentProfile = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-2">
-                <Mail className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <Mail className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium break-all">{user?.email}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">Email</p>
+                  <p className="font-medium break-all text-foreground dark:text-white">{user?.email}</p>
                 </div>
               </div>
               
               <div className="flex items-start gap-2">
-                <Phone className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <Phone className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Phone</p>
-                  <p className="font-medium">{user?.phone || "Not provided"}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">Phone</p>
+                  <p className="font-medium text-foreground dark:text-white">{user?.phone || "Not provided"}</p>
                 </div>
               </div>
               
               <div className="flex items-start gap-2">
-                <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Region</p>
-                  <p className="font-medium">{user?.region || "Not specified"}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">Region</p>
+                  <p className="font-medium text-foreground dark:text-white">{user?.region || "Not specified"}</p>
                 </div>
               </div>
               
               <div className="flex items-start gap-2">
-                <Clock className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <Clock className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Joined</p>
-                  <p className="font-medium">{formattedJoinDate}</p>
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">Joined</p>
+                  <p className="font-medium text-foreground dark:text-white">{formattedJoinDate}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-2">
-                <Shield className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <Shield className="h-5 w-5 text-muted-foreground dark:text-gray-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Account Status</p>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <p className="text-sm text-muted-foreground dark:text-gray-400">Account Status</p>
+                  <Badge variant="outline" className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-700">
                     Active
                   </Badge>
                 </div>
@@ -123,33 +123,33 @@ const StudentProfile = () => {
         </Card>
         
         <div className="md:col-span-2 space-y-6">
-          <Card>
+          <Card className="bg-card dark:bg-gray-800 border border-border dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-foreground dark:text-white">
                 <Calendar className="h-5 w-5 text-primary" />
                 Recent Activity
               </CardTitle>
-              <CardDescription>Your recent interactions with the system</CardDescription>
+              <CardDescription className="text-muted-foreground dark:text-gray-300">Your recent interactions with the system</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50 dark:bg-gray-700/50">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
                     <Clock className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-medium">Last Login</p>
-                    <p className="text-sm text-muted-foreground">{new Date().toLocaleString()}</p>
+                    <p className="font-medium text-foreground dark:text-white">Last Login</p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">{new Date().toLocaleString()}</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                  <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50 dark:bg-gray-700/50">
+                  <div className="h-10 w-10 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center">
                     <Shield className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <p className="font-medium">Profile Updated</p>
-                    <p className="text-sm text-muted-foreground">{formattedJoinDate}</p>
+                    <p className="font-medium text-foreground dark:text-white">Profile Updated</p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-300">{formattedJoinDate}</p>
                   </div>
                 </div>
               </div>
@@ -159,54 +159,54 @@ const StudentProfile = () => {
       </div>
       
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
-        <DialogContent>
+        <DialogContent className="bg-background dark:bg-gray-800 border border-border dark:border-gray-700">
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-foreground dark:text-white">Edit Profile</DialogTitle>
+            <DialogDescription className="text-muted-foreground dark:text-gray-300">
               Update your profile information
             </DialogDescription>
           </DialogHeader>
           
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="name" className="text-right text-foreground dark:text-white">
                 Name
               </Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="col-span-3"
+                className="col-span-3 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white"
               />
             </div>
             
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
+              <Label htmlFor="phone" className="text-right text-foreground dark:text-white">
                 Phone
               </Label>
               <Input
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="col-span-3"
+                className="col-span-3 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white"
               />
             </div>
             
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="region" className="text-right">
+              <Label htmlFor="region" className="text-right text-foreground dark:text-white">
                 Region
               </Label>
               <Input
                 id="region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="col-span-3"
+                className="col-span-3 bg-background dark:bg-gray-700 border-border dark:border-gray-600 text-foreground dark:text-white"
               />
             </div>
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditing(false)}>
+            <Button variant="outline" onClick={() => setIsEditing(false)} className="border-border dark:border-gray-600 text-foreground dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               Cancel
             </Button>
             <Button onClick={handleUpdateProfile}>

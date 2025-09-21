@@ -122,112 +122,112 @@ const AdminDashboardSummary = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border shadow-sm bg-gradient-to-br from-blue-50 to-blue-100">
+        <Card className="border shadow-sm bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Total Users</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-2xl font-bold">
+                <span className="text-2xl font-bold text-foreground dark:text-white">
                   {isLoading ? '...' : stats.totalStudents + stats.totalDrivers + stats.totalCoordinators}
                 </span>
-                <span className="text-xs text-muted-foreground">Active accounts</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">Active accounts</span>
               </div>
-              <div className="h-9 w-9 rounded-full bg-blue-100 flex items-center justify-center">
-                <Users className="h-5 w-5 text-blue-600" />
+              <div className="h-9 w-9 rounded-full bg-blue-100 dark:bg-blue-800/50 flex items-center justify-center">
+                <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
             <div className="mt-4 flex items-center text-xs">
-              <Badge variant="outline" className="text-green-600 bg-green-100 border-green-200">
+              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
                 <ChevronUpIcon className="h-3 w-3 mr-1" />
                 <span>{isLoading ? '...' : stats.totalStudents}</span>
               </Badge>
-              <span className="ml-2 text-muted-foreground">Students</span>
+              <span className="ml-2 text-muted-foreground dark:text-gray-300">Students</span>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100">
+        <Card className="border shadow-sm bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Buses</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Buses</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-2xl font-bold">
+                <span className="text-2xl font-bold text-foreground dark:text-white">
                   {isLoading ? '...' : stats.totalBuses}
                 </span>
-                <span className="text-xs text-muted-foreground">Total vehicles</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">Total vehicles</span>
               </div>
-              <div className="h-9 w-9 rounded-full bg-yellow-100 flex items-center justify-center">
-                <Bus className="h-5 w-5 text-yellow-600" />
+              <div className="h-9 w-9 rounded-full bg-yellow-100 dark:bg-yellow-800/50 flex items-center justify-center">
+                <Bus className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
               </div>
             </div>
             <div className="mt-4 flex justify-between items-center text-xs">
-              <Badge variant="outline" className="text-green-600 bg-green-100 border-green-200">
+              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
                 <span>{isLoading ? '...' : stats.activeBuses}</span>
               </Badge>
-              <span className="text-muted-foreground">Active</span>
-              <Badge variant="outline" className="text-gray-600 bg-gray-100 border-gray-200">
+              <span className="text-muted-foreground dark:text-gray-300">Active</span>
+              <Badge variant="outline" className="text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-600">
                 <span>{isLoading ? '...' : stats.inactiveBuses}</span>
               </Badge>
-              <span className="text-muted-foreground">Inactive</span>
+              <span className="text-muted-foreground dark:text-gray-300">Inactive</span>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border shadow-sm bg-gradient-to-br from-red-50 to-red-100">
+        <Card className="border shadow-sm bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Complaints</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Complaints</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-2xl font-bold">
+                <span className="text-2xl font-bold text-foreground dark:text-white">
                   {isLoading ? '...' : stats.totalComplaints}
                 </span>
-                <span className="text-xs text-muted-foreground">Total complaints</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">Total complaints</span>
               </div>
-              <div className="h-9 w-9 rounded-full bg-red-100 flex items-center justify-center">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+              <div className="h-9 w-9 rounded-full bg-red-100 dark:bg-red-800/50 flex items-center justify-center">
+                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
               </div>
             </div>
             <div className="mt-4 flex justify-between items-center text-xs">
-              <Badge variant="outline" className="text-green-600 bg-green-100 border-green-200">
+              <Badge variant="outline" className="text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
                 <span>{isLoading ? '...' : stats.resolvedComplaints}</span>
               </Badge>
-              <span className="text-muted-foreground">Resolved</span>
-              <Badge variant="outline" className="text-amber-600 bg-amber-100 border-amber-200">
+              <span className="text-muted-foreground dark:text-gray-300">Resolved</span>
+              <Badge variant="outline" className="text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700">
                 <span>{isLoading ? '...' : stats.pendingComplaints}</span>
               </Badge>
-              <span className="text-muted-foreground">Pending</span>
+              <span className="text-muted-foreground dark:text-gray-300">Pending</span>
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border shadow-sm bg-gradient-to-br from-purple-50 to-purple-100">
+        <Card className="border shadow-sm bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Date</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground dark:text-gray-300">Date</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-2xl font-bold">
+                <span className="text-2xl font-bold text-foreground dark:text-white">
                   {format(new Date(), 'dd MMM yyyy')}
                 </span>
-                <span className="text-xs text-muted-foreground">{format(new Date(), 'EEEE')}</span>
+                <span className="text-xs text-muted-foreground dark:text-gray-300">{format(new Date(), 'EEEE')}</span>
               </div>
-              <div className="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center">
-                <CalendarIcon className="h-5 w-5 text-purple-600" />
+              <div className="h-9 w-9 rounded-full bg-purple-100 dark:bg-purple-800/50 flex items-center justify-center">
+                <CalendarIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
             <div className="mt-4 flex items-center text-xs">
-              <Badge variant="outline" className="text-purple-600 bg-purple-100 border-purple-200">
+              <Badge variant="outline" className="text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30 border-purple-200 dark:border-purple-700">
                 <span>{format(new Date(), 'HH:mm:ss')}</span>
               </Badge>
-              <span className="ml-2 text-muted-foreground">Current time</span>
+              <span className="ml-2 text-muted-foreground dark:text-gray-300">Current time</span>
             </div>
           </CardContent>
         </Card>

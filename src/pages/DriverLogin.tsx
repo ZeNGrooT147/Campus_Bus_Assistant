@@ -74,9 +74,9 @@ const DriverLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12 sm:px-6 lg:px-8">
       <Link to="/login" className="absolute top-4 left-6 z-10">
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5">
+        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10">
           <ChevronLeft className="h-4 w-4" />
           Back to Selection
         </Button>
@@ -89,11 +89,11 @@ const DriverLogin = () => {
         className="w-full max-w-md"
       >
         <div className="text-center mb-6">
-          <div className="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="mx-auto h-14 w-14 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
             <Bus className="h-7 w-7 text-primary" />
           </div>
-          <h2 className="mt-4 text-3xl font-extrabold text-gray-900">Driver Login</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="mt-4 text-3xl font-extrabold text-gray-900 dark:text-white">Driver Login</h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Enter your credentials to access the driver dashboard
           </p>
         </div>

@@ -37,9 +37,9 @@ const LoginSelection = () => {
   // Prevent any redirects if we're in the process of loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
-        <p className="text-gray-600">Loading authentication...</p>
+        <p className="text-gray-600 dark:text-gray-300">Loading authentication...</p>
       </div>
     );
   }
@@ -48,9 +48,9 @@ const LoginSelection = () => {
   // to prevent flickering between login and dashboard
   if (isAuthenticated && role && redirected) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
-        <p className="text-gray-600">Redirecting to dashboard...</p>
+        <p className="text-gray-600 dark:text-gray-300">Redirecting to dashboard...</p>
       </div>
     );
   }
@@ -83,10 +83,10 @@ const LoginSelection = () => {
   ];
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col">
       <div className="absolute top-4 right-6 z-10">
         <Link to="/login/admin">
-          <Button variant="ghost" size="sm" className="text-xs flex items-center gap-1 hover:bg-black/5">
+          <Button variant="ghost" size="sm" className="text-xs flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10">
             <ShieldCheck className="h-3.5 w-3.5" />
             Admin Login
           </Button>
@@ -94,7 +94,7 @@ const LoginSelection = () => {
       </div>
       
       <Link to="/" className="absolute top-4 left-6 z-10">
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5">
+        <Button variant="ghost" size="sm" className="flex items-center gap-1 hover:bg-black/5 dark:hover:bg-white/10">
           <ChevronLeft className="h-4 w-4" />
           Back to Home
         </Button>
@@ -109,9 +109,9 @@ const LoginSelection = () => {
         >
           <div className="flex items-center justify-center gap-2 mb-4">
             <Bus className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-bold">Campus Bus Assistant</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Campus Bus Assistant</h1>
           </div>
-          <p className="text-gray-600 max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
             Select your role to continue to the login screen.
           </p>
         </motion.div>
@@ -148,8 +148,8 @@ const LoginSelection = () => {
                   <role.icon className="h-16 w-16 text-white" />
                 </div>
                 <div className="p-6">
-                  <h2 className="text-xl font-semibold mb-2">{role.title}</h2>
-                  <p className="text-gray-600 mb-4">{role.description}</p>
+                  <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{role.title}</h2>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">{role.description}</p>
                   <Button className="w-full">
                     Continue as {role.title}
                   </Button>
@@ -160,7 +160,7 @@ const LoginSelection = () => {
         </motion.div>
       </div>
       
-      <footer className="py-6 text-center text-sm text-gray-600 border-t">
+      <footer className="py-6 text-center text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
         <p>© {new Date().getFullYear()} Campus Bus Assistant. All rights reserved.</p>
       </footer>
     </div>

@@ -92,29 +92,29 @@ const AdminDashboard = () => {
               show: { opacity: 1, y: 0 }
             }}
           >
-            <Card className="bg-gradient-to-br from-white to-blue-50 border border-primary/5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
+            <Card className="bg-gradient-to-br from-background to-blue-50 dark:from-gray-800 dark:to-blue-900/20 border border-primary/5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
               <CardHeader className="pb-4">
                 <div className="mb-3">
-                  <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <GraduationCap className="h-6 w-6 text-blue-600" />
+                  <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-800/50 flex items-center justify-center">
+                    <GraduationCap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
-                <CardTitle className="text-lg">Student Accounts</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg text-foreground dark:text-white">Student Accounts</CardTitle>
+                <CardDescription className="text-muted-foreground dark:text-gray-300">
                   Manage student registrations and access
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>Total Students:</span>
                     <span className="font-medium">250</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>Active Today:</span>
                     <span className="font-medium">178</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>New This Week:</span>
                     <span className="font-medium">12</span>
                   </div>
@@ -137,29 +137,29 @@ const AdminDashboard = () => {
               show: { opacity: 1, y: 0 }
             }}
           >
-            <Card className="bg-gradient-to-br from-white to-green-50 border border-primary/5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
+            <Card className="bg-gradient-to-br from-background to-green-50 dark:from-gray-800 dark:to-green-900/20 border border-primary/5 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
               <CardHeader className="pb-4">
                 <div className="mb-3">
-                  <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center">
-                    <Bus className="h-6 w-6 text-green-600" />
+                  <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-800/50 flex items-center justify-center">
+                    <Bus className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                 </div>
-                <CardTitle className="text-lg">Driver Accounts</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg text-foreground dark:text-white">Driver Accounts</CardTitle>
+                <CardDescription className="text-muted-foreground dark:text-gray-300">
                   Manage bus drivers and assignments
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>Total Drivers:</span>
                     <span className="font-medium">{buses.filter(bus => bus.driver).length || 'Loading...'}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>Active Buses:</span>
                     <span className="font-medium">{buses.filter(bus => bus.status === 'on-time').length || 'Loading...'}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm text-foreground dark:text-white">
                     <span>On Duty Now:</span>
                     <span className="font-medium">{buses.filter(bus => bus.status === 'on-time' && bus.driver).length || 'Loading...'}</span>
                   </div>
@@ -222,7 +222,7 @@ const AdminDashboard = () => {
           </motion.div>
         </motion.div>
         
-        <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center">
+        <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center text-foreground dark:text-white">
           <LineChart className="h-5 w-5 mr-2 text-primary" />
           System Monitoring
         </h2>

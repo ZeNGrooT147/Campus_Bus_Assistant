@@ -102,7 +102,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider defaultTheme="light" storageKey="campus-bus-theme">
+    <ThemeProvider storageKey="campus-bus-theme">
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ToastProvider>

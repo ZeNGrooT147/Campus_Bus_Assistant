@@ -45,7 +45,7 @@ const AdminBuses = () => {
     <DashboardLayout pageTitle="Bus Management">
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Bus Management</h1>
+          <h1 className="text-2xl font-bold dark:text-white">Bus Management</h1>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={refreshData} disabled={isLoading}>
               {isLoading ? (
@@ -62,10 +62,10 @@ const AdminBuses = () => {
           </div>
         </div>
 
-        <Card className="mb-6">
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
           <CardHeader className="pb-3">
-            <CardTitle>Bus Fleet Overview</CardTitle>
-            <CardDescription>Manage and monitor all buses in the system</CardDescription>
+            <CardTitle className="dark:text-white">Bus Fleet Overview</CardTitle>
+            <CardDescription className="dark:text-gray-300">Manage and monitor all buses in the system</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSearch} className="flex w-full max-w-sm mb-4 items-center space-x-2">
@@ -74,6 +74,7 @@ const AdminBuses = () => {
                 placeholder="Search by bus number..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
               <Button type="submit" size="sm">
                 <Search className="h-4 w-4 mr-2" />
@@ -81,29 +82,29 @@ const AdminBuses = () => {
               </Button>
             </form>
 
-            <div className="rounded-md border">
+            <div className="rounded-md border dark:border-gray-700">
               {busesData.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b bg-muted/50">
-                        <th className="h-10 px-4 text-left font-medium">Bus Number</th>
-                        <th className="h-10 px-4 text-left font-medium">Name</th>
-                        <th className="h-10 px-4 text-left font-medium">Route</th>
-                        <th className="h-10 px-4 text-left font-medium">Status</th>
+                      <tr className="border-b bg-muted/50 dark:bg-gray-700 dark:border-gray-600">
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Bus Number</th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Name</th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Route</th>
+                        <th className="h-10 px-4 text-left font-medium dark:text-gray-300">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {busesData.map((bus) => (
-                        <tr key={bus.id} className="border-b hover:bg-muted/50">
-                          <td className="p-4">{bus.number}</td>
-                          <td className="p-4">{bus.name}</td>
-                          <td className="p-4">{bus.route}</td>
+                        <tr key={bus.id} className="border-b hover:bg-muted/50 dark:border-gray-700 dark:hover:bg-gray-700">
+                          <td className="p-4 dark:text-white">{bus.number}</td>
+                          <td className="p-4 dark:text-white">{bus.name}</td>
+                          <td className="p-4 dark:text-gray-300">{bus.route}</td>
                           <td className="p-4">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              bus.status === 'active' ? 'bg-green-100 text-green-800' : 
-                              bus.status === 'maintenance' ? 'bg-amber-100 text-amber-800' : 
-                              'bg-red-100 text-red-800'
+                              bus.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 
+                              bus.status === 'maintenance' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300' : 
+                              'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                             }`}>
                               {bus.status === 'active' ? 'Active' : 
                                bus.status === 'maintenance' ? 'Maintenance' : 
@@ -116,7 +117,7 @@ const AdminBuses = () => {
                   </table>
                 </div>
               ) : (
-                <div className="p-4 text-center text-muted-foreground">
+                <div className="p-4 text-center text-muted-foreground dark:text-gray-400">
                   <p>Bus management console will be displayed here.</p>
                   <p className="text-sm mt-1">You can add, edit, or remove buses from the fleet.</p>
                 </div>
@@ -126,9 +127,9 @@ const AdminBuses = () => {
         </Card>
         
         <Dialog open={showAddBusDialog} onOpenChange={setShowAddBusDialog}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px] dark:bg-gray-800 dark:border-gray-600">
             <DialogHeader>
-              <DialogTitle>Add New Bus</DialogTitle>
+              <DialogTitle className="dark:text-white">Add New Bus</DialogTitle>
             </DialogHeader>
             <AddBusForm onSuccess={() => setShowAddBusDialog(false)} />
           </DialogContent>

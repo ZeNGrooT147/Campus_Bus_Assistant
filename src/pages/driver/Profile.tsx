@@ -38,16 +38,16 @@ const DriverProfile = () => {
   return (
     <DashboardLayout pageTitle="My Profile">
       <div className="max-w-4xl mx-auto">
-        <Card className="shadow-md overflow-hidden border-0">
-          <div className="h-32 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+        <Card className="shadow-md overflow-hidden border-0 bg-card dark:bg-gray-800">
+          <div className="h-32 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700"></div>
           <CardHeader className="flex flex-row items-center gap-4 pb-2 -mt-16 z-10 relative px-8">
-            <Avatar className="h-24 w-24 ring-4 ring-white shadow-lg">
+            <Avatar className="h-24 w-24 ring-4 ring-white dark:ring-gray-800 shadow-lg">
               <AvatarImage src="/placeholder.svg" alt={user?.name} />
               <AvatarFallback className="text-3xl bg-gradient-to-br from-primary to-blue-700 text-white">{user?.name?.[0]?.toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="pt-16 md:pt-0">
-              <CardTitle className="text-2xl text-gray-800">{user?.name}</CardTitle>
-              <CardDescription className="text-sm flex items-center gap-1">
+              <CardTitle className="text-2xl text-gray-800 dark:text-white">{user?.name}</CardTitle>
+              <CardDescription className="text-sm flex items-center gap-1 text-muted-foreground dark:text-gray-300">
                 <span className="inline-block h-2 w-2 rounded-full bg-green-500 mr-1"></span>
                 Driver
               </CardDescription>
