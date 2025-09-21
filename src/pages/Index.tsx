@@ -636,7 +636,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="h-24 flex items-center justify-center bg-slate-700 dark:bg-slate-600">
+                <div className={`h-24 flex items-center justify-center ${role.bgColor}`}>
                   <role.icon className="w-8 h-8 text-white" />
                 </div>
 
@@ -838,7 +838,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="text-slate-400 hover:text-slate-200 transition-colors text-sm border-l border-slate-700 pl-4"
                 >
-                  Made by Zen Groot
+                  Made by ZeN GrooT ❤️🫡
                 </a>
               </div>
 
@@ -924,6 +924,7 @@ const roles = [
       "View bus schedules, vote for additional services, and report issues as needed.",
     icon: User,
     loginPath: "/login/student",
+    bgColor: "bg-blue-600 dark:bg-blue-500",
   },
   {
     title: "Driver",
@@ -931,6 +932,7 @@ const roles = [
       "Manage routes, update locations, and respond to emergency requests.",
     icon: Users,
     loginPath: "/login/driver",
+    bgColor: "bg-green-600 dark:bg-green-500",
   },
   {
     title: "Coordinator",
@@ -938,6 +940,7 @@ const roles = [
       "Oversee operations, manage schedules, and coordinate between all stakeholders.",
     icon: ShieldCheck,
     loginPath: "/login/coordinator",
+    bgColor: "bg-amber-600 dark:bg-amber-500",
   },
   {
     title: "Administrator",
@@ -945,6 +948,7 @@ const roles = [
       "Full system access with user management, analytics, and configuration controls.",
     icon: Shield,
     loginPath: "/login/admin",
+    bgColor: "bg-purple-600 dark:bg-purple-500",
   },
 ];
 
