@@ -833,7 +833,7 @@ const Index = () => {
                   reserved.
                 </p>
                 <a
-                  href="https://your-portfolio-link.com" 
+                  href="https://suhas-gosal.vercel.app/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-400 hover:text-slate-200 transition-colors text-sm border-l border-slate-700 pl-4"
